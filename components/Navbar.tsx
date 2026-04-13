@@ -6,6 +6,7 @@ export default function Navbar() {
       <div className="flex gap-6 text-gray-600">
         <a href="/">Home</a>
         <a href="/generate">Generate</a>
+        <a href="/tours">Tours</a>
       </div>
     </div>
   );

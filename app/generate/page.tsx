@@ -85,74 +85,107 @@ export default function GeneratePage() {
     }
   };
 
+  const formatItinerary = (text: string) => {
+    return text.split("\n").filter((line) => line.trim() !== "");
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
-      <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-md space-y-6">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 py-12 px-4">
+      <div className="max-w-5xl mx-auto space-y-8">
 
         {/* TITLE */}
-        <div className="text-center">
-          <h2 className="text-3xl font-bold">Plan Your Trip ✨</h2>
-          <p className="text-gray-500 mt-2">
-            Generate your personalized itinerary in seconds
+        <div className="text-center space-y-3">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Plan Smarter Travel ✨
+          </h1>
+          <p className="text-gray-600 max-w-xl mx-auto">
+            AI-powered itineraries with real booking support
           </p>
         </div>
 
         {/* INPUTS */}
-        <input
-          type="number"
-          value={days}
-          onChange={(e) => setDays(Number(e.target.value))}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Days"
-        />
+        <div className="bg-white p-6 rounded-2xl shadow-lg space-y-5">
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-600">Number of Days</label>
+            <input
+              type="number"
+              value={days}
+              onChange={(e) => setDays(Number(e.target.value))}
+              className="w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black/80"
+            />
+          </div>
 
-        <input
-          type="text"
-          value={budget}
-          onChange={(e) => setBudget(e.target.value)}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Budget"
-        />
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-600">Budget</label>
+            <input
+              type="text"
+              value={budget}
+              onChange={(e) => setBudget(e.target.value)}
+              className="w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black/80"
+            />
+          </div>
 
-        <input
-          type="number"
-          value={groupSize}
-          onChange={(e) => setGroupSize(Number(e.target.value))}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Group Size"
-        />
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-600">Group Size</label>
+            <input
+              type="number"
+              value={groupSize}
+              onChange={(e) => setGroupSize(Number(e.target.value))}
+              className="w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black/80"
+            />
+          </div>
 
-        {/* GENERATE BUTTON */}
-        <button
-          onClick={handleGenerate}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold"
-        >
-          {loading ? "Generating..." : "Generate Itinerary"}
-        </button>
+          {/* GENERATE BUTTON */}
+          <button
+            onClick={handleGenerate}
+            disabled={loading}
+            className="w-full bg-black hover:bg-gray-800 disabled:bg-gray-400 text-white h-14 rounded-xl font-semibold text-lg flex items-center justify-center"
+          >
+            {loading ? "Generating..." : "Generate Itinerary"}
+          </button>
+        </div>
+
+        
 
         {/* ITINERARY */}
         {itinerary && (
-          <div className="bg-gray-100 p-6 rounded-xl space-y-4">
-            <h3 className="text-xl font-semibold">Your Itinerary</h3>
-
-            <div className="whitespace-pre-line text-gray-700">
-              {itinerary.contentJson}
+          <div className="bg-white p-8 rounded-2xl shadow-xl space-y-6 border">
+            
+            <div className="flex justify-between items-center">
+              <h3 className="text-2xl font-semibold">Your Itinerary</h3>
+              <span className="text-sm text-gray-500">
+                {days} days · {budget}
+              </span>
             </div>
 
-            {/* ACTION BUTTONS */}
-            <div className="flex gap-4">
+            <div className="border-l-2 border-gray-200 pl-4 space-y-4">
+              {formatItinerary(itinerary.contentJson).map((item, index) => (
+                <div
+                  key={index}
+                  className="flex gap-4 items-start bg-gray-50 p-4 rounded-xl"
+                >
+                  <div className="w-3 h-3 mt-2 bg-black rounded-full"></div>
+
+                  <div className="text-gray-700 leading-relaxed">
+                    {item}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-4 pt-4">
               <button
                 onClick={handleRequest}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg"
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-xl"
               >
                 Request Execution
               </button>
 
               <button
                 onClick={handleBooking}
-                className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg"
+                className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl"
               >
-                Create Booking
+                Instant Booking
               </button>
             </div>
           </div>
@@ -162,7 +195,7 @@ export default function GeneratePage() {
         {booking && (
           <button
             onClick={handlePayment}
-            className="w-full bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-lg font-semibold"
+            className="w-full bg-linear-to-r from-orange-500 to-orange-600 hover:opacity-90 text-white py-3 rounded-xl font-semibold"
           >
             Pay Advance 💳
           </button>
