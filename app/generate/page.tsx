@@ -89,6 +89,23 @@ export default function GeneratePage() {
     return text.split("\n").filter((line) => line.trim() !== "");
   };
 
+  const handleAcceptRevision = async () => {
+    await fetch(
+      "https://ai-travel-backend-production.up.railway.app/requests/accept",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          requestId: itinerary.requestId,
+        }),
+      }
+    );
+
+    alert("Revision Accepted ✅");
+  };
+
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 py-12 px-4">
       <div className="max-w-5xl mx-auto space-y-8">
@@ -189,6 +206,15 @@ export default function GeneratePage() {
               </button>
             </div>
           </div>
+        )}
+
+        {itinerary?.requestStatus === "REVISION_SENT" && (
+          <button
+            onClick={handleAcceptRevision}
+            className="w-full bg-blue-600 text-white py-3 rounded-xl"
+          >
+            Accept Revision
+          </button>
         )}
 
         {/* PAYMENT */}
