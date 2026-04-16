@@ -1,13 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 export default function GeneratePage() {
+  useAuth();
+  
   const [days, setDays] = useState(3);
   const [budget, setBudget] = useState("medium");
   const [groupSize, setGroupSize] = useState(2);
 
   const [loading, setLoading] = useState(false);
+  const [requestLoading, setRequestLoading] = useState(false);
   const [itinerary, setItinerary] = useState<any>(null);
   const [booking, setBooking] = useState<any>(null);
 
@@ -33,19 +37,38 @@ export default function GeneratePage() {
   };
 
   const handleRequest = async () => {
+    setRequestLoading(true);
+
     try {
-      await fetch("https://ai-travel-backend-production.up.railway.app/requests", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ itineraryId: itinerary.id }),
-      });
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(
+        "https://ai-travel-backend-production.up.railway.app/requests",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ itineraryId: itinerary.id }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Something went wrong");
+        setRequestLoading(false);
+        return;
+      }
 
       alert("Request Submitted ✅");
+        window.location.reload(); // ✅ force refresh
     } catch (err) {
-      console.error(err);
+      alert("Network error");
     }
+
+    setRequestLoading(false);
   };
 
   const handleBooking = async () => {
@@ -68,22 +91,27 @@ export default function GeneratePage() {
   };
 
   const handlePayment = async () => {
-    try {
-      await fetch("https://ai-travel-backend-production.up.railway.app/payments/initiate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: booking.advanceAmount,
-        }),
-      });
-
-      alert("Payment Initiated 💳");
-    } catch (err) {
-      console.error(err);
-    }
+    alert("Our team will contact you for payment via WhatsApp 📞");
   };
+
+// HANDLE PAYMENT I WILL USE LATER
+  // const handlePayment = async () => {
+  //   try {
+  //     await fetch("https://ai-travel-backend-production.up.railway.app/payments/initiate", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         amount: booking.advanceAmount,
+  //       }),
+  //     });
+
+  //     alert("Payment Initiated 💳");
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   const formatItinerary = (text: string) => {
     return text.split("\n").filter((line) => line.trim() !== "");
@@ -107,7 +135,15 @@ export default function GeneratePage() {
   };
 
   return (
+
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 py-12 px-4">
+      <div className="bg-blue-50 p-4 rounded-xl text-sm text-gray-700">
+        <p className="font-semibold mb-2">How it works:</p>
+        <p>1. Generate your itinerary</p>
+        <p>2. Submit request</p>
+        <p>3. Our travel expert reviews it</p>
+        <p>4. Confirm and proceed with booking</p>
+      </div>
       <div className="max-w-5xl mx-auto space-y-8">
 
         {/* TITLE */}
@@ -193,9 +229,10 @@ export default function GeneratePage() {
             <div className="flex gap-4 pt-4">
               <button
                 onClick={handleRequest}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-xl"
+                disabled={requestLoading}
+                className="flex-1 bg-green-600 text-white py-2 rounded-xl disabled:bg-gray-400"
               >
-                Request Execution
+                {requestLoading ? "Processing..." : "Request Execution"}
               </button>
 
               <button
@@ -226,7 +263,9 @@ export default function GeneratePage() {
             Pay Advance 💳
           </button>
         )}
-
+        <p className="text-sm text-gray-500 text-center">
+            Secure payment will be handled by our travel expert after confirmation
+          </p>
       </div>
     </div>
   );

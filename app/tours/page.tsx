@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 export default function ToursPage() {
+  useAuth();
+  
   const [tours, setTours] = useState<any[]>([]);
 
   useEffect(() => {

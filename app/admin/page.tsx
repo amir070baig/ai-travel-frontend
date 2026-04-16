@@ -1,9 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 export default function AdminPage() {
+  useAuth();
+  
+  const token = localStorage.getItem("token");
   const [requests, setRequests] = useState<any[]>([]);
+
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+    if (user.role !== "ADMIN") {
+      alert("Access denied");
+      window.location.href = "/generate";
+    }
+  }, []);
+
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -72,6 +87,12 @@ export default function AdminPage() {
         </h1>
 
         <div className="space-y-4">
+          {requests.length === 0 && (
+            <p className="text-center text-gray-500">
+              No requests yet
+            </p>
+          )}
+
           {requests.map((req) => (
             <div
               key={req.id}
@@ -88,21 +109,24 @@ export default function AdminPage() {
               <div className="flex gap-3">
                 <button
                   onClick={() => handleApprove(req.id)}
-                  className="bg-green-600 text-white px-4 py-2 rounded"
+                  disabled={req.status !== "UNDER_REVIEW"}
+                  className="bg-green-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
                 >
                   Approve
                 </button>
 
                 <button
                   onClick={() => handleRevision(req.id)}
-                  className="bg-yellow-500 text-white px-4 py-2 rounded"
+                  disabled={req.status !== "UNDER_REVIEW"}
+                  className="bg-yellow-500 text-white px-4 py-2 rounded disabled:bg-gray-400"
                 >
                   Send Revision
                 </button>
 
                 <button
                   onClick={() => handleReject(req.id)}
-                  className="bg-red-600 text-white px-4 py-2 rounded"
+                  disabled={req.status !== "UNDER_REVIEW"}
+                  className="bg-red-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
                 >
                   Reject
                 </button>
