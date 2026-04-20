@@ -5,16 +5,17 @@ import { useAuth } from "../hooks/useAuth";
 
 export default function AdminPage() {
   useAuth();
-  
-  const token = localStorage.getItem("token");
+
+  const [isAdmin, setIsAdmin] = useState(false);
   const [requests, setRequests] = useState<any[]>([]);
 
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-    if (user.role !== "ADMIN") {
-      alert("Access denied");
+    if (user.role === "ADMIN") {
+      setIsAdmin(true);
+    } else {
       window.location.href = "/generate";
     }
   }, []);
@@ -77,6 +78,8 @@ export default function AdminPage() {
 
     alert("Revision Sent ✏️");
   };
+
+  if (!isAdmin) return null;
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
