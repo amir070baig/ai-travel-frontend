@@ -8,7 +8,10 @@ export default function HomePage() {
   useEffect(() => {
     fetch("https://ai-travel-backend-production.up.railway.app/tours")
       .then((res) => res.json())
-      .then((data) => setTours(data));
+      .then((data) => {
+        console.log("TOURS DATA:", data);
+        setTours(data);
+      });
   }, []);
 
   return (
