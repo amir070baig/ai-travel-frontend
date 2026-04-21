@@ -83,22 +83,17 @@ export default function MyRequestsPage() {
             key={req.id}
             className="bg-white p-6 rounded-xl shadow-md space-y-3"
           >
-            <p><strong>ID:</strong> {req.id}</p>
+            <p><strong>Request ID:</strong> {req.id}</p>
+
             <p>
               <strong>Status:</strong>{" "}
-              <span
-                className={`px-2 py-1 rounded text-sm font-medium ${
-                  req.status === "UNDER_REVIEW"
-                    ? "bg-yellow-100 text-yellow-700"
-                    : req.status === "REVISION_SENT"
-                    ? "bg-blue-100 text-blue-700"
-                    : req.status === "APPROVED"
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
-                }`}
-              >
+              <span className="px-2 py-1 rounded bg-yellow-100 text-yellow-700">
                 {req.status}
               </span>
+            </p>
+
+            <p className="text-sm text-gray-600">
+              {req.itinerary?.contentJson || "No itinerary details available"}
             </p>
 
             {req.status === "REVISION_SENT" && (

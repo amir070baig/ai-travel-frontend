@@ -62,7 +62,7 @@ export default function GeneratePage() {
         return;
       }
 
-      alert("Request Submitted ✅");
+      alert("Request submitted ✅ You can track it in My Requests page");
         window.location.reload(); // ✅ force refresh
     } catch (err) {
       alert("Network error");
@@ -84,7 +84,7 @@ export default function GeneratePage() {
       const data = await res.json();
       setBooking(data);
 
-      alert("Booking Created ✅");
+      alert("Booking created ✅ Our team will contact you shortly");
     } catch (err) {
       console.error(err);
     }

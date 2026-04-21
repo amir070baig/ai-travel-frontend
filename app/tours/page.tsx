@@ -4,18 +4,23 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 
 export default function ToursPage() {
-  useAuth();
   
   const [tours, setTours] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchTours = async () => {
-      const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/itineraries/admin"
-      );
+      try {
+        const res = await fetch(
+          "https://ai-travel-backend-production.up.railway.app/tours"
+        );
 
-      const data = await res.json();
-      setTours(data);
+        const data = await res.json();
+
+        setTours(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error(err);
+        setTours([]);
+      }
     };
 
     fetchTours();
@@ -54,21 +59,21 @@ export default function ToursPage() {
         </h1>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {tours.map((tour) => (
+          {tours.map((tour: any) => (
             <div
               key={tour.id}
               className="bg-white p-6 rounded-2xl shadow-md space-y-3"
             >
-              <h2 className="text-xl font-semibold">{tour.days}-Day {tour.city} Tour</h2>
-              <p className="text-gray-600">{tour.contentJson}</p>
+              <h2 className="text-xl font-semibold">{tour.title}</h2>
+              <p className="text-gray-600">{tour.description}</p>
 
               <div className="flex justify-between items-center pt-3">
                 <span className="font-bold text-lg">
-                  ₹{tour.days * 2000}
+                  ₹{tour.price}
                 </span>
 
                 <button
-                  onClick={() => handleBooking(tour.id)}
+                  onClick={() => alert("Booking flow coming soon")}
                   className="bg-black text-white px-4 py-2 rounded-xl"
                 >
                   Book Now

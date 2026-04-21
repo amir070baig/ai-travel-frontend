@@ -31,7 +31,7 @@ export default function Navbar() {
       </div>
 
       {/* RIGHT */}
-      <div>
+      <div className="w-8 h-8 bg-gray-300 rounded-full">
         {!token ? (
           <div className="flex gap-4">
             <a href="/login" className="text-blue-600">Login</a>
