@@ -4,38 +4,26 @@ import { useEffect, useState } from "react";
 
 export default function HomePage() {
   const [tours, setTours] = useState<any[]>([]);
-  const [requests, setRequests] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchRequests = async () => {
+    const fetchTours = async () => {
       try {
-        const token = localStorage.getItem("token");
-
         const res = await fetch(
-          "https://ai-travel-backend-production.up.railway.app/requests",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          "https://ai-travel-backend-production.up.railway.app/tours"
         );
 
         const data = await res.json();
 
-        if (!res.ok) {
-          console.error("API Error:", data);
-          setRequests([]);
-          return;
-        }
+        console.log("TOURS:", data);
 
-        setRequests(Array.isArray(data) ? data : []);
+        setTours(Array.isArray(data) ? data : []);
       } catch (err) {
-        console.error("Network error:", err);
-        setRequests([]);
+        console.error("Error fetching tours:", err);
+        setTours([]);
       }
     };
 
-    fetchRequests();
+    fetchTours();
   }, []);
 
   return (

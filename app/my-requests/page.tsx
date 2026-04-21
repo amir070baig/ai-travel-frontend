@@ -10,12 +10,39 @@ export default function MyRequestsPage() {
 
   useEffect(() => {
     const fetchRequests = async () => {
-      const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/requests"
-      );
+      try {
+        const token = localStorage.getItem("token");
 
-      const data = await res.json();
-      setRequests(data);
+        if (!token) {
+          console.log("No token found");
+          setRequests([]);
+          return;
+        }
+
+        const res = await fetch(
+          "https://ai-travel-backend-production.up.railway.app/requests",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await res.json();
+
+        console.log("REQUESTS API:", data);
+
+        // ✅ GUARANTEED SAFE
+        if (!res.ok || !Array.isArray(data)) {
+          setRequests([]);
+          return;
+        }
+
+        setRequests(data);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setRequests([]);
+      }
     };
 
     fetchRequests();
@@ -51,7 +78,7 @@ export default function MyRequestsPage() {
           </p>
         )}
 
-        {requests.map((req) => (
+        {Array.isArray(requests) && requests.map((req) => (
           <div
             key={req.id}
             className="bg-white p-6 rounded-xl shadow-md space-y-3"
