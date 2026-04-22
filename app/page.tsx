@@ -54,15 +54,12 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {tours.slice(0, 3).map((tour) => (
-            <a href={`/tours?id=${tour.id}`}>
-              <div className="bg-white p-4 rounded-xl shadow cursor-pointer hover:shadow-lg">
+            <a key={tour.id} href={`/tours?id=${tour.id}`}>
+              <div className="bg-white p-4 rounded-xl shadow cursor-pointer hover:shadow-lg transition-shadow">
                 <h3 className="text-lg font-semibold">{tour.title}</h3>
                 <p className="text-gray-500">{tour.description}</p>
               </div>
             </a>
-              <h3 className="text-lg font-semibold">{tour.title}</h3>
-              <p className="text-gray-500">{tour.description}</p>
-            </div>
           ))}
         </div>
       </div>

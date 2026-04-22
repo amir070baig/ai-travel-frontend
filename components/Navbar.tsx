@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 
 export default function Navbar() {
-  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    setToken(storedToken);
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, []);
 
   const handleLogout = () => {
@@ -25,26 +27,36 @@ export default function Navbar() {
         <a href="/generate">Generate</a>
         <a href="/tours">Tours</a>
         <a href="/my-requests">My Requests</a>
-        {token && JSON.parse(localStorage.getItem("user") || "{}").role === "ADMIN" && (
+        {user?.role === "ADMIN" && (
           <a href="/admin">Admin</a>
         )}
       </div>
 
       {/* RIGHT */}
-      <div className="w-8 h-8 bg-gray-300 rounded-full">
-        {!token ? (
-          <div className="flex gap-4">
+      <div className="flex items-center gap-4">
+
+        {!user ? (
+          <>
             <a href="/login" className="text-blue-600">Login</a>
             <a href="/register" className="text-blue-600">Register</a>
-          </div>
+          </>
         ) : (
-          <button
-            onClick={handleLogout}
-            className="text-red-500 font-semibold"
-          >
-            Logout
-          </button>
+          <>
+            {/* USER INFO */}
+            <span className="text-sm text-gray-600">
+              👤 {user.email}
+            </span>
+
+            {/* LOGOUT */}
+            <button
+              onClick={handleLogout}
+              className="text-red-500 font-semibold"
+            >
+              Logout
+            </button>
+          </>
         )}
+
       </div>
 
     </div>

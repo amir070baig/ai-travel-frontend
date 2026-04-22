@@ -30,7 +30,7 @@ export default function LoginPage() {
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
 
-    router.push("/generate"); // ✅ redirect
+    window.location.href = "/";
   };
 
   return (
