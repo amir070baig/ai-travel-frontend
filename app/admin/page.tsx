@@ -23,27 +23,57 @@ export default function AdminPage() {
 
   useEffect(() => {
     const fetchRequests = async () => {
-      const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/requests"
-      );
+      try {
+        const token = localStorage.getItem("token");
 
-      const data = await res.json();
-      setRequests(data);
+        if (!token) {
+          console.log("No token found");
+          setRequests([]);
+          return;
+        }
+
+          const res = await fetch(
+            "https://ai-travel-backend-production.up.railway.app/admin/requests",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+        const data = await res.json();
+
+        console.log("ADMIN REQUESTS:", data);
+
+        if (!res.ok || !Array.isArray(data)) {
+          setRequests([]);
+          return;
+        }
+
+        setRequests(data);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setRequests([]);
+      }
     };
 
     fetchRequests();
   }, []);
 
   const handleApprove = async (requestId: string) => {
-    await fetch(
-      "https://ai-travel-backend-production.up.railway.app/admin/approve",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ requestId }),
-      }
+    await fetch("https://ai-travel-backend-production.up.railway.app/admin/approve", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ requestId }),
+    });
+
+    // ✅ UPDATE UI STATE IMMEDIATELY
+    setRequests((prev) =>
+      prev.map((req) =>
+        req.id === requestId ? { ...req, status: "APPROVED" } : req
+      )
     );
 
     alert("Approved ✅");
@@ -96,7 +126,7 @@ export default function AdminPage() {
             </p>
           )}
 
-          {requests.map((req) => (
+          {Array.isArray(requests) && requests.map((req) => (
             <div
               key={req.id}
               className="bg-white p-6 rounded-xl shadow-md space-y-3"
