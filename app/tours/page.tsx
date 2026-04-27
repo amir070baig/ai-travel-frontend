@@ -45,7 +45,7 @@ export default function ToursPage() {
             Authorization: `Bearer ${token}`, // ✅ CRITICAL
           },
           body: JSON.stringify({
-            itineraryId,
+            tourId: itineraryId, // we are treating tour as itinerary for now
           }),
         }
       );
@@ -85,10 +85,11 @@ export default function ToursPage() {
               <div className="flex justify-between items-center pt-3">
                 <span className="font-bold text-lg">
                   ₹{tour.price}
+                  console.log("TOUR:", tour)
                 </span>
 
                 <button
-                  onClick={() => handleBooking(tour.id)}
+                  onClick={() => handleBooking(tour.itineraryId)}
                   className="bg-black text-white px-4 py-2 rounded-xl"
                 >
                   Book Now

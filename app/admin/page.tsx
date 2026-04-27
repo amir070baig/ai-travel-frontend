@@ -8,6 +8,7 @@ export default function AdminPage() {
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [requests, setRequests] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<any[]>([]);
 
 
   useEffect(() => {
@@ -22,42 +23,42 @@ export default function AdminPage() {
 
 
   useEffect(() => {
-    const fetchRequests = async () => {
+    const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
 
-        if (!token) {
-          console.log("No token found");
-          setRequests([]);
-          return;
-        }
+        // ✅ FETCH REQUESTS
+        const reqRes = await fetch(
+          "https://ai-travel-backend-production.up.railway.app/admin/requests",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-          const res = await fetch(
-            "https://ai-travel-backend-production.up.railway.app/admin/requests",
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+        const reqData = await reqRes.json();
+        setRequests(Array.isArray(reqData) ? reqData : []);
 
-        const data = await res.json();
+        // ✅ FETCH BOOKINGS (THIS IS THE NEW PART)
+        const bookingRes = await fetch(
+          "https://ai-travel-backend-production.up.railway.app/admin/bookings",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        console.log("ADMIN REQUESTS:", data);
+        const bookingData = await bookingRes.json();
+        setBookings(Array.isArray(bookingData) ? bookingData : []);
 
-        if (!res.ok || !Array.isArray(data)) {
-          setRequests([]);
-          return;
-        }
-
-        setRequests(data);
       } catch (err) {
-        console.error("Fetch error:", err);
-        setRequests([]);
+        console.error(err);
       }
     };
 
-    fetchRequests();
+    fetchData();
   }, []);
 
   const handleApprove = async (requestId: string) => {
@@ -180,6 +181,20 @@ export default function AdminPage() {
               </div>
             </div>
           ))}
+
+          <h2 className="text-2xl font-bold mt-10">Bookings</h2>
+
+            {bookings.length === 0 && (
+              <p className="text-gray-500">No bookings yet</p>
+            )}
+
+            {bookings.map((b) => (
+              <div key={b.id} className="bg-white p-4 rounded shadow mt-4">
+                <p><strong>User:</strong> {b.user?.email}</p>
+                <p><strong>Status:</strong> {b.status}</p>
+                <p><strong>Amount:</strong> ₹{b.advanceAmount}</p>
+              </div>
+            ))}
         </div>
 
       </div>
