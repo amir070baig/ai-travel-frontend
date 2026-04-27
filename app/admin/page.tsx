@@ -154,6 +154,20 @@ export default function AdminPage() {
                 </span>
               </p>
 
+              <h2 className="text-2xl font-bold mt-10">Bookings</h2>
+
+                {bookings.length === 0 && (
+                  <p className="text-gray-500">No bookings yet</p>
+                )}
+
+                {bookings.map((b) => (
+                  <div key={b.id} className="bg-white p-4 rounded shadow mt-4">
+                    <p><strong>User:</strong> {b.user?.email}</p>
+                    <p><strong>Status:</strong> {b.status}</p>
+                    <p><strong>Amount:</strong> ₹{b.advanceAmount}</p>
+                  </div>
+                ))}
+                
               <div className="flex gap-3">
                 <button
                   onClick={() => handleApprove(req.id)}
@@ -181,20 +195,6 @@ export default function AdminPage() {
               </div>
             </div>
           ))}
-
-          <h2 className="text-2xl font-bold mt-10">Bookings</h2>
-
-            {bookings.length === 0 && (
-              <p className="text-gray-500">No bookings yet</p>
-            )}
-
-            {bookings.map((b) => (
-              <div key={b.id} className="bg-white p-4 rounded shadow mt-4">
-                <p><strong>User:</strong> {b.user?.email}</p>
-                <p><strong>Status:</strong> {b.status}</p>
-                <p><strong>Amount:</strong> ₹{b.advanceAmount}</p>
-              </div>
-            ))}
         </div>
 
       </div>
