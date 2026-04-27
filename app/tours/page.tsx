@@ -26,7 +26,7 @@ export default function ToursPage() {
     fetchTours();
   }, []);
 
-  const handleBooking = async (itineraryId: string) => {
+  const handleBooking = async (tourId: string) => {
     try {
       const token = localStorage.getItem("token");
 
@@ -42,10 +42,10 @@ export default function ToursPage() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // ✅ CRITICAL
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            tourId: itineraryId, // we are treating tour as itinerary for now
+            tourId: tourId, // ✅ FIXED
           }),
         }
       );
@@ -53,6 +53,7 @@ export default function ToursPage() {
       const data = await res.json();
 
       if (!res.ok) {
+        console.error("Booking failed:", data);
         alert("Booking failed");
         return;
       }
@@ -63,6 +64,7 @@ export default function ToursPage() {
       console.error(err);
       alert("Something went wrong");
     }
+    console.log("TOURS:", tours)
   };
 
   return (
@@ -85,11 +87,10 @@ export default function ToursPage() {
               <div className="flex justify-between items-center pt-3">
                 <span className="font-bold text-lg">
                   ₹{tour.price}
-                  console.log("TOUR:", tour)
                 </span>
 
                 <button
-                  onClick={() => handleBooking(tour.itineraryId)}
+                  onClick={() => handleBooking(tour.id)}
                   className="bg-black text-white px-4 py-2 rounded-xl"
                 >
                   Book Now
