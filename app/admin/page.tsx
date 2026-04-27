@@ -61,22 +61,36 @@ export default function AdminPage() {
   }, []);
 
   const handleApprove = async (requestId: string) => {
-    await fetch("https://ai-travel-backend-production.up.railway.app/admin/approve", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ requestId }),
-    });
+    try {
+      const token = localStorage.getItem("token");
 
-    // ✅ UPDATE UI STATE IMMEDIATELY
-    setRequests((prev) =>
-      prev.map((req) =>
-        req.id === requestId ? { ...req, status: "APPROVED" } : req
-      )
-    );
+      await fetch(
+        "https://ai-travel-backend-production.up.railway.app/admin/approve",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ requestId }),
+        }
+      );
 
-    alert("Approved ✅");
+      // ✅ REFRESH FROM BACKEND (BEST APPROACH)
+      const res = await fetch(
+        "https://ai-travel-backend-production.up.railway.app/admin/requests",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await res.json();
+      setRequests(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleReject = async (requestId: string) => {

@@ -46,6 +46,10 @@ export default function HomePage() {
         </a>
       </div>
 
+      <p className="text-center text-gray-500 mt-4">
+        Trusted by travelers for personalized AI-powered trip planning ✈️
+      </p>
+
       {/* TOURS PREVIEW */}
       <div className="max-w-6xl mx-auto py-12 px-6">
         <h2 className="text-2xl font-bold mb-6 text-center">

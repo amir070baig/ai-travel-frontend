@@ -74,7 +74,7 @@ export default function MyRequestsPage() {
 
         {requests.length === 0 && (
           <p className="text-center text-gray-500">
-            No requests yet
+            No requests yet. Start by generating your first trip!
           </p>
         )}
 
@@ -83,13 +83,23 @@ export default function MyRequestsPage() {
             key={req.id}
             className="bg-white p-6 rounded-xl shadow-md space-y-3"
           >
-            <p><strong>Request ID:</strong> {req.id}</p>
+            
+            <p className="text-center text-gray-500 text-sm">
+              Track your travel requests and updates here
+            </p>
+            <p className="text-sm text-gray-500">
+              Request #{req.id.slice(0, 6)}
+            </p>
 
-            <p>
-              <strong>Status:</strong>{" "}
-              <span className="px-2 py-1 rounded bg-yellow-100 text-yellow-700">
-                {req.status}
+            <p className="font-semibold">
+              Status:{" "}
+              <span className="text-blue-600">
+                {req.status.replace("_", " ")}
               </span>
+            </p>
+
+            <p className="text-gray-600 text-sm">
+              {req.itinerary?.contentJson || "Your travel plan"}
             </p>
 
             <p className="text-sm text-gray-600">

@@ -28,12 +28,21 @@ export default function ToursPage() {
 
   const handleBooking = async (itineraryId: string) => {
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Please login first");
+        window.location.href = "/login";
+        return;
+      }
+
       const res = await fetch(
         "https://ai-travel-backend-production.up.railway.app/bookings",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ CRITICAL
           },
           body: JSON.stringify({
             itineraryId,
@@ -43,10 +52,16 @@ export default function ToursPage() {
 
       const data = await res.json();
 
-      alert("Booking Created ✅");
-      console.log(data);
+      if (!res.ok) {
+        alert("Booking failed");
+        return;
+      }
+
+      alert("Booking confirmed ✅");
+
     } catch (err) {
       console.error(err);
+      alert("Something went wrong");
     }
   };
 
@@ -73,7 +88,7 @@ export default function ToursPage() {
                 </span>
 
                 <button
-                  onClick={() => alert("Booking flow coming soon")}
+                  onClick={() => handleBooking(tour.id)}
                   className="bg-black text-white px-4 py-2 rounded-xl"
                 >
                   Book Now
