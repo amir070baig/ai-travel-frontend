@@ -10,6 +10,7 @@ export default function AdminPage() {
   const [requests, setRequests] = useState<any[]>([]);
   const [bookings, setBookings] = useState<any[]>([]);
 
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -20,6 +21,7 @@ export default function AdminPage() {
     }
   }, []);
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,7 +29,7 @@ export default function AdminPage() {
 
         // ✅ FETCH REQUESTS
         const reqRes = await fetch(
-          "https://railway.app",
+          "https://ai-travel-backend-production.up.railway.app/admin/requests",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -36,11 +38,12 @@ export default function AdminPage() {
         );
 
         const reqData = await reqRes.json();
+        console.log("ADMIN REQUESTS:", reqData); // ✅ ADD
         setRequests(Array.isArray(reqData) ? reqData : []);
 
-        // ✅ FETCH BOOKINGS
+        // ✅ FETCH BOOKINGS (THIS IS THE NEW PART)
         const bookingRes = await fetch(
-          "https://railway.app",
+          "https://ai-travel-backend-production.up.railway.app/admin/bookings",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -49,7 +52,9 @@ export default function AdminPage() {
         );
 
         const bookingData = await bookingRes.json();
+        console.log("ADMIN BOOKINGS:", bookingData); // ✅ ADD
         setBookings(Array.isArray(bookingData) ? bookingData : []);
+
       } catch (err) {
         console.error(err);
       }
@@ -63,7 +68,7 @@ export default function AdminPage() {
       const token = localStorage.getItem("token");
 
       await fetch(
-        "https://railway.app",
+        "https://ai-travel-backend-production.up.railway.app/admin/approve",
         {
           method: "POST",
           headers: {
@@ -74,8 +79,9 @@ export default function AdminPage() {
         }
       );
 
+      // ✅ REFRESH FROM BACKEND (BEST APPROACH)
       const res = await fetch(
-        "https://railway.app",
+        "https://ai-travel-backend-production.up.railway.app/admin/requests",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -91,12 +97,15 @@ export default function AdminPage() {
   };
 
   const handleReject = async (requestId: string) => {
+    const token = localStorage.getItem("token");
+
     await fetch(
-      "https://railway.app",
+      "https://ai-travel-backend-production.up.railway.app/admin/reject",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // ✅ FIX
         },
         body: JSON.stringify({ requestId }),
       }
@@ -106,12 +115,15 @@ export default function AdminPage() {
   };
 
   const handleRevision = async (requestId: string) => {
+    const token = localStorage.getItem("token");
+
     await fetch(
-      "https://railway.app",
+      "https://ai-travel-backend-production.up.railway.app/admin/revision",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // ✅ FIX
         },
         body: JSON.stringify({ requestId }),
       }
@@ -125,74 +137,73 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
       <div className="max-w-5xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold text-center">Admin Dashboard</h1>
 
-        {/* --- REQUESTS SECTION --- */}
+        <h1 className="text-3xl font-bold text-center">
+          Admin Dashboard
+        </h1>
+
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold">Requests</h2>
-          {requests.length === 0 && (
-            <p className="text-center text-gray-500">No requests yet</p>
+          {Array.isArray(requests) && requests.length === 0 && (
+            <p className="text-center text-gray-500">
+              No requests yet
+            </p>
           )}
 
-          {Array.isArray(requests) &&
-            requests.map((req) => (
-              <div
-                key={req.id}
-                className="bg-white p-6 rounded-xl shadow-md space-y-3"
-              >
-                <p><strong>Request ID:</strong> {req.id}</p>
-                <p>
-                  <strong>Status:</strong>{" "}
-                  <span className="px-2 py-1 rounded bg-yellow-100 text-yellow-700">
-                    {req.status}
-                  </span>
-                </p>
+          {Array.isArray(requests) && requests.map((req) => (
+            <div
+              key={req.id}
+              className="bg-white p-6 rounded-xl shadow-md space-y-3"
+            >
+              <p><strong>Request ID:</strong> {req.id}</p>
+              <p>
+                <strong>Status:</strong>{" "}
+                <span className="px-2 py-1 rounded bg-yellow-100 text-yellow-700">
+                  {req.status}
+                </span>
+              </p>
 
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => handleApprove(req.id)}
-                    disabled={req.status !== "UNDER_REVIEW"}
-                    className="bg-green-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
-                  >
-                    Approve
-                  </button>
+                
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleApprove(req.id)}
+                  disabled={req.status !== "UNDER_REVIEW"}
+                  className="bg-green-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
+                >
+                  Approve
+                </button>
 
-                  <button
-                    onClick={() => handleRevision(req.id)}
-                    disabled={req.status !== "UNDER_REVIEW"}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded disabled:bg-gray-400"
-                  >
-                    Send Revision
-                  </button>
+                <button
+                  onClick={() => handleRevision(req.id)}
+                  disabled={req.status !== "UNDER_REVIEW"}
+                  className="bg-yellow-500 text-white px-4 py-2 rounded disabled:bg-gray-400"
+                >
+                  Send Revision
+                </button>
 
-                  <button
-                    onClick={() => handleReject(req.id)}
-                    disabled={req.status !== "UNDER_REVIEW"}
-                    className="bg-red-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
-                  >
-                    Reject
-                  </button>
-                </div>
+                <button
+                  onClick={() => handleReject(req.id)}
+                  disabled={req.status !== "UNDER_REVIEW"}
+                  className="bg-red-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
+                >
+                  Reject
+                </button>
               </div>
-            ))}
-        </div>
-
-        {/* --- BOOKINGS SECTION (MOVED OUTSIDE) --- */}
-        <div className="space-y-4 mt-10">
-          <h2 className="text-2xl font-bold">Bookings</h2>
-
-          {bookings.length === 0 && (
-            <p className="text-gray-500">No bookings yet</p>
-          )}
-
-          {bookings.map((b) => (
-            <div key={b.id} className="bg-white p-4 rounded shadow mt-4">
-              <p><strong>User:</strong> {b.user?.email}</p>
-              <p><strong>Status:</strong> {b.status}</p>
-              <p><strong>Amount:</strong> ₹{b.advanceAmount}</p>
             </div>
           ))}
         </div>
+        <h2 className="text-2xl font-bold mt-10">Bookings</h2>
+
+              {bookings.length === 0 && (
+                <p className="text-gray-500">No bookings yet</p>
+              )}
+
+              {bookings.map((b) => (
+                <div key={b.id} className="bg-white p-4 rounded shadow mt-4">
+                  <p><strong>User:</strong> {b.user?.email}</p>
+                  <p><strong>Status:</strong> {b.status}</p>
+                  <p><strong>Amount:</strong> ₹{b.advanceAmount}</p>
+                </div>
+              ))}
       </div>
     </div>
   );
