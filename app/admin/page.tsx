@@ -105,11 +105,24 @@ export default function AdminPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ FIX
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ requestId }),
       }
     );
+
+    // ✅ ADD THIS PART HERE
+    const res = await fetch(
+      "https://ai-travel-backend-production.up.railway.app/admin/requests",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+    setRequests(Array.isArray(data) ? data : []);
 
     alert("Rejected ❌");
   };
@@ -117,17 +130,33 @@ export default function AdminPage() {
   const handleRevision = async (requestId: string) => {
     const token = localStorage.getItem("token");
 
+    const message = prompt("Enter revision message:");
+    if (!message) return;
+
     await fetch(
       "https://ai-travel-backend-production.up.railway.app/admin/revision",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ FIX
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ requestId }),
+        body: JSON.stringify({ requestId, message }),
       }
     );
+
+    // ✅ ADD THIS PART HERE
+    const res = await fetch(
+      "https://ai-travel-backend-production.up.railway.app/admin/requests",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+    setRequests(Array.isArray(data) ? data : []);
 
     alert("Revision Sent ✏️");
   };
@@ -155,6 +184,20 @@ export default function AdminPage() {
               className="bg-white p-6 rounded-xl shadow-md space-y-3"
             >
               <p><strong>Request ID:</strong> {req.id}</p>
+
+              <p><strong>User:</strong> {req.user?.email}</p>
+
+              <p><strong>City:</strong> {req.itinerary?.city}</p>
+              <p><strong>Days:</strong> {req.itinerary?.days}</p>
+              <p><strong>Budget:</strong> {req.itinerary?.budget}</p>
+
+              <div className="bg-gray-100 p-3 rounded">
+                <strong>Itinerary:</strong>
+                <pre className="whitespace-pre-wrap text-sm">
+                  {req.itinerary?.contentJson}
+                </pre>
+              </div>
+              
               <p>
                 <strong>Status:</strong>{" "}
                 <span className="px-2 py-1 rounded bg-yellow-100 text-yellow-700">

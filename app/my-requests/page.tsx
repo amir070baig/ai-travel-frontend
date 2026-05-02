@@ -63,6 +63,25 @@ export default function MyRequestsPage() {
     alert("Revision Accepted ✅");
   };
 
+  
+  const handleRejectRevision = async (requestId: string) => {
+    const token = localStorage.getItem("token");
+
+    await fetch(
+      "https://ai-travel-backend-production.up.railway.app/requests/reject-revision",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ requestId }),
+      }
+    );
+
+    alert("Revision rejected ❌");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -105,14 +124,28 @@ export default function MyRequestsPage() {
             <p className="text-sm text-gray-600">
               {req.itinerary?.contentJson || "No itinerary details available"}
             </p>
-
+            {req.revisionMessage && (
+              <p className="text-blue-600">
+                <strong>Admin Note:</strong> {req.revisionMessage}
+              </p>
+            )}
             {req.status === "REVISION_SENT" && (
-              <button
-                onClick={() => handleAccept(req.id)}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-              >
-                Accept Revision
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleAccept(req.id)}
+                  className="bg-green-600 text-white px-4 py-2 rounded"
+                >
+                  Accept Revision
+                </button>
+
+                {/* ✅ ADD THIS */}
+                <button
+                  onClick={() => handleRejectRevision(req.id)}
+                  className="bg-red-600 text-white px-4 py-2 rounded"
+                >
+                  Reject Revision
+                </button>
+              </div>
             )}
           </div>
         ))}
