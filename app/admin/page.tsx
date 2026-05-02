@@ -171,6 +171,10 @@ export default function AdminPage() {
           Admin Dashboard
         </h1>
 
+        <h2 className="text-2xl font-semibold mt-6 border-b pb-2">
+            AI Generated Requests
+        </h2>
+
         <div className="space-y-4">
           {Array.isArray(requests) && requests.length === 0 && (
             <p className="text-center text-gray-500">
@@ -183,6 +187,7 @@ export default function AdminPage() {
               key={req.id}
               className="bg-white p-6 rounded-xl shadow-md space-y-3"
             >
+              <p className="text-xs text-gray-500">Type: AI Request</p>
               <p><strong>Request ID:</strong> {req.id}</p>
 
               <p><strong>User:</strong> {req.user?.email}</p>
@@ -191,16 +196,33 @@ export default function AdminPage() {
               <p><strong>Days:</strong> {req.itinerary?.days}</p>
               <p><strong>Budget:</strong> {req.itinerary?.budget}</p>
 
-              <div className="bg-gray-100 p-3 rounded">
+              <div className="bg-gray-50 border p-4 rounded-md">
                 <strong>Itinerary:</strong>
-                <pre className="whitespace-pre-wrap text-sm">
-                  {req.itinerary?.contentJson}
-                </pre>
+
+                {req.itinerary?.contentJson ? (
+                  <pre className="whitespace-pre-wrap text-sm mt-2">
+                    {req.itinerary.contentJson}
+                  </pre>
+                ) : (
+                  <p className="text-gray-400 mt-2">
+                    Itinerary not available
+                  </p>
+                )}
               </div>
               
               <p>
                 <strong>Status:</strong>{" "}
-                <span className="px-2 py-1 rounded bg-yellow-100 text-yellow-700">
+                <span
+                  className={`px-2 py-1 rounded text-sm font-medium ${
+                    req.status === "UNDER_REVIEW"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : req.status === "APPROVED"
+                      ? "bg-green-100 text-green-700"
+                      : req.status === "REJECTED"
+                      ? "bg-red-100 text-red-700"
+                      : "bg-blue-100 text-blue-700"
+                  }`}
+                >
                   {req.status}
                 </span>
               </p>
@@ -234,19 +256,29 @@ export default function AdminPage() {
             </div>
           ))}
         </div>
-        <h2 className="text-2xl font-bold mt-10">Bookings</h2>
+        <h2 className="text-2xl font-semibold mt-12 border-b pb-2">
+          Confirmed Bookings
+        </h2>
 
               {bookings.length === 0 && (
                 <p className="text-gray-500">No bookings yet</p>
               )}
 
-              {bookings.map((b) => (
-                <div key={b.id} className="bg-white p-4 rounded shadow mt-4">
-                  <p><strong>User:</strong> {b.user?.email}</p>
-                  <p><strong>Status:</strong> {b.status}</p>
-                  <p><strong>Amount:</strong> ₹{b.advanceAmount}</p>
-                </div>
-              ))}
+              <div className="space-y-4 mt-4">
+                {bookings.map((b) => (
+                  <div key={b.id} className="bg-white p-4 rounded shadow mt-4">
+                    <p className="text-xs text-gray-500">Type: Pre-built Tour</p>
+                    <p><strong>User:</strong> {b.user?.email}</p>
+                    <p><strong>Status:</strong> {b.status}</p>
+                    {b.revisionMessage && (
+                      <p className="text-blue-600">
+                        <strong>Admin Note:</strong> {b.revisionMessage}
+                      </p>
+                    )}
+                    <p><strong>Amount:</strong> ₹{b.advanceAmount}</p>
+                  </div>
+                ))}
+              </div>
       </div>
     </div>
   );
