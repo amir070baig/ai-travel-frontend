@@ -7,6 +7,7 @@ export default function MyRequestsPage() {
   useAuth();
   
   const [requests, setRequests] = useState<any[]>([]);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -60,7 +61,7 @@ export default function MyRequestsPage() {
       }
     );
 
-    alert("Revision Accepted ✅");
+    setMessage("Request submitted ✅ Track it in My Requests page");
   };
 
   
@@ -79,7 +80,7 @@ export default function MyRequestsPage() {
       }
     );
 
-    alert("Revision rejected ❌");
+    setMessage("Revision rejected ❌");
   };
 
   return (
@@ -137,6 +138,11 @@ export default function MyRequestsPage() {
                 >
                   Accept Revision
                 </button>
+                {message && (
+                  <p className="text-green-600 text-center mt-4">
+                    {message}
+                  </p>
+                )}
 
                 {/* ✅ ADD THIS */}
                 <button
@@ -145,6 +151,11 @@ export default function MyRequestsPage() {
                 >
                   Reject Revision
                 </button>
+                {message && (
+                  <p className="text-green-600 text-center mt-4">
+                    {message}
+                  </p>
+                )}
               </div>
             )}
           </div>

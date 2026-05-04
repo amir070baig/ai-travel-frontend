@@ -232,40 +232,11 @@ export default function GeneratePage() {
                 disabled={requestLoading}
                 className="flex-1 bg-green-600 text-white py-2 rounded-xl disabled:bg-gray-400"
               >
-                {requestLoading ? "Processing..." : "Request Execution"}
-              </button>
-
-              <button
-                onClick={handleBooking}
-                className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl"
-              >
-                Instant Booking
+                {requestLoading ? "Submitting..." : "Request This Plan"}
               </button>
             </div>
           </div>
         )}
-
-        {itinerary?.requestStatus === "REVISION_SENT" && (
-          <button
-            onClick={handleAcceptRevision}
-            className="w-full bg-blue-600 text-white py-3 rounded-xl"
-          >
-            Accept Revision
-          </button>
-        )}
-
-        {/* PAYMENT */}
-        {booking && (
-          <button
-            onClick={handlePayment}
-            className="w-full bg-linear-to-r from-orange-500 to-orange-600 hover:opacity-90 text-white py-3 rounded-xl font-semibold"
-          >
-            Pay Advance 💳
-          </button>
-        )}
-        <p className="text-sm text-gray-500 text-center">
-            Secure payment will be handled by our travel expert after confirmation
-          </p>
       </div>
     </div>
   );
