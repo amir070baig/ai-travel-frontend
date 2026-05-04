@@ -267,15 +267,21 @@ export default function AdminPage() {
               <div className="space-y-4 mt-4">
                 {bookings.map((b) => (
                   <div key={b.id} className="bg-white p-4 rounded shadow mt-4">
-                    <p className="text-xs text-gray-500">Type: Pre-built Tour</p>
-                    <p><strong>User:</strong> {b.user?.email}</p>
-                    <p><strong>Status:</strong> {b.status}</p>
-                    {b.revisionMessage && (
-                      <p className="text-blue-600">
-                        <strong>Admin Note:</strong> {b.revisionMessage}
+                    <p className="text-xs text-gray-500">Pre-built Tour</p>
+
+                      <p><strong>User:</strong> {b.user?.email}</p>
+
+                      {/* 🔥 SHOW TOUR TITLE */}
+                      <p><strong>Tour:</strong> {b.tour?.title || "Unknown Tour"}</p>
+
+                      {/* 🔥 SHOW DESCRIPTION */}
+                      <p className="text-gray-600 text-sm">
+                        {b.tour?.description}
                       </p>
-                    )}
-                    <p><strong>Amount:</strong> ₹{b.advanceAmount}</p>
+
+                      <p><strong>Amount:</strong> ₹{b.advanceAmount}</p>
+
+                      <p><strong>Status:</strong> {b.status}</p>
                   </div>
                 ))}
               </div>
