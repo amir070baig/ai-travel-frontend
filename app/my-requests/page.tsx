@@ -52,37 +52,72 @@ export default function MyRequestsPage() {
   }, []);
 
   const handleAccept = async (requestId: string) => {
-    await fetch(
-      "https://ai-travel-backend-production.up.railway.app/requests/accept",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ requestId }),
-      }
-    );
+    try {
+      const token = localStorage.getItem("token");
 
-    setMessage("Request submitted ✅ Track it in My Requests page");
+      const res = await fetch(
+        "https://ai-travel-backend-production.up.railway.app/requests/accept",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ requestId }),
+        }
+      );
+
+      if (!res.ok) throw new Error();
+
+      // ✅ UPDATE UI STATE IMMEDIATELY
+      setRequests((prev) =>
+        prev.map((req) =>
+          req.id === requestId
+            ? { ...req, status: "APPROVED" }
+            : req
+        )
+      );
+
+      setMessage("Revision accepted ✅");
+
+    } catch (err) {
+      setMessage("Something went wrong ❌");
+    }
   };
 
   
   const handleRejectRevision = async (requestId: string) => {
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    await fetch(
-      "https://ai-travel-backend-production.up.railway.app/requests/reject-revision",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ requestId }),
-      }
-    );
+      const res = await fetch(
+        "https://ai-travel-backend-production.up.railway.app/requests/reject-revision",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ requestId }),
+        }
+      );
 
-    setMessage("Revision rejected ❌");
+      if (!res.ok) throw new Error();
+
+      // ✅ UPDATE UI STATE
+      setRequests((prev) =>
+        prev.map((req) =>
+          req.id === requestId
+            ? { ...req, status: "UNDER_REVIEW" }
+            : req
+        )
+      );
+
+      setMessage("Revision rejected ❌");
+
+    } catch (err) {
+      setMessage("Something went wrong ❌");
+    }
   };
 
   return (
@@ -139,14 +174,16 @@ export default function MyRequestsPage() {
               <div className="flex gap-3">
                 <button
                   onClick={() => handleAccept(req.id)}
-                  className="bg-green-600 text-white px-4 py-2 rounded"
+                  disabled={req.status !== "REVISION_SENT"}
+                  className="bg-green-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
                 >
                   Accept Revision
                 </button>
 
                 <button
                   onClick={() => handleRejectRevision(req.id)}
-                  className="bg-red-600 text-white px-4 py-2 rounded"
+                  disabled={req.status !== "REVISION_SENT"}
+                  className="bg-red-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
                 >
                   Reject Revision
                 </button>
