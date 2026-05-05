@@ -7,46 +7,48 @@ export default function MyRequestsPage() {
   useAuth();
   
   const [requests, setRequests] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<any[]>([]);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const fetchRequests = async () => {
+    const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
 
         if (!token) {
-          console.log("No token found");
           setRequests([]);
+          setBookings([]);
           return;
         }
 
-        const res = await fetch(
+        // ✅ REQUESTS
+        const reqRes = await fetch(
           "https://ai-travel-backend-production.up.railway.app/requests",
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        const data = await res.json();
+        const reqData = await reqRes.json();
+        setRequests(Array.isArray(reqData) ? reqData : []);
 
-        console.log("REQUESTS API:", data);
+        // 🔥 BOOKINGS
+        const bookRes = await fetch(
+          "https://ai-travel-backend-production.up.railway.app/bookings",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
-        // ✅ GUARANTEED SAFE
-        if (!res.ok || !Array.isArray(data)) {
-          setRequests([]);
-          return;
-        }
+        const bookData = await bookRes.json();
+        setBookings(Array.isArray(bookData) ? bookData : []);
 
-        setRequests(data);
       } catch (err) {
-        console.error("Fetch error:", err);
-        setRequests([]);
+        console.error(err);
       }
     };
 
-    fetchRequests();
+    fetchData();
   }, []);
 
   const handleAccept = async (requestId: string) => {
@@ -118,13 +120,16 @@ export default function MyRequestsPage() {
               </span>
             </p>
 
-            <p className="text-gray-600 text-sm">
-              {req.itinerary?.contentJson || "Your travel plan"}
-            </p>
+            {req.itinerary?.contentJson && (
+              <div className="bg-gray-50 border p-3 rounded mt-2">
+                <strong>Your Itinerary:</strong>
+                <pre className="whitespace-pre-wrap text-sm mt-1">
+                  {req.itinerary.contentJson}
+                </pre>
+              </div>
+            )}
 
-            <p className="text-sm text-gray-600">
-              {req.itinerary?.contentJson || "No itinerary details available"}
-            </p>
+            
             {req.revisionMessage && (
               <p className="text-blue-600">
                 <strong>Admin Note:</strong> {req.revisionMessage}
@@ -138,30 +143,62 @@ export default function MyRequestsPage() {
                 >
                   Accept Revision
                 </button>
-                {message && (
-                  <p className="text-green-600 text-center mt-4">
-                    {message}
-                  </p>
-                )}
 
-                {/* ✅ ADD THIS */}
                 <button
                   onClick={() => handleRejectRevision(req.id)}
                   className="bg-red-600 text-white px-4 py-2 rounded"
                 >
                   Reject Revision
                 </button>
-                {message && (
-                  <p className="text-green-600 text-center mt-4">
-                    {message}
-                  </p>
-                )}
               </div>
             )}
+            {message && (
+              <p className="text-center text-green-600 mt-4">
+                {message}
+              </p>
+            )}
           </div>
+          
         ))}
 
       </div>
+
+      <h2 className="text-2xl font-bold mt-10 text-center">
+        My Bookings
+      </h2>
+
+      {bookings.length === 0 && (
+        <p className="text-center text-gray-500">
+          No bookings yet
+        </p>
+      )}
+
+      {bookings.map((b) => (
+        <div
+          key={b.id}
+          className="bg-white p-6 rounded-xl shadow-md space-y-3"
+        >
+          <p className="text-xs text-gray-500">
+            {b.tour ? "Pre-built Tour" : "Custom AI Trip"}
+          </p>
+
+          {b.tour && (
+            <>
+              <p><strong>Tour:</strong> {b.tour.title}</p>
+              <p className="text-gray-600">{b.tour.description}</p>
+            </>
+          )}
+
+          {b.itinerary && (
+            <pre className="text-sm bg-gray-50 p-2 rounded">
+              {b.itinerary.contentJson}
+            </pre>
+          )}
+
+          <p><strong>Amount:</strong> ₹{b.advanceAmount}</p>
+          <p><strong>Status:</strong> {b.status}</p>
+        </div>
+      ))}
     </div>
   );
 }

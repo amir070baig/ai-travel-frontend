@@ -14,6 +14,7 @@ export default function GeneratePage() {
   const [requestLoading, setRequestLoading] = useState(false);
   const [itinerary, setItinerary] = useState<any>(null);
   const [booking, setBooking] = useState<any>(null);
+  const [message, setMessage] = useState("");
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -233,6 +234,13 @@ export default function GeneratePage() {
                 className="flex-1 bg-green-600 text-white py-2 rounded-xl disabled:bg-gray-400"
               >
                 {requestLoading ? "Submitting..." : "Request This Plan"}
+              </button>
+
+              <button
+                onClick={() => setMessage("Saved! You can request it later")}
+                className="bg-gray-200 px-4 py-2 rounded"
+              >
+                Save for Later
               </button>
             </div>
           </div>
