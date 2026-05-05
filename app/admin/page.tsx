@@ -208,12 +208,6 @@ export default function AdminPage() {
                     Itinerary not available
                   </p>
                 )}
-
-                {req.revisionStatus === "REJECTED_BY_USER" && (
-                  <p className="text-red-600">
-                    User rejected the revision ❌
-                  </p>
-                )}
               </div>
               
               <p>
@@ -231,9 +225,13 @@ export default function AdminPage() {
                 >
                   {req.status}
                 </span>
+                {req.revisionStatus === "REJECTED_BY_USER" && (
+                  <p className="text-red-600">
+                    User rejected the revision ❌
+                  </p>
+                )}
               </p>
 
-                
               <div className="flex gap-3">
                 <button
                   onClick={() => handleApprove(req.id)}
