@@ -7,7 +7,7 @@ export default function GeneratePage() {
   useAuth();
   
   const [days, setDays] = useState(3);
-  const [budget, setBudget] = useState("medium");
+  const [budget, setBudget] = useState("");
   const [groupSize, setGroupSize] = useState(2);
 
   const [loading, setLoading] = useState(false);
@@ -15,9 +15,14 @@ export default function GeneratePage() {
   const [itinerary, setItinerary] = useState<any>(null);
   const [booking, setBooking] = useState<any>(null);
   const [message, setMessage] = useState("");
+  const [saved, setSaved] = useState(false);
 
   const handleGenerate = async () => {
     setLoading(true);
+    if (!budget || Number(budget) < 2000) {
+      setMessage("Minimum budget should be ₹2000");
+      return;
+    }
 
     try {
       const res = await fetch("https://ai-travel-backend-production.up.railway.app/ai/generate-itinerary", {
@@ -206,7 +211,9 @@ export default function GeneratePage() {
           <div className="bg-white p-8 rounded-2xl shadow-xl space-y-6 border">
             
             <div className="flex justify-between items-center">
-              <h3 className="text-2xl font-semibold">Your Itinerary</h3>
+              <h3 className="text-2xl font-semibold">
+                {itinerary.contentJson.split("\n")[0]}
+              </h3>
               <span className="text-sm text-gray-500">
                 {days} days · {budget}
               </span>
@@ -228,6 +235,8 @@ export default function GeneratePage() {
             </div>
 
             <div className="flex gap-4 pt-4">
+
+              {/* REQUEST */}
               <button
                 onClick={handleRequest}
                 disabled={requestLoading}
@@ -236,14 +245,25 @@ export default function GeneratePage() {
                 {requestLoading ? "Submitting..." : "Request This Plan"}
               </button>
 
+              {/* SAVE */}
               <button
-                onClick={() => setMessage("Saved! You can request it later")}
-                className="bg-gray-200 px-4 py-2 rounded"
+                onClick={() => {
+                  setSaved(true);
+                  setMessage("Saved ✅ You can request it later from My Requests");
+                }}
+                disabled={saved}
+                className="flex-1 bg-gray-200 py-2 rounded-xl disabled:bg-gray-400"
               >
-                Save for Later
+                {saved ? "Saved" : "Save for Later"}
               </button>
+
             </div>
           </div>
+        )}
+        {message && (
+          <p className="text-green-600 text-center mt-2">
+            {message}
+          </p>
         )}
       </div>
     </div>

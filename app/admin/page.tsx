@@ -208,6 +208,12 @@ export default function AdminPage() {
                     Itinerary not available
                   </p>
                 )}
+
+                {req.revisionStatus === "REJECTED_BY_USER" && (
+                  <p className="text-red-600">
+                    User rejected the revision ❌
+                  </p>
+                )}
               </div>
               
               <p>
