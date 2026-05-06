@@ -34,7 +34,9 @@ export default function GeneratePage() {
       });
 
       const data = await res.json();
-      setItinerary(data.itinerary);
+      setItinerary({
+        contentJson: data.content,
+      });
     } catch (err) {
       console.error(err);
     }
@@ -212,7 +214,7 @@ export default function GeneratePage() {
             
             <div className="flex justify-between items-center">
               <h3 className="text-2xl font-semibold">
-                {itinerary.contentJson.split("\n")[0]}
+                {itinerary?.contentJson?.split("\n")[0] || "Your AI Itinerary"}
               </h3>
               <span className="text-sm text-gray-500">
                 {days} days · {budget}
@@ -247,14 +249,38 @@ export default function GeneratePage() {
 
               {/* SAVE */}
               <button
-                onClick={() => {
-                  setSaved(true);
-                  setMessage("Saved ✅ You can request it later from My Requests");
+                onClick={async () => {
+                  try {
+                    const token = localStorage.getItem("token");
+
+                    const res = await fetch(
+                      "https://ai-travel-backend-production.up.railway.app/itineraries/save",
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({
+                          content: itinerary.contentJson,
+                          days,
+                          budget,
+                          groupSize,
+                        }),
+                      }
+                    );
+
+                    if (!res.ok) throw new Error();
+
+                    setMessage("Saved successfully ✅");
+
+                  } catch (err) {
+                    setMessage("Save failed ❌");
+                  }
                 }}
-                disabled={saved}
-                className="flex-1 bg-gray-200 py-2 rounded-xl disabled:bg-gray-400"
+                className="flex-1 bg-gray-200 py-2 rounded-xl"
               >
-                {saved ? "Saved" : "Save for Later"}
+                Save for Later
               </button>
 
             </div>
