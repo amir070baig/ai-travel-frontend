@@ -121,8 +121,12 @@ export default function GeneratePage() {
   //   }
   // };
 
-  const formatItinerary = (text: string) => {
-    return text.split("\n").filter((line) => line.trim() !== "");
+  const formatItinerary = (text?: string) => {
+    if (!text) return [];
+
+    return text
+      .split("\n")
+      .filter((line) => line.trim() !== "");
   };
 
   const handleAcceptRevision = async () => {
@@ -222,7 +226,7 @@ export default function GeneratePage() {
             </div>
 
             <div className="border-l-2 border-gray-200 pl-4 space-y-4">
-              {formatItinerary(itinerary.contentJson).map((item, index) => (
+              {formatItinerary(itinerary?.contentJson).map((item, index) => (
                 <div
                   key={index}
                   className="flex gap-4 items-start bg-gray-50 p-4 rounded-xl"
