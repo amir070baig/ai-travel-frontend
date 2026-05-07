@@ -174,9 +174,19 @@ export default function GeneratePage() {
             <label className="text-sm font-medium text-gray-600">Number of Days</label>
             <input
               type="number"
+              min="1"
               value={days}
-              onChange={(e) => setDays(Number(e.target.value))}
-              className="w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black/80"
+              onChange={(e) => {
+                const value = Number(e.target.value);
+
+                if (value < 1) {
+                  setDays(1);
+                  return;
+                }
+
+                setDays(value);
+              }}
+              className="w-full p-3 border rounded-xl"
             />
           </div>
 
@@ -257,6 +267,11 @@ export default function GeneratePage() {
                   try {
                     const token = localStorage.getItem("token");
 
+                    if (!token) {
+                      alert("Please login first");
+                      return;
+                    }
+
                     const res = await fetch(
                       "https://ai-travel-backend-production.up.railway.app/itineraries/save",
                       {
@@ -274,12 +289,18 @@ export default function GeneratePage() {
                       }
                     );
 
-                    if (!res.ok) throw new Error();
+                    const data = await res.json();
 
-                    setMessage("Saved successfully ✅");
+                    if (!res.ok) {
+                      alert(data.message || "Save failed");
+                      return;
+                    }
+
+                    setMessage("Itinerary saved successfully ✅");
 
                   } catch (err) {
-                    setMessage("Save failed ❌");
+                    console.error(err);
+                    alert("Something went wrong");
                   }
                 }}
                 className="flex-1 bg-gray-200 py-2 rounded-xl"

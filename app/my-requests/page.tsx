@@ -9,6 +9,7 @@ export default function MyRequestsPage() {
   const [requests, setRequests] = useState<any[]>([]);
   const [bookings, setBookings] = useState<any[]>([]);
   const [message, setMessage] = useState("");
+  const [savedItineraries, setSavedItineraries] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +43,19 @@ export default function MyRequestsPage() {
 
         const bookData = await bookRes.json();
         setBookings(Array.isArray(bookData) ? bookData : []);
+
+        const savedRes = await fetch(
+          "https://ai-travel-backend-production.up.railway.app/itineraries/my",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const savedData = await savedRes.json();
+
+        setSavedItineraries(Array.isArray(savedData) ? savedData : []);
 
       } catch (err) {
         console.error(err);
@@ -125,7 +139,7 @@ export default function MyRequestsPage() {
       <div className="max-w-4xl mx-auto space-y-6">
 
         <h1 className="text-3xl font-bold text-center">
-          My Requests
+          Travel Dashboard
         </h1>
 
 
@@ -142,7 +156,7 @@ export default function MyRequestsPage() {
           >
             
             <p className="text-center text-gray-500 text-sm">
-              Track your travel requests and updates here
+              Monitor your AI trips, bookings, and travel updates all in one place
             </p>
             <p className="text-sm text-gray-500">
               Request #{req.id.slice(0, 6)}
@@ -198,11 +212,42 @@ export default function MyRequestsPage() {
           
         ))}
 
-      </div>
+        <h2 className="text-2xl font-bold mt-12 text-center">
+          Saved Itineraries
+        </h2>
 
-      <h2 className="text-2xl font-bold mt-10 text-center">
-        My Bookings
-      </h2>
+        <p className="text-center text-gray-500 text-sm mb-4">
+          Plans you saved for future booking
+        </p>
+
+        {savedItineraries.length === 0 && (
+          <p className="text-center text-gray-500">
+            No saved itineraries yet
+          </p>
+        )}
+
+        <div className="space-y-4">
+          {savedItineraries.map((it) => (
+            <div
+              key={it.id}
+              className="bg-white p-6 rounded-2xl shadow-md border space-y-4"
+            >
+
+              <p className="text-xs text-gray-500 mb-2">
+                Saved AI Trip
+              </p>
+
+              <pre className="whitespace-pre-wrap text-sm text-gray-700">
+                {it.contentJson}
+              </pre>
+
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-bold mt-10 text-center">
+          My Bookings
+        </h2>
 
       {bookings.length === 0 && (
         <p className="text-center text-gray-500">
@@ -236,6 +281,7 @@ export default function MyRequestsPage() {
           <p><strong>Status:</strong> {b.status}</p>
         </div>
       ))}
+    </div>
     </div>
   );
 }
