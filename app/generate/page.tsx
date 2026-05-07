@@ -125,8 +125,9 @@ export default function GeneratePage() {
     if (!text) return [];
 
     return text
-      .split("\n")
-      .filter((line) => line.trim() !== "");
+    .split("\n")
+    .map((line) => line.replace(/\*/g, "").trim())
+    .filter((line) => line !== "");
   };
 
   const handleAcceptRevision = async () => {
@@ -263,6 +264,7 @@ export default function GeneratePage() {
 
               {/* SAVE */}
               <button
+                disabled={saved}
                 onClick={async () => {
                   try {
                     const token = localStorage.getItem("token");
@@ -297,6 +299,7 @@ export default function GeneratePage() {
                     }
 
                     setMessage("Itinerary saved successfully ✅");
+                    setSaved(true);
 
                   } catch (err) {
                     console.error(err);
@@ -305,7 +308,7 @@ export default function GeneratePage() {
                 }}
                 className="flex-1 bg-gray-200 py-2 rounded-xl"
               >
-                Save for Later
+                {saved ? "Saved" : "Save for Later"}
               </button>
 
             </div>

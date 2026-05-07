@@ -237,6 +237,38 @@ export default function MyRequestsPage() {
                 Saved AI Trip
               </p>
 
+              <button
+                onClick={async () => {
+                  try {
+                    const token = localStorage.getItem("token");
+
+                    const res = await fetch(
+                      "https://ai-travel-backend-production.up.railway.app/requests",
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({
+                          itineraryId: it.id,
+                        }),
+                      }
+                    );
+
+                    if (!res.ok) throw new Error();
+
+                    setMessage("Request submitted successfully ✅");
+
+                  } catch (err) {
+                    setMessage("Failed to submit request ❌");
+                  }
+                }}
+                className="mt-4 bg-green-600 text-white px-4 py-2 rounded-xl"
+              >
+                Request This Plan
+              </button>
+
               <pre className="whitespace-pre-wrap text-sm text-gray-700">
                 {it.contentJson}
               </pre>
