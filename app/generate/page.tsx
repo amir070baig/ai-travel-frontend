@@ -298,8 +298,10 @@ export default function GeneratePage() {
                       return;
                     }
 
-                    setMessage("Itinerary saved successfully ✅");
                     setSaved(true);
+                    setMessage("Itinerary saved successfully ✅");
+                    window.location.href = "/my-requests"; // Redirect to My Requests page
+                    
 
                   } catch (err) {
                     console.error(err);

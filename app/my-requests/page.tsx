@@ -10,6 +10,7 @@ export default function MyRequestsPage() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [message, setMessage] = useState("");
   const [savedItineraries, setSavedItineraries] = useState<any[]>([]);
+  const [expandedTrips, setExpandedTrips] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -134,6 +135,10 @@ export default function MyRequestsPage() {
     }
   };
 
+  const activeRequests = requests.filter(
+    (req) => req.status !== "APPROVED"
+  );
+
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -142,26 +147,34 @@ export default function MyRequestsPage() {
           Travel Dashboard
         </h1>
 
+        <p className="text-center text-gray-500">
+          Monitor your AI trips, saved plans, and bookings
+        </p>
 
-        {requests.length === 0 && (
-          <p className="text-center text-gray-500">
-            No requests yet. Start by generating your first trip!
+
+        <h2 className="text-2xl font-bold mt-10 text-center">
+          Active Requests
+        </h2>
+
+        {activeRequests.length > 0 && (
+          <p className="text-center text-gray-500 text-sm mb-4">
+            Trips currently under review by our travel experts
           </p>
         )}
 
-        {Array.isArray(requests) && requests.map((req) => (
+        {activeRequests.length === 0 && (
+          <p className="text-center text-gray-500">
+            No active requests right now. Saved itineraries can be submitted for review anytime.
+          </p>
+        )}
+
+        {activeRequests.map((req, index) => (
           <div
             key={req.id}
-            className="bg-white p-6 rounded-xl shadow-md space-y-3"
+            className="bg-white p-6 rounded-2xl border shadow-sm space-y-4"
           >
-            
-            <p className="text-center text-gray-500 text-sm">
-              Monitor your AI trips, bookings, and travel updates all in one place
-            </p>
-            <p className="text-sm text-gray-500">
-              Request #{req.id.slice(0, 6)}
-            </p>
 
+            <p>Active Request #{index + 1}</p>
             <p className="font-semibold">
               Status:{" "}
               <span className="text-blue-600">
@@ -172,9 +185,48 @@ export default function MyRequestsPage() {
             {req.itinerary?.contentJson && (
               <div className="bg-gray-50 border p-3 rounded mt-2">
                 <strong>Your Itinerary:</strong>
-                <pre className="whitespace-pre-wrap text-sm mt-1">
-                  {req.itinerary.contentJson}
-                </pre>
+                <div className="space-y-3 mt-3">
+                {req.itinerary.contentJson
+                  .replace(/\*/g, "")
+                  .split("\n")
+                  .filter((line: string) => line.trim() !== "")
+                  .slice(
+                    0,
+                    expandedTrips.includes(req.id)
+                      ? undefined
+                      : 4
+                  )
+                  .map((line: string, index: number) => (
+                    <div
+                      key={index}
+                      className="bg-gray-50 border border-gray-100 rounded-xl p-4 flex gap-3 items-start"
+                    >
+
+                      <div className="w-3 h-3 rounded-full bg-black mt-2"></div>
+
+                      <p className="text-gray-700 leading-relaxed text-sm break-words w-full">
+                        {line}
+                      </p>
+
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => {
+                      if (expandedTrips.includes(req.id)) {
+                        setExpandedTrips((prev) =>
+                          prev.filter((id) => id !== req.id)
+                        );
+                      } else {
+                        setExpandedTrips((prev) => [...prev, req.id]);
+                      }
+                    }}
+                    className="text-blue-600 text-sm font-medium mt-2"
+                  >
+                    {expandedTrips.includes(req.id)
+                      ? "Show Less"
+                      : "Show Full Itinerary"}
+                  </button>
+              </div>
               </div>
             )}
 
@@ -227,15 +279,67 @@ export default function MyRequestsPage() {
         )}
 
         <div className="space-y-4">
-          {savedItineraries.map((it) => (
+          {savedItineraries.map((it, index) => (
             <div
               key={it.id}
               className="bg-white p-6 rounded-2xl shadow-md border space-y-4"
             >
 
-              <p className="text-xs text-gray-500 mb-2">
-                Saved AI Trip
+              <p className="text-sm font-bold text-gray-500 mb-2">
+                Saved Plan #{index + 1}
               </p>
+
+              <div className="space-y-3 mt-3">
+                {it.contentJson
+                  .replace(/\*/g, "")
+                  .split("\n")
+                  .filter((line: string) => line.trim() !== "")
+                  .slice(
+                    0,
+                    expandedTrips.includes(it.id)
+                      ? undefined
+                      : 4
+                  )
+                  .map((line: string, index: number) => (
+
+                    <div
+                      key={index}
+                      className="bg-gray-50 border border-gray-100 rounded-xl p-4 flex gap-3 items-start"
+                    >
+
+                      <div className="w-3 h-3 rounded-full bg-black mt-2"></div>
+
+                      <p className="text-gray-700 leading-relaxed text-sm break-words w-full">
+                        {line}
+                      </p>
+
+                    </div>
+                  ))}
+
+                <button
+                  onClick={() => {
+                    if (expandedTrips.includes(it.id)) {
+
+                      setExpandedTrips((prev) =>
+                        prev.filter((id) => id !== it.id)
+                      );
+
+                    } else {
+
+                      setExpandedTrips((prev) => [
+                        ...prev,
+                        it.id,
+                      ]);
+
+                    }
+                  }}
+                  className="text-blue-600 text-sm font-medium mt-2"
+                >
+                  {expandedTrips.includes(it.id)
+                    ? "Show Less"
+                    : "Show Full Itinerary"}
+                </button>
+              </div>
 
               <button
                 onClick={async () => {
@@ -260,6 +364,25 @@ export default function MyRequestsPage() {
 
                     setMessage("Request submitted successfully ✅");
 
+                    // remove from saved itineraries instantly
+                    setSavedItineraries((prev) =>
+                      prev.filter((item) => item.id !== it.id)
+                    );
+
+                    // refresh requests
+                    const reqRes = await fetch(
+                      "https://ai-travel-backend-production.up.railway.app/requests",
+                      {
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                      }
+                    );
+
+                    const reqData = await reqRes.json();
+
+                    setRequests(Array.isArray(reqData) ? reqData : []);
+
                   } catch (err) {
                     setMessage("Failed to submit request ❌");
                   }
@@ -268,10 +391,6 @@ export default function MyRequestsPage() {
               >
                 Request This Plan
               </button>
-
-              <pre className="whitespace-pre-wrap text-sm text-gray-700">
-                {it.contentJson}
-              </pre>
 
             </div>
           ))}
@@ -287,13 +406,13 @@ export default function MyRequestsPage() {
         </p>
       )}
 
-      {bookings.map((b) => (
+      {bookings.map((b, index) => (
         <div
           key={b.id}
-          className="bg-white p-6 rounded-xl shadow-md space-y-3"
+          className="bg-white p-6 rounded-2xl border shadow-sm space-y-4"
         >
-          <p className="text-xs text-gray-500">
-            {b.tour ? "Pre-built Tour" : "Custom AI Trip"}
+          <p className="text-xs font-bold text-gray-500">
+            Booking #{index + 1} • {b.tour ? "Pre-built Tour" : "Custom AI Trip"}
           </p>
 
           {b.tour && (
@@ -304,9 +423,57 @@ export default function MyRequestsPage() {
           )}
 
           {b.itinerary && (
-            <pre className="text-sm bg-gray-50 p-2 rounded">
-              {b.itinerary.contentJson}
-            </pre>
+            <div className="space-y-3 mt-3">
+              {b.itinerary.contentJson
+                .replace(/\*/g, "")
+                .split("\n")
+                .filter((line: string) => line.trim() !== "")
+                .slice(
+                  0,
+                  expandedTrips.includes(b.id)
+                    ? undefined
+                    : 4
+                )
+                .map((line: string, index: number) => (
+
+                  <div
+                    key={index}
+                    className="bg-gray-50 border border-gray-100 rounded-xl p-4 flex gap-3 items-start"
+                  >
+
+                    <div className="w-3 h-3 rounded-full bg-black mt-2"></div>
+
+                    <p className="text-gray-700 leading-relaxed text-sm break-words w-full">
+                      {line}
+                    </p>
+
+                  </div>
+                ))}
+
+              <button
+                onClick={() => {
+                  if (expandedTrips.includes(b.id)) {
+
+                    setExpandedTrips((prev) =>
+                      prev.filter((id) => id !== b.id)
+                    );
+
+                  } else {
+
+                    setExpandedTrips((prev) => [
+                      ...prev,
+                      b.id,
+                    ]);
+
+                  }
+                }}
+                className="text-blue-600 text-sm font-medium mt-2"
+              >
+                {expandedTrips.includes(b.id)
+                  ? "Show Less"
+                  : "Show Full Itinerary"}
+              </button>
+            </div>
           )}
 
           <p><strong>Amount:</strong> ₹{b.advanceAmount}</p>
