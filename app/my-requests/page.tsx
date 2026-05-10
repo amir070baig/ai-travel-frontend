@@ -204,7 +204,17 @@ export default function MyRequestsPage() {
 
                       <div className="w-3 h-3 rounded-full bg-black mt-2"></div>
 
-                      <p className="text-gray-700 leading-relaxed text-sm break-words w-full">
+                      <p
+                        className={`leading-relaxed text-sm break-words w-full whitespace-pre-wrap ${
+                          line.includes("Day") ||
+                          line.includes("Overview") ||
+                          line.includes("Budget") ||
+                          line.includes("Tips") ||
+                          line.includes("Hotel")
+                            ? "font-bold text-blue-700 text-base"
+                            : "text-gray-700"
+                        }`}
+                      >
                         {line}
                       </p>
 
@@ -309,7 +319,17 @@ export default function MyRequestsPage() {
 
                       <div className="w-3 h-3 rounded-full bg-black mt-2"></div>
 
-                      <p className="text-gray-700 leading-relaxed text-sm break-words w-full">
+                      <p
+                        className={`leading-relaxed text-sm break-words w-full whitespace-pre-wrap ${
+                          line.includes("Day") ||
+                          line.includes("Overview") ||
+                          line.includes("Budget") ||
+                          line.includes("Tips") ||
+                          line.includes("Hotel")
+                            ? "font-bold text-blue-700 text-base"
+                            : "text-gray-700"
+                        }`}
+                      >
                         {line}
                       </p>
 
@@ -443,7 +463,17 @@ export default function MyRequestsPage() {
 
                     <div className="w-3 h-3 rounded-full bg-black mt-2"></div>
 
-                    <p className="text-gray-700 leading-relaxed text-sm break-words w-full">
+                    <p
+                      className={`leading-relaxed text-sm break-words w-full whitespace-pre-wrap ${
+                        line.includes("Day") ||
+                        line.includes("Overview") ||
+                        line.includes("Budget") ||
+                        line.includes("Tips") ||
+                        line.includes("Hotel")
+                          ? "font-bold text-blue-700 text-base"
+                          : "text-gray-700"
+                      }`}
+                    >
                       {line}
                     </p>
 
