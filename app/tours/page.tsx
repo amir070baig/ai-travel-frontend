@@ -69,7 +69,7 @@ export default function ToursPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 py-10 px-4">
-      <div className="max-w-5xl mx-auto space-y-6">
+      <div className="max-w-5xl mx-auto px-1 sm:px-0 space-y-6">
 
         <div className="text-center space-y-4 mb-12">
 
@@ -77,7 +77,7 @@ export default function ToursPage() {
             ✨ Curated Agra Experiences
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-black tracking-tight leading-tight text-gray-900">
+          <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight text-gray-900">
             Discover Premium
             <span className="block text-blue-600">
               Agra Tours
@@ -91,17 +91,17 @@ export default function ToursPage() {
 
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {tours.map((tour: any) => (
             <div
               key={tour.id}
-              className="bg-white/90 backdrop-blur border border-white/40 shadow-xl shadow-black/5 rounded-3xl p-7  space-y-5 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+              className="bg-white/90 backdrop-blur border border-white/40 shadow-xl shadow-black/5 rounded-3xl p-4 sm:p-7  space-y-5 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
             >
               <div className="overflow-hidden rounded-2xl">
                 <img
                   src={tour.imageUrl}
                   alt={tour.title}
-                  className="w-full h-64 object-cover hover:scale-105 transition-all duration-500"
+                  className="w-full h-52 sm:h-64 object-cover hover:scale-105 transition-all duration-500"
                 />
               </div>
               <div className="space-y-3">
@@ -162,7 +162,7 @@ export default function ToursPage() {
                     Starting From
                   </p>
 
-                  <p className="text-3xl font-black text-gray-900">
+                  <p className="text-2xl md:text-3xl font-black text-gray-900">
                     ₹{tour.price}
                     <span className="text-sm font-medium text-gray-500">
                       /person
@@ -173,7 +173,7 @@ export default function ToursPage() {
 
                 <button
                   onClick={() => handleBooking(tour.id)}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition-all text-white px-5 py-3 rounded-2xl font-semibold shadow-lg shadow-blue-200"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition-all text-white px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl font-semibold shadow-lg shadow-blue-200"
                 >
                   Book Now
                 </button>

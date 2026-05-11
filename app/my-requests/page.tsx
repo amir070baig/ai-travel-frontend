@@ -143,7 +143,7 @@ export default function MyRequestsPage() {
     <div className="min-h-screen bg-gray-50 py-10 px-4">
       <div className="max-w-4xl mx-auto space-y-6">
 
-        <h1 className="text-3xl font-bold text-center">
+        <h1 className="text-2xl md:text-3xl font-bold text-center">
           Travel Dashboard
         </h1>
 
@@ -199,13 +199,11 @@ export default function MyRequestsPage() {
                   .map((line: string, index: number) => (
                     <div
                       key={index}
-                      className="bg-gray-50 border border-gray-100 rounded-xl p-4 flex gap-3 items-start"
+                      className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 shadow-sm"
                     >
 
-                      <div className="w-3 h-3 rounded-full bg-black mt-2"></div>
-
                       <p
-                        className={`leading-relaxed text-sm break-words w-full whitespace-pre-wrap ${
+                        className={`leading-relaxed text-sm break-words w-full overflow-hidden whitespace-pre-wrap ${
                           line.includes("Day") ||
                           line.includes("Overview") ||
                           line.includes("Budget") ||
@@ -299,7 +297,7 @@ export default function MyRequestsPage() {
                 Saved Plan #{index + 1}
               </p>
 
-              <div className="space-y-3 mt-3">
+              <div className="space-y-2 sm:space-y-3 mt-3">
                 {it.contentJson
                   .replace(/\*/g, "")
                   .split("\n")
@@ -314,13 +312,12 @@ export default function MyRequestsPage() {
 
                     <div
                       key={index}
-                      className="bg-gray-50 border border-gray-100 rounded-xl p-4 flex gap-3 items-start"
+                      className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 shadow-sm"
                     >
 
-                      <div className="w-3 h-3 rounded-full bg-black mt-2"></div>
 
                       <p
-                        className={`leading-relaxed text-sm break-words w-full whitespace-pre-wrap ${
+                        className={`leading-relaxed text-sm break-words w-full overflow-hidden whitespace-pre-wrap ${
                           line.includes("Day") ||
                           line.includes("Overview") ||
                           line.includes("Budget") ||
@@ -458,13 +455,11 @@ export default function MyRequestsPage() {
 
                   <div
                     key={index}
-                    className="bg-gray-50 border border-gray-100 rounded-xl p-4 flex gap-3 items-start"
+                    className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 shadow-sm"
                   >
 
-                    <div className="w-3 h-3 rounded-full bg-black mt-2"></div>
-
                     <p
-                      className={`leading-relaxed text-sm break-words w-full whitespace-pre-wrap ${
+                      className={`leading-relaxed text-sm break-words w-full overflow-hidden whitespace-pre-wrap ${
                         line.includes("Day") ||
                         line.includes("Overview") ||
                         line.includes("Budget") ||

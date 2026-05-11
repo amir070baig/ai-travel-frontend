@@ -150,27 +150,70 @@ export default function GeneratePage() {
   return (
 
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 py-12 px-4">
-      <div className="bg-blue-50 p-4 rounded-xl text-sm text-gray-700">
-        <p className="font-semibold mb-2">How it works:</p>
-        <p>1. Generate your itinerary</p>
-        <p>2. Submit request</p>
-        <p>3. Our travel expert reviews it</p>
-        <p>4. Confirm and proceed with booking</p>
+      <div className="bg-white/90 backdrop-blur border border-white/40 shadow-lg rounded-3xl p-5 sm:p-6">
+
+        <h2 className="text-lg font-bold text-gray-900 mb-4">
+          How It Works
+        </h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <p className="text-2xl mb-2">🧠</p>
+            <p className="font-semibold text-sm">
+              Generate AI Plan
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <p className="text-2xl mb-2">📩</p>
+            <p className="font-semibold text-sm">
+              Submit Request
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <p className="text-2xl mb-2">🧳</p>
+            <p className="font-semibold text-sm">
+              Expert Review
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <p className="text-2xl mb-2">✅</p>
+            <p className="font-semibold text-sm">
+              Confirm Booking
+            </p>
+          </div>
+
+        </div>
+
       </div>
       <div className="max-w-5xl mx-auto space-y-8">
 
         {/* TITLE */}
-        <div className="text-center space-y-3">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            Plan Smarter Travel ✨
+        <div className="text-center space-y-5 mb-4">
+
+          <div className="inline-flex items-center gap-2 bg-white border border-gray-200 shadow-sm px-4 py-2 rounded-full text-sm text-gray-600">
+            ✨ AI Powered Travel Planning
+          </div>
+
+          <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight text-gray-900">
+            Build Your Perfect
+            <span className="block text-blue-600">
+              Agra Experience
+            </span>
           </h1>
-          <p className="text-gray-600 max-w-xl mx-auto">
-            AI-powered itineraries with real booking support
+
+          <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto leading-relaxed px-2">
+            Generate premium AI travel itineraries with real hotel suggestions,
+            pricing estimates, local recommendations, and expert booking support.
           </p>
+
         </div>
 
         {/* INPUTS */}
-        <div className="bg-white p-6 rounded-2xl shadow-lg space-y-5">
+        <div className="bg-white/90 backdrop-blur border border-white/40 shadow-xl shadow-black/5 rounded-3xl p-5 sm:p-8 space-y-6">
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-600">Number of Days</label>
             <input
@@ -187,7 +230,7 @@ export default function GeneratePage() {
 
                 setDays(value);
               }}
-              className="w-full p-3 border rounded-xl"
+              className="w-full p-3.5 border border-gray-200 rounded-2xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
 
@@ -197,7 +240,7 @@ export default function GeneratePage() {
               type="text"
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
-              className="w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black/80"
+              className="w-full p-3.5 border border-gray-200 rounded-2xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
 
@@ -207,7 +250,7 @@ export default function GeneratePage() {
               type="number"
               value={groupSize}
               onChange={(e) => setGroupSize(Number(e.target.value))}
-              className="w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black/80"
+              className="w-full p-3.5 border border-gray-200 rounded-2xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
 
@@ -215,7 +258,7 @@ export default function GeneratePage() {
           <button
             onClick={handleGenerate}
             disabled={loading}
-            className="w-full bg-black hover:bg-gray-800 disabled:bg-gray-400 text-white h-14 rounded-xl font-semibold text-lg flex items-center justify-center"
+            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition-all disabled:bg-gray-400 text-white h-14 rounded-2xl font-semibold text-lg flex items-center justify-center shadow-lg shadow-blue-200"
           >
             {loading ? "Generating..." : "Generate Itinerary"}
           </button>
@@ -225,7 +268,7 @@ export default function GeneratePage() {
 
         {/* ITINERARY */}
         {itinerary && (
-          <div className="bg-white p-8 rounded-2xl shadow-xl space-y-6 border">
+          <div className="bg-white/95 backdrop-blur border border-white/40 rounded-3xl p-5 sm:p-8 shadow-2xl shadow-black/5 space-y-6">
             
             <div className="flex justify-between items-center">
               <h3 className="text-2xl font-semibold">
@@ -236,22 +279,35 @@ export default function GeneratePage() {
               </span>
             </div>
 
-            <div className="border-l-2 border-gray-200 pl-4 space-y-4">
+            <div className="space-y-3">
               {formatItinerary(itinerary?.contentJson).map((item, index) => (
                 <div
                   key={index}
-                  className="flex gap-4 items-start bg-gray-50 p-4 rounded-xl"
+                  className="bg-gray-50 border border-gray-100 rounded-2xl p-4 sm:p-5"
                 >
-                  <div className="w-3 h-3 mt-2 bg-black rounded-full"></div>
 
-                  <div className="text-gray-700 leading-relaxed">
+                  <div
+                    className={`leading-relaxed whitespace-pre-wrap text-sm sm:text-base ${
+                      item.includes("Day") ||
+                      item.includes("Overview") ||
+                      item.includes("Budget") ||
+                      item.includes("Tips") ||
+                      item.includes("Hotel")
+                        ? "font-bold text-blue-700 text-base sm:text-lg"
+                        : "text-gray-700"
+                    }`}
+                  >
                     {item}
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="flex gap-4 pt-4">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 text-sm text-yellow-800">
+              Prices, hotel rates, and ticket costs are AI-generated estimates and may vary depending on season, availability, and traveler preferences.
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
 
               {/* REQUEST */}
               <button
