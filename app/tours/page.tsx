@@ -93,99 +93,109 @@ export default function ToursPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {tours.map((tour: any) => (
-            <div
+            <a
               key={tour.id}
-              className="bg-white/90 backdrop-blur border border-white/40 shadow-xl shadow-black/5 rounded-3xl p-4 sm:p-7  space-y-5 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+              href={`/tours/${tour.id}`}
+              className="block"
             >
-              <div className="overflow-hidden rounded-2xl">
-                <img
-                  src={tour.imageUrl}
-                  alt={tour.title}
-                  className="w-full h-52 sm:h-64 object-cover hover:scale-105 transition-all duration-500"
-                />
-              </div>
-              <div className="space-y-3">
-
-                <div className="flex flex-wrap gap-2">
-
-                  <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
-                    Bestseller
-                  </span>
-
-                  <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-                    Instant Confirmation
-                  </span>
-
-                  <span className="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-medium">
-                    Free Cancellation
-                  </span>
-
+              <div
+                key={tour.id}
+                className="bg-white/90 backdrop-blur border border-white/40 shadow-xl shadow-black/5 rounded-3xl p-4 sm:p-7  space-y-5 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+              >
+                <div className="overflow-hidden rounded-2xl">
+                  <img
+                    src={tour.imageUrl}
+                    alt={tour.title}
+                    className="w-full h-52 sm:h-64 object-cover hover:scale-105 transition-all duration-500"
+                  />
                 </div>
+                <div className="space-y-3">
 
-                <h2 className="text-2xl font-bold text-gray-900 leading-snug">
-                  {tour.title}
-                </h2>
+                  <div className="flex flex-wrap gap-2">
 
-              </div>
-              <p className="text-gray-600 leading-relaxed text-[15px]">
-                {tour.description}
-              </p>
-
-              <div className="grid grid-cols-2 gap-3 text-sm">
-
-                <div className="bg-gray-50 rounded-2xl p-3">
-                  <p className="text-gray-400 text-xs mb-1">
-                    Duration
-                  </p>
-
-                  <p className="font-semibold text-gray-800">
-                    Full Day Experience
-                  </p>
-                </div>
-
-                <div className="bg-gray-50 rounded-2xl p-3">
-                  <p className="text-gray-400 text-xs mb-1">
-                    Includes
-                  </p>
-
-                  <p className="font-semibold text-gray-800">
-                    Guide + Pickup
-                  </p>
-                </div>
-
-              </div>
-
-              <div className="flex justify-between items-center pt-3">
-                <div>
-
-                  <p className="text-sm text-gray-400">
-                    Starting From
-                  </p>
-
-                  <p className="text-2xl md:text-3xl font-black text-gray-900">
-                    ₹{tour.price}
-                    <span className="text-sm font-medium text-gray-500">
-                      /person
+                    <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+                      Bestseller
                     </span>
-                  </p>
+
+                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                      Instant Confirmation
+                    </span>
+
+                    <span className="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-medium">
+                      Free Cancellation
+                    </span>
+
+                  </div>
+
+                  <h2 className="text-2xl font-bold text-gray-900 leading-snug">
+                    {tour.title}
+                  </h2>
+
+                </div>
+                <p className="text-gray-600 leading-relaxed text-[15px]">
+                  {tour.description}
+                </p>
+
+                <div className="grid grid-cols-2 gap-3 text-sm">
+
+                  <div className="bg-gray-50 rounded-2xl p-3">
+                    <p className="text-gray-400 text-xs mb-1">
+                      Duration
+                    </p>
+
+                    <p className="font-semibold text-gray-800">
+                      Full Day Experience
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-2xl p-3">
+                    <p className="text-gray-400 text-xs mb-1">
+                      Includes
+                    </p>
+
+                    <p className="font-semibold text-gray-800">
+                      Guide + Pickup
+                    </p>
+                  </div>
 
                 </div>
 
-                <button
-                  onClick={() => handleBooking(tour.id)}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition-all text-white px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl font-semibold shadow-lg shadow-blue-200"
-                >
-                  Book Now
-                </button>
-                <a
-                  href={`https://wa.me/7599921173?text=Hi, I am interested in the ${tour.title}`}
-                  target="_blank"
-                  className="text-green-600 text-sm font-semibold"
-                >
-                  Chat on WhatsApp
-                </a>
+                <div className="flex justify-between items-center pt-3">
+                  <div>
+
+                    <p className="text-sm text-gray-400">
+                      Starting From
+                    </p>
+
+                    <p className="text-2xl md:text-3xl font-black text-gray-900">
+                      ₹{tour.price}
+                      <span className="text-sm font-medium text-gray-500">
+                        /person
+                      </span>
+                    </p>
+
+                  </div>
+
+                  <div className="flex gap-3">
+
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleBooking(tour.id);
+                      }}
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition-all text-white px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl font-semibold shadow-lg shadow-blue-200"
+                    >
+                      Book Now
+                    </button>
+
+                    <div className="border border-gray-200 px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl font-semibold text-gray-700 bg-white">
+                      View Details
+                    </div>
+
+                  </div>
+                </div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
 

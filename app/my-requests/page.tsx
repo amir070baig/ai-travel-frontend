@@ -139,6 +139,79 @@ export default function MyRequestsPage() {
     (req) => req.status !== "APPROVED"
   );
 
+  const handlePayment = async (bookingId: string) => {
+    try {
+
+      const res = await fetch(
+        "https://ai-travel-backend-production.up.railway.app/payments/create-order",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            bookingId,
+          }),
+        }
+      );
+
+      const order = await res.json();
+
+      const options = {
+        key: "YOUR_RAZORPAY_KEY_ID",
+
+        amount: order.amount,
+
+        currency: order.currency,
+
+        name: "AI Travel App",
+
+        description: "Advance Booking Payment",
+
+        order_id: order.id,
+
+        handler: async function (response: any) {
+
+          const verifyRes = await fetch(
+            "https://ai-travel-backend-production.up.railway.app/payments/verify",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                ...response,
+                bookingId,
+              }),
+            }
+          );
+
+          const verifyData = await verifyRes.json();
+
+          if (verifyData.success) {
+            alert("Payment Successful ✅");
+
+            window.location.reload();
+          }
+
+        },
+
+        theme: {
+          color: "#2563eb",
+        },
+      };
+
+      const razorpay = new (window as any).Razorpay(options);
+
+      razorpay.open();
+
+    } catch (err) {
+      console.error(err);
+
+      alert("Payment failed");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -498,11 +571,33 @@ export default function MyRequestsPage() {
                   ? "Show Less"
                   : "Show Full Itinerary"}
               </button>
+              {b.paymentStatus !== "PAID" && (
+                <button
+                  onClick={() => handlePayment(b.id)}
+                  className="bg-green-600 text-white px-5 py-3 rounded-2xl"
+                >
+                  Pay Advance
+                </button>
+              )}
             </div>
           )}
 
           <p><strong>Amount:</strong> ₹{b.advanceAmount}</p>
+
           <p><strong>Status:</strong> {b.status}</p>
+
+          <p>
+            <strong>Payment:</strong>{" "}
+            <span
+              className={
+                b.paymentStatus === "PAID"
+                  ? "text-green-600"
+                  : "text-yellow-600"
+              }
+            >
+              {b.paymentStatus}
+            </span>
+          </p>
         </div>
       ))}
     </div>

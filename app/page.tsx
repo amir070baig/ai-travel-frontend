@@ -27,7 +27,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50">
 
       {/* HERO */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
@@ -59,7 +59,7 @@ export default function HomePage() {
 
             <a
               href="/generate"
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition-all text-white px-7 py-4 rounded-2xl font-semibold shadow-lg shadow-blue-200"
+              className="bg-linear-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition-all text-white px-7 py-4 rounded-2xl font-semibold shadow-lg shadow-blue-200"
             >
               Generate AI Trip
             </a>
@@ -168,7 +168,7 @@ export default function HomePage() {
                       </p>
                     </div>
 
-                    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-2xl text-sm font-semibold">
+                    <div className="bg-linear-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-2xl text-sm font-semibold">
                       Explore
                     </div>
 

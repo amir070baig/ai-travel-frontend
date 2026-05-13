@@ -318,6 +318,16 @@ export default function GeneratePage() {
                 {requestLoading ? "Submitting..." : "Request This Plan"}
               </button>
 
+              <a
+                href={`https://wa.me/917599921173?text=${encodeURIComponent(
+                  `Hi, I generated an itinerary for ${days} days with budget ₹${budget}. I'd like help planning this trip.`
+                )}`}
+                target="_blank"
+                className="flex-1 bg-green-500 hover:bg-green-600 transition-all text-white py-2 rounded-xl text-center"
+              >
+                Discuss on WhatsApp
+              </a>
+
               {/* SAVE */}
               <button
                 disabled={saved}
@@ -367,6 +377,53 @@ export default function GeneratePage() {
                 className="flex-1 bg-gray-200 py-2 rounded-xl"
               >
                 {saved ? "Saved" : "Save for Later"}
+              </button>
+
+              <button
+                onClick={async () => {
+                  try {
+
+                    const res = await fetch(
+                      "https://ai-travel-backend-production.up.railway.app/pdf/generate",
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          content: itinerary.contentJson,
+                          days,
+                          budget,
+                          groupSize,
+                        }),
+                      }
+                    );
+
+                    const blob = await res.blob();
+
+                    const url = window.URL.createObjectURL(blob);
+
+                    const a = document.createElement("a");
+
+                    a.href = url;
+
+                    a.download = "itinerary.pdf";
+
+                    document.body.appendChild(a);
+
+                    a.click();
+
+                    a.remove();
+
+                  } catch (err) {
+                    console.error(err);
+
+                    alert("Failed to download PDF");
+                  }
+                }}
+                className="flex-1 bg-blue-600 text-white py-2 rounded-xl"
+              >
+                Download PDF
               </button>
 
             </div>
