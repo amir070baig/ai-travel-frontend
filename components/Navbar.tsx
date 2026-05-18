@@ -12,26 +12,19 @@ export default function Navbar() {
 
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
-
       setUser(parsedUser);
 
       const fetchNotifications = async () => {
         try {
-          const token = localStorage.getItem("token");
-
           const res = await fetch(
-            "https://ai-travel-backend-production.up.railway.app/notifications",
+            `${process.env.NEXT_PUBLIC_API_URL}/notifications`,
             {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
+              credentials: "include",
             }
           );
 
           const data = await res.json();
-
           setNotifications(Array.isArray(data) ? data : []);
-
         } catch (err) {
           console.error(err);
         }
@@ -41,10 +34,22 @@ export default function Navbar() {
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.href = "/login";
+  // Corrected async handler function
+  const handleLogout = async () => {
+    try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/logout`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+    } catch (err) {
+      console.error("Logout request failed:", err);
+    } finally {
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }
   };
 
   return (
@@ -52,7 +57,21 @@ export default function Navbar() {
 
       {/* LEFT */}
       <div className="flex flex-wrap gap-3 sm:gap-4 items-center text-sm sm:text-base">
-        <a href="/">Home</a>
+        <a href="/" className="flex items-center gap-3">
+          <img
+            src="/branding/logo.png"
+            alt="AI Travel Concierge"
+            className="w-10 h-10 object-contain"
+          />
+          <div>
+            <h1 className="font-black text-lg text-gray-900">
+              AI Travel Concierge
+            </h1>
+            <p className="text-xs text-gray-500">
+              Curated Journeys. Local Expertise. AI Precision.
+            </p>
+          </div>
+        </a>
         <a href="/generate">Generate</a>
         <a href="/tours">Tours</a>
         <a href="/my-requests">My Requests</a>
@@ -63,7 +82,6 @@ export default function Navbar() {
 
       {/* RIGHT */}
       <div className="flex items-center gap-4">
-
         {!user ? (
           <>
             <a href="/login" className="text-blue-600">Login</a>
@@ -72,13 +90,11 @@ export default function Navbar() {
         ) : (
           <>
             <div className="relative">
-
               <button
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="relative text-2xl"
               >
                 🔔
-
                 {notifications.filter((n) => !n.isRead).length > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
                     {notifications.filter((n) => !n.isRead).length}
@@ -88,7 +104,6 @@ export default function Navbar() {
 
               {showNotifications && (
                 <div className="absolute right-0 mt-3 w-80 max-h-96 overflow-y-auto bg-white border shadow-2xl rounded-3xl p-4 z-50">
-
                   <h3 className="font-bold text-lg mb-4">
                     Notifications
                   </h3>
@@ -100,7 +115,6 @@ export default function Navbar() {
                   )}
 
                   <div className="space-y-3">
-
                     {notifications.map((n, index) => (
                       <div
                         key={n.id}
@@ -109,19 +123,16 @@ export default function Navbar() {
                         <p className="font-semibold text-sm text-gray-900">
                           {index + 1}. {n.title}
                         </p>
-
                         <p className="text-xs text-gray-600 mt-1 leading-relaxed">
                           {n.message}
                         </p>
                       </div>
                     ))}
-
                   </div>
-
                 </div>
               )}
-
             </div>
+
             {/* USER INFO */}
             <span className="hidden sm:block text-sm text-gray-600">
               👤 {user.email}
@@ -136,9 +147,7 @@ export default function Navbar() {
             </button>
           </>
         )}
-
       </div>
-
     </div>
   );
 }

@@ -4,13 +4,21 @@ import { useEffect, useState } from "react";
 
 export default function HomePage() {
   const [tours, setTours] = useState<any[]>([]);
+  const [leadName, setLeadName] = useState("");
+  const [leadEmail, setLeadEmail] = useState("");
+  const [leadPhone, setLeadPhone] = useState("");
+  const [leadMessage, setLeadMessage] = useState("");
 
   useEffect(() => {
     const fetchTours = async () => {
       try {
         const res = await fetch(
-          "https://ai-travel-backend-production.up.railway.app/tours"
+          `${process.env.NEXT_PUBLIC_API_URL}/tours`,
+          {
+            credentials: "include",
+          }
         );
+        
 
         const data = await res.json();
 
@@ -54,6 +62,32 @@ export default function HomePage() {
             all in one platform.
 
           </p>
+          
+
+          <div className="flex flex-wrap justify-center gap-4 mt-6">
+
+            <a
+              href="/agra-tours"
+              className="text-blue-600 font-semibold hover:underline"
+            >
+              Best Agra Tours
+            </a>
+
+            <a
+              href="/tours"
+              className="text-blue-600 font-semibold hover:underline"
+            >
+              Taj Mahal Sunrise Tours
+            </a>
+
+            <a
+              href="/generate"
+              className="text-blue-600 font-semibold hover:underline"
+            >
+              AI Travel Itineraries
+            </a>
+
+          </div>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
 
@@ -181,31 +215,225 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* CONTACT */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-16">
 
-        <div className="bg-white rounded-3xl shadow-xl shadow-black/5 border p-8 text-center space-y-4">
 
-          <p className="text-3xl">
-            💬
+      <div className="max-w-4xl mx-auto px-4 py-14">
+
+        <div className="bg-white rounded-3xl border shadow-xl p-8">
+
+          <h2 className="text-4xl font-black text-center">
+            Plan Your Journey
+          </h2>
+
+          <p className="text-center text-gray-600 mt-4">
+            Speak with our travel experts and get
+            personalized recommendations.
           </p>
 
-          <h3 className="text-2xl font-bold text-gray-900">
-            Need Help Planning?
-          </h3>
+          <div className="grid md:grid-cols-2 gap-4 mt-8">
 
-          <p className="text-gray-600 max-w-xl mx-auto">
-            Talk directly with our travel team for personalized trip planning,
-            luxury experiences, and custom travel support.
-          </p>
+            <input
+              placeholder="Your Name"
 
-          <a
-            href="https://wa.me/917599921173"
-            target="_blank"
-            className="inline-block bg-green-500 hover:bg-green-600 transition-all text-white px-6 py-3 rounded-2xl font-semibold shadow-lg"
+              value={leadName}
+
+              onChange={(e) =>
+                setLeadName(
+                  e.target.value
+                )
+              }
+
+              className="border p-4 rounded-2xl"
+            />
+
+            <input
+              placeholder="Your Email"
+
+              value={leadEmail}
+
+              onChange={(e) =>
+                setLeadEmail(
+                  e.target.value
+                )
+              }
+
+              className="border p-4 rounded-2xl"
+            />
+
+            <input
+              placeholder="Phone Number"
+
+              value={leadPhone}
+
+              onChange={(e) =>
+                setLeadPhone(
+                  e.target.value
+                )
+              }
+
+              className="border p-4 rounded-2xl md:col-span-2"
+            />
+
+            <textarea
+              placeholder="Tell us about your trip plans..."
+
+              value={leadMessage}
+
+              onChange={(e) =>
+                setLeadMessage(
+                  e.target.value
+                )
+              }
+
+              className="border p-4 rounded-2xl h-40 md:col-span-2"
+            />
+
+          </div>
+
+          <button
+            onClick={async () => {
+
+              await fetch(
+                "/leads",
+                {
+                  method: "POST",
+
+                  credentials: "include",
+
+                  headers: {
+                    "Content-Type":
+                      "application/json",
+                  },
+
+                  body: JSON.stringify({
+                    name: leadName,
+                    email: leadEmail,
+                    phone: leadPhone,
+                    message: leadMessage,
+                  }),
+                }
+              );
+
+              alert(
+                "Our travel experts will contact you shortly ✅"
+              );
+
+              setLeadName("");
+              setLeadEmail("");
+              setLeadPhone("");
+              setLeadMessage("");
+
+            }}
+            className="w-full bg-blue-600 text-white py-4 rounded-2xl font-semibold mt-8"
           >
-            Chat on WhatsApp
-          </a>
+            Submit Inquiry
+          </button>
+
+        </div>
+
+      </div>
+
+
+      {/* FOOTER */}
+
+      <div className="bg-white border-t mt-16">
+
+        <div className="max-w-6xl mx-auto px-6 py-10">
+
+          <div className="grid md:grid-cols-3 gap-10">
+
+            {/* BRAND */}
+
+            <div>
+
+              <h3 className="text-2xl font-black text-gray-900">
+                AI Travel Concierge
+              </h3>
+
+              <p className="text-gray-600 mt-4 leading-relaxed">
+                Premium AI-powered travel planning,
+                curated Agra tours, and personalized
+                local experiences.
+              </p>
+
+            </div>
+
+            {/* SEO LINKS */}
+
+            <div>
+
+              <h4 className="font-bold text-lg mb-4">
+                Explore
+              </h4>
+
+              <div className="flex flex-col gap-3">
+
+                <a
+                  href="/agra-tours"
+                  className="text-gray-600 hover:text-blue-600"
+                >
+                  Agra Tours
+                </a>
+
+                <a
+                  href="/tours"
+                  className="text-gray-600 hover:text-blue-600"
+                >
+                  Taj Mahal Experiences
+                </a>
+
+                <a
+                  href="/generate"
+                  className="text-gray-600 hover:text-blue-600"
+                >
+                  Luxury Agra Trips
+                </a>
+
+              </div>
+
+            </div>
+
+            {/* CONTACT */}
+
+            <div>
+
+              <h4 className="font-bold text-lg mb-4">
+                Contact
+              </h4>
+
+              <div className="space-y-3 text-gray-600">
+
+                <p>
+                  WhatsApp:
+                  +91-7599921173
+                </p>
+
+                <p>
+                  Agra, India
+                </p>
+
+                <a
+                  href="https://wa.me/917599921173"
+                  target="_blank"
+                  className="inline-block bg-green-500 text-white px-5 py-3 rounded-2xl mt-3"
+                >
+                  Chat on WhatsApp
+                </a>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* BOTTOM */}
+
+          <div className="border-t mt-10 pt-6 text-center text-gray-500 text-sm">
+
+            © 2026 AI Travel Planner.
+            All rights reserved.
+
+          </div>
 
         </div>
 

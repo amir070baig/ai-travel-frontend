@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 export default function AdminPage() {
   useAuth();
   const router = useRouter();
-
   const [isAdmin, setIsAdmin] = useState(false);
   const [requests, setRequests] = useState<any[]>([]);
   const [bookings, setBookings] = useState<any[]>([]);
@@ -23,8 +22,8 @@ export default function AdminPage() {
     inclusions: "",
     exclusions: "",
   });
-
   const [editingTourId, setEditingTourId] = useState("");
+  const [leads, setLeads] = useState<any[]>([]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -39,7 +38,10 @@ export default function AdminPage() {
   const fetchTours = async () => {
     try {
       const tourRes = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/tours"
+        `${process.env.NEXT_PUBLIC_API_URL}/tours`,
+        {
+          credentials: "include",
+        }
       );
       const tourData = await tourRes.json();
       setTours(Array.isArray(tourData) ? tourData : []);
@@ -53,13 +55,12 @@ export default function AdminPage() {
 
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
 
         // FETCH REQUESTS
         const reqRes = await fetch(
-          "https://ai-travel-backend-production.up.railway.app/admin/requests",
+          `${process.env.NEXT_PUBLIC_API_URL}/admin/requests`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include",
           }
         );
         const reqData = await reqRes.json();
@@ -67,13 +68,23 @@ export default function AdminPage() {
 
         // FETCH BOOKINGS
         const bookingRes = await fetch(
-          "https://ai-travel-backend-production.up.railway.app/admin/bookings",
+          `${process.env.NEXT_PUBLIC_API_URL}/admin/bookings`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include",
           }
         );
         const bookingData = await bookingRes.json();
         setBookings(Array.isArray(bookingData) ? bookingData : []);
+
+        // FETCH LEADS
+        const leadRes = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/leads`,
+          {
+            credentials: "include",
+          }
+        );
+        const leadData = await leadRes.json();
+        setLeads(Array.isArray(leadData) ? leadData : []);
 
         // FETCH TOURS
         await fetchTours();
@@ -87,22 +98,23 @@ export default function AdminPage() {
 
   const handleApprove = async (requestId: string) => {
     try {
-      const token = localStorage.getItem("token");
       await fetch(
-        "https://ai-travel-backend-production.up.railway.app/admin/approve",
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/approve`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ requestId }),
         }
       );
 
       const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/admin/requests",
-        { headers: { Authorization: `Bearer ${token}` } }
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/requests`,
+        { 
+          credentials: "include",
+        }
       );
       const data = await res.json();
       setRequests(Array.isArray(data) ? data : []);
@@ -113,22 +125,23 @@ export default function AdminPage() {
 
   const handleReject = async (requestId: string) => {
     try {
-      const token = localStorage.getItem("token");
       await fetch(
-        "https://ai-travel-backend-production.up.railway.app/admin/reject",
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/reject`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ requestId }),
         }
       );
 
       const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/admin/requests",
-        { headers: { Authorization: `Bearer ${token}` } }
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/requests`,
+        { 
+          credentials: "include",
+        }
       );
       const data = await res.json();
       setRequests(Array.isArray(data) ? data : []);
@@ -139,26 +152,27 @@ export default function AdminPage() {
   };
 
   const handleRevision = async (requestId: string) => {
-    const token = localStorage.getItem("token");
     const message = prompt("Enter revision message:");
     if (!message) return;
 
     try {
       await fetch(
-        "https://ai-travel-backend-production.up.railway.app/admin/revision",
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/revision`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ requestId, message }),
         }
       );
 
       const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/admin/requests",
-        { headers: { Authorization: `Bearer ${token}` } }
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/requests`,
+        { 
+          credentials: "include",
+        }
       );
       const data = await res.json();
       setRequests(Array.isArray(data) ? data : []);
@@ -169,7 +183,6 @@ export default function AdminPage() {
   };
 
   const handleTourSubmit = async () => {
-    const token = localStorage.getItem("token");
     const bodyData = {
       ...tourForm,
       price: Number(tourForm.price),
@@ -178,18 +191,19 @@ export default function AdminPage() {
       exclusions: tourForm.exclusions.split(",").map((s) => s.trim()),
     };
 
+    // FIXED: Corrected full Railway API endpoints
     const url = editingTourId
-      ? `railway.app{editingTourId}`
-      : "railway.app";
+      ? `${process.env.NEXT_PUBLIC_API_URL}/tours/${editingTourId}`
+      : `${process.env.NEXT_PUBLIC_API_URL}/tours`;
 
     const method = editingTourId ? "PUT" : "POST";
 
     try {
       const res = await fetch(url, {
+        credentials: "include",
         method,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(bodyData),
       });
@@ -268,178 +282,100 @@ export default function AdminPage() {
           <div className="space-y-3">
             <label className="font-medium">Upload Tour Image</label>
             <input
-              type="file"
-              onChange={async (e) => {
-                const file = e.target.files?.[0];
-                if (!file) return;
-                const formData = new FormData();
-                formData.append("image", file);
-
-                try {
-                  const res = await fetch(
-                    "https://ai-travel-backend-production.up.railway.app/upload",
-                    { method: "POST", body: formData }
-                  );
-                  const data = await res.json();
-                  setTourForm({ ...tourForm, imageUrl: data.imageUrl });
-                } catch (err) {
-                  console.error(err);
-                  alert("Image upload failed");
-                }
-              }}
-              className="border p-3 rounded-2xl w-full"
-            />
-            {tourForm.imageUrl && (
-              <img src={tourForm.imageUrl} alt="Preview" className="w-full h-64 object-cover rounded-2xl" />
-            )}
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <input
-              placeholder="Duration (e.g., 3 Days)"
-              value={tourForm.duration}
-              onChange={(e) => setTourForm({ ...tourForm, duration: e.target.value })}
-              className="border p-3 rounded-2xl"
-            />
-            <input
-              placeholder="Pickup Point"
-              value={tourForm.pickupPoint}
-              onChange={(e) => setTourForm({ ...tourForm, pickupPoint: e.target.value })}
-              className="border p-3 rounded-2xl"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <input
-              placeholder="Highlights (comma separated)"
-              value={tourForm.highlights}
-              onChange={(e) => setTourForm({ ...tourForm, highlights: e.target.value })}
-              className="border p-3 rounded-2xl w-full"
-            />
-            <input
-              placeholder="Inclusions (comma separated)"
-              value={tourForm.inclusions}
-              onChange={(e) => setTourForm({ ...tourForm, inclusions: e.target.value })}
-              className="border p-3 rounded-2xl w-full"
-            />
-            <input
-              placeholder="Exclusions (comma separated)"
-              value={tourForm.exclusions}
-              onChange={(e) => setTourForm({ ...tourForm, exclusions: e.target.value })}
+              placeholder="Image URL"
+              value={tourForm.imageUrl}
+              onChange={(e) => setTourForm({ ...tourForm, imageUrl: e.target.value })}
               className="border p-3 rounded-2xl w-full"
             />
           </div>
 
-          <div className="flex gap-2">
-            <button
-              onClick={handleTourSubmit}
-              className="bg-blue-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-blue-700 transition"
+          <button
+            onClick={handleTourSubmit}
+            className="w-full bg-black text-white p-4 rounded-2xl font-bold"
+          >
+            {editingTourId ? "Update Tour" : "Create Tour"}
+          </button>
+        </div>
+
+        {/* CRM LEADS SECTION */}
+        <h2 className="text-2xl font-semibold mt-10 border-b pb-2">
+          CRM Leads
+        </h2>
+
+        <div className="space-y-4">
+          {leads.map((lead) => (
+            <div
+              key={lead.id}
+              className="bg-white rounded-3xl border shadow p-6 space-y-4"
             >
-              {editingTourId ? "Update Tour Info" : "Save & Create Tour"}
-            </button>
-            {editingTourId && (
-              <button
-                onClick={() => {
-                  setEditingTourId("");
-                  setTourForm({
-                    title: "", description: "", price: "", imageUrl: "",
-                    duration: "", pickupPoint: "", highlights: "", inclusions: "", exclusions: ""
-                  });
-                }}
-                className="bg-gray-400 text-white px-6 py-3 rounded-2xl font-bold hover:bg-gray-500 transition"
-              >
-                Cancel
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* BOOKINGS LIST */}
-        <div className="bg-white rounded-3xl shadow border p-6 space-y-4">
-          <h2 className="text-2xl font-bold">Active Bookings</h2>
-          {bookings.length === 0 ? (
-            <p className="text-gray-500">No active reservations.</p>
-          ) : (
-            <div className="space-y-3">
-              {bookings.map((b) => (
-                <div key={b.id} className="border p-4 rounded-2xl bg-gray-50 flex justify-between items-center">
-                  <div>
-                    <h3 className="font-bold text-lg">{b.tour?.title}</h3>
-                    <p className="text-sm text-gray-600">User: {b.user?.email}</p>
-                    <p className="text-sm"><strong>Date:</strong> {new Date(b.travelDate).toLocaleDateString()}</p>
-                    <p className="text-sm"><strong>Time Slot:</strong> {b.timeSlot} | <strong>Travelers:</strong> {b.travelers}</p>
-                  </div>
-                  <span className="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">
-                    Confirmed
-                  </span>
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-2xl font-bold">{lead.name}</h3>
+                  <p className="text-gray-500">{lead.email}</p>
+                  <p className="text-gray-500">{lead.phone}</p>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* EXISTENT TOURS ROW LIST */}
-        <div className="bg-white rounded-3xl shadow border p-6 space-y-4">
-          <h2 className="text-2xl font-bold">Existing Live Tours</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {tours.map((t) => (
-              <div key={t.id} className="border p-4 rounded-2xl flex gap-4 items-center bg-gray-50">
-                <img src={t.imageUrl} alt="" className="w-16 h-16 object-cover rounded-xl" />
-                <div className="flex-1">
-                  <h4 className="font-bold">{t.title}</h4>
-                  <p className="text-sm text-gray-500">₹{t.price} / person</p>
-                </div>
-                <button
-                  onClick={() => handleEditSelect(t)}
-                  className="bg-gray-200 text-gray-800 px-3 py-1 rounded-xl text-sm hover:bg-gray-300"
-                >
-                  Edit
-                </button>
+                <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
+                  {lead.status}
+                </span>
               </div>
-            ))}
-          </div>
+
+              <div className="bg-gray-50 rounded-2xl p-4">
+                <p className="text-gray-700 leading-relaxed">{lead.message}</p>
+              </div>
+
+              <textarea
+                placeholder="Internal notes..."
+                defaultValue={lead.notes}
+                id={`notes-${lead.id}`}
+                className="border p-3 rounded-2xl w-full h-28"
+              />
+
+              <div className="flex flex-wrap gap-3">
+                {[
+                  "CONTACTED",
+                  "INTERESTED",
+                  "BOOKED",
+                  "COMPLETED",
+                  "LOST",
+                ].map((status) => (
+                  <button
+                    key={status}
+                    onClick={async () => {
+                      const notes = (
+                        document.getElementById(
+                          `notes-${lead.id}`
+                        ) as HTMLTextAreaElement
+                      )?.value;
+
+                      await fetch(
+                        `${process.env.NEXT_PUBLIC_API_URL}/leads`,
+                        {
+                          credentials: "include",
+                          method: "PATCH",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            leadId: lead.id,
+                            status,
+                            notes,
+                          }),
+                        }
+                      );
+                      window.location.reload();
+                    }}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm"
+                  >
+                    {status}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* REQUESTS LIST */}
-        <div className="bg-white rounded-3xl shadow border p-6 space-y-4">
-          <h2 className="text-2xl font-bold">Pending Approval Requests</h2>
-          {requests.length === 0 ? (
-            <p className="text-gray-500">No pending requests found.</p>
-          ) : (
-            <div className="space-y-4">
-              {requests.map((r) => (
-                <div key={r.id} className="border p-4 rounded-2xl bg-gray-50 space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="font-bold text-gray-700">Request ID: {r.id}</span>
-                    <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded">Pending Review</span>
-                  </div>
-                  <p className="text-sm text-gray-600">{r.details || "Custom system generated request"}</p>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleApprove(r.id)}
-                      className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm"
-                    >
-                      Approve
-                    </button>
-                    <button
-                      onClick={() => handleRevision(r.id)}
-                      className="bg-yellow-500 text-white px-4 py-2 rounded-xl text-sm"
-                    >
-                      Ask Revision
-                    </button>
-                    <button
-                      onClick={() => handleReject(r.id)}
-                      className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
-                    >
-                      Reject
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );
 }
+ 

@@ -15,19 +15,12 @@ export default function MyRequestsPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          setRequests([]);
-          setBookings([]);
-          return;
-        }
-
         // REQUESTS
         const reqRes = await fetch(
-          "https://ai-travel-backend-production.up.railway.app/requests",
+          `${process.env.NEXT_PUBLIC_API_URL}/requests`,
+          
           {
-            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include",
           }
         );
         const reqData = await reqRes.json();
@@ -35,9 +28,9 @@ export default function MyRequestsPage() {
 
         // BOOKINGS
         const bookRes = await fetch(
-          "https://ai-travel-backend-production.up.railway.app/bookings",
+          `${process.env.NEXT_PUBLIC_API_URL}/bookings`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include",
           }
         );
         const bookData = await bookRes.json();
@@ -45,9 +38,9 @@ export default function MyRequestsPage() {
 
         // SAVED ITINERARIES
         const savedRes = await fetch(
-          "https://ai-travel-backend-production.up.railway.app/itineraries/my",
+          `${process.env.NEXT_PUBLIC_API_URL}/itineraries/my`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include",
           }
         );
         const savedData = await savedRes.json();
@@ -63,14 +56,13 @@ export default function MyRequestsPage() {
 
   const handleAccept = async (requestId: string) => {
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/requests/accept",
+        `${process.env.NEXT_PUBLIC_API_URL}/requests/accept`,
         {
+          credentials: "include",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ requestId }),
         }
@@ -91,14 +83,13 @@ export default function MyRequestsPage() {
 
   const handleRejectRevision = async (requestId: string) => {
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/requests/reject-revision",
+        `${process.env.NEXT_PUBLIC_API_URL}/requests/reject-revision`,
         {
+          credentials: "include",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ requestId }),
         }
@@ -128,8 +119,9 @@ export default function MyRequestsPage() {
   const handlePayment = async (bookingId: string) => {
     try {
       const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/payments/create-order",
+        `${process.env.NEXT_PUBLIC_API_URL}/payments/create-order`,
         {
+          credentials: "include",
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ bookingId }),
@@ -147,8 +139,9 @@ export default function MyRequestsPage() {
         order_id: order.id,
         handler: async function (response: any) {
           const verifyRes = await fetch(
-            "https://ai-travel-backend-production.up.railway.app/payments/verify",
+            `${process.env.NEXT_PUBLIC_API_URL}/payments/verify`,
             {
+              credentials: "include",
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ ...response, bookingId }),

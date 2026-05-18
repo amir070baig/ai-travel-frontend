@@ -22,13 +22,19 @@ export default function TourDetailsPage({
     const fetchTour = async () => {
       try {
         const res = await fetch(
-          `https://ai-travel-backend-production.up.railway.app/tours/${params.id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/tours/${params.id}`,
+          {
+            credentials: "include",
+          }
         );
         const data = await res.json();
         setTour(data);
 
         const reviewRes = await fetch(
-          `https://ai-travel-backend-production.up.railway.app/reviews/${params.id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/reviews/${params.id}`,
+          {
+            credentials: "include",
+          }
         );
         const reviewData = await reviewRes.json();
         setReviews(Array.isArray(reviewData) ? reviewData : []);
@@ -41,20 +47,14 @@ export default function TourDetailsPage({
   }, [params.id]);
 
   const handleReviewSubmit = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Please login first");
-      return;
-    }
-
     try {
       const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/reviews",
+        `${process.env.NEXT_PUBLIC_API_URL}/reviews`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             tourId: params.id,
@@ -76,22 +76,16 @@ export default function TourDetailsPage({
   };
 
   const handleBooking = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Please login first to book a tour.");
-      return;
-    }
-
     setBookingStatus("Processing...");
 
     try {
       const res = await fetch(
-        "railway.app",
+        `${process.env.NEXT_PUBLIC_API_URL}/bookings`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             tourId: params.id,

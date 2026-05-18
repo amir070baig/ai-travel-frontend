@@ -15,9 +15,10 @@ export default function RegisterPage() {
 
     try {
       const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/auth/register",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

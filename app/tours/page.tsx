@@ -11,7 +11,10 @@ export default function ToursPage() {
     const fetchTours = async () => {
       try {
         const res = await fetch(
-          "https://ai-travel-backend-production.up.railway.app/tours"
+          `${process.env.NEXT_PUBLIC_API_URL}/tours`,
+          {
+            credentials: "include",
+          }
         );
 
         const data = await res.json();
@@ -28,21 +31,13 @@ export default function ToursPage() {
 
   const handleBooking = async (tourId: string) => {
     try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        alert("Please login first");
-        window.location.href = "/login";
-        return;
-      }
-
       const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/bookings",
+        `${process.env.NEXT_PUBLIC_API_URL}/bookings`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             tourId: tourId, // ✅ FIXED
@@ -68,7 +63,7 @@ export default function ToursPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 py-10 px-4">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50 py-10 px-4">
       <div className="max-w-5xl mx-auto px-1 sm:px-0 space-y-6">
 
         <div className="text-center space-y-4 mb-12">
@@ -183,7 +178,7 @@ export default function ToursPage() {
                         e.preventDefault();
                         handleBooking(tour.id);
                       }}
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition-all text-white px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl font-semibold shadow-lg shadow-blue-200"
+                      className="bg-linear-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition-all text-white px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl font-semibold shadow-lg shadow-blue-200"
                     >
                       Book Now
                     </button>

@@ -10,8 +10,9 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     const res = await fetch(
-      "https://ai-travel-backend-production.up.railway.app/auth/login",
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
       {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",

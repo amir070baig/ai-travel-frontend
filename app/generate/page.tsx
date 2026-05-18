@@ -9,13 +9,15 @@ export default function GeneratePage() {
   const [days, setDays] = useState(3);
   const [budget, setBudget] = useState("");
   const [groupSize, setGroupSize] = useState(2);
-
   const [loading, setLoading] = useState(false);
   const [requestLoading, setRequestLoading] = useState(false);
   const [itinerary, setItinerary] = useState<any>(null);
   const [booking, setBooking] = useState<any>(null);
   const [message, setMessage] = useState("");
   const [saved, setSaved] = useState(false);
+  const [travelStyle, setTravelStyle] = useState("Luxury");
+  const [tripType, setTripType] = useState("Couple");
+  const [interests, setInterests] = useState("");
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -25,12 +27,13 @@ export default function GeneratePage() {
     }
 
     try {
-      const res = await fetch("https://ai-travel-backend-production.up.railway.app/ai/generate-itinerary", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ai/generate-itinerary`, {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ days, budget, groupSize }),
+        body: JSON.stringify({ days, budget, groupSize, travelStyle, tripType, interests }),
       });
 
       const data = await res.json();
@@ -48,15 +51,14 @@ export default function GeneratePage() {
     setRequestLoading(true);
 
     try {
-      const token = localStorage.getItem("token");
 
       const res = await fetch(
-        "https://ai-travel-backend-production.up.railway.app/requests",
+        `${process.env.NEXT_PUBLIC_API_URL}/requests`,
         {
+          credentials: "include",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ itineraryId: itinerary.id }),
         }
@@ -81,7 +83,8 @@ export default function GeneratePage() {
 
   const handleBooking = async () => {
     try {
-      const res = await fetch("https://ai-travel-backend-production.up.railway.app/bookings", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings`, {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +108,8 @@ export default function GeneratePage() {
 // HANDLE PAYMENT I WILL USE LATER
   // const handlePayment = async () => {
   //   try {
-  //     await fetch("https://ai-travel-backend-production.up.railway.app/payments/initiate", {
+  //     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payments/initiate`, {
+         //credentials: "include",
   //       method: "POST",
   //       headers: {
   //         "Content-Type": "application/json",
@@ -132,8 +136,9 @@ export default function GeneratePage() {
 
   const handleAcceptRevision = async () => {
     await fetch(
-      "https://ai-travel-backend-production.up.railway.app/requests/accept",
+      `${process.env.NEXT_PUBLIC_API_URL}/requests/accept`,
       {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -254,11 +259,106 @@ export default function GeneratePage() {
             />
           </div>
 
+
+          <div className="space-y-1">
+
+            <label className="text-sm font-medium text-gray-600">
+              Travel Style
+            </label>
+
+            <select
+              value={travelStyle}
+
+              onChange={(e) =>
+                setTravelStyle(
+                  e.target.value
+                )
+              }
+
+              className="w-full p-3 border rounded-xl"
+            >
+
+              <option>
+                Budget
+              </option>
+
+              <option>
+                Comfort
+              </option>
+
+              <option>
+                Luxury
+              </option>
+
+            </select>
+
+          </div>
+
+          <div className="space-y-1">
+
+            <label className="text-sm font-medium text-gray-600">
+              Trip Type
+            </label>
+
+            <select
+              value={tripType}
+
+              onChange={(e) =>
+                setTripType(
+                  e.target.value
+                )
+              }
+
+              className="w-full p-3 border rounded-xl"
+            >
+
+              <option>
+                Solo
+              </option>
+
+              <option>
+                Couple
+              </option>
+
+              <option>
+                Family
+              </option>
+
+              <option>
+                Friends
+              </option>
+
+            </select>
+
+          </div>
+
+          <div className="space-y-1">
+
+            <label className="text-sm font-medium text-gray-600">
+              Interests
+            </label>
+
+            <input
+              placeholder="Photography, food, history, luxury hotels..."
+
+              value={interests}
+
+              onChange={(e) =>
+                setInterests(
+                  e.target.value
+                )
+              }
+
+              className="w-full p-3 border rounded-xl"
+            />
+
+          </div>
+
           {/* GENERATE BUTTON */}
           <button
             onClick={handleGenerate}
             disabled={loading}
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition-all disabled:bg-gray-400 text-white h-14 rounded-2xl font-semibold text-lg flex items-center justify-center shadow-lg shadow-blue-200"
+            className="w-full bg-linear-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition-all disabled:bg-gray-400 text-white h-14 rounded-2xl font-semibold text-lg flex items-center justify-center shadow-lg shadow-blue-200"
           >
             {loading ? "Generating..." : "Generate Itinerary"}
           </button>
@@ -333,26 +433,22 @@ export default function GeneratePage() {
                 disabled={saved}
                 onClick={async () => {
                   try {
-                    const token = localStorage.getItem("token");
-
-                    if (!token) {
-                      alert("Please login first");
-                      return;
-                    }
-
                     const res = await fetch(
-                      "https://ai-travel-backend-production.up.railway.app/itineraries/save",
+                      `${process.env.NEXT_PUBLIC_API_URL}/itineraries/save`,
                       {
+                        credentials: "include",
                         method: "POST",
                         headers: {
                           "Content-Type": "application/json",
-                          Authorization: `Bearer ${token}`,
                         },
                         body: JSON.stringify({
                           content: itinerary.contentJson,
                           days,
                           budget,
                           groupSize,
+                          travelStyle,
+                          tripType,
+                          interests,
                         }),
                       }
                     );
@@ -384,8 +480,9 @@ export default function GeneratePage() {
                   try {
 
                     const res = await fetch(
-                      "https://ai-travel-backend-production.up.railway.app/pdf/generate",
+                      `${process.env.NEXT_PUBLIC_API_URL}/pdf/generate`,
                       {
+                        credentials: "include",
                         method: "POST",
                         headers: {
                           "Content-Type": "application/json",
@@ -395,6 +492,9 @@ export default function GeneratePage() {
                           days,
                           budget,
                           groupSize,
+                          travelStyle,
+                          tripType,
+                          interests,
                         }),
                       }
                     );
