@@ -1,5 +1,3 @@
-"use client";
-
 export const metadata = {
   title:
     "Best Agra Tours | Taj Mahal Experiences",
