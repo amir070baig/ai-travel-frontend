@@ -1,3 +1,5 @@
+"use client";
+
 export const metadata = {
   title:
     "Best Agra Tours | Taj Mahal Experiences",
@@ -13,8 +15,6 @@ export const metadata = {
     "Sunrise Taj Mahal",
   ],
 };
-
-"use client";
 
 export default function AgraToursSEOPage() {
 
