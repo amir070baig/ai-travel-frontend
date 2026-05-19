@@ -232,6 +232,96 @@ export default function MyRequestsPage() {
           )}
         </div>
 
+        {/* SAVED ITINERARIES */}
+        <div className="space-y-4 pt-4">
+          <h2 className="text-2xl font-bold text-center">
+            Saved Itineraries
+          </h2>
+
+          {savedItineraries.length === 0 ? (
+
+            <p className="text-center text-gray-500">
+              No saved itineraries yet.
+            </p>
+
+          ) : (
+
+            <div className="space-y-4">
+
+              {savedItineraries.map((trip) => (
+
+                <div
+                  key={trip.id}
+                  className="bg-white p-6 rounded-2xl border shadow-sm space-y-4"
+                >
+
+                  <div className="flex justify-between items-center">
+
+                    <h3 className="font-bold text-lg">
+                      {trip.city || "Saved Trip"}
+                    </h3>
+
+                    <span className="text-sm text-gray-500">
+                      {trip.days} Days
+                    </span>
+
+                  </div>
+
+                  <div className="space-y-3">
+
+                    {trip.contentJson
+                      ?.replace(/\*/g, "")
+                      .split("\n")
+                      .filter((line: string) => line.trim() !== "")
+                      .slice(
+                        0,
+                        expandedTrips.includes(trip.id)
+                          ? undefined
+                          : 4
+                      )
+                      .map((line: string, i: number) => (
+
+                        <div
+                          key={i}
+                          className="bg-gray-50 border rounded-xl p-3"
+                        >
+
+                          <p
+                            className={`text-sm whitespace-pre-wrap ${
+                              line.includes("Day") ||
+                              line.includes("Overview") ||
+                              line.includes("Budget")
+                                ? "font-bold text-blue-700"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            {line}
+                          </p>
+
+                        </div>
+
+                      ))}
+
+                  </div>
+
+                  <button
+                    onClick={() => toggleExpand(trip.id)}
+                    className="text-blue-600 text-sm font-semibold hover:underline"
+                  >
+                    {expandedTrips.includes(trip.id)
+                      ? "Show Less"
+                      : "View Full Plan"}
+                  </button>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          )}
+        </div>
+
         {/* ACTIVE REQUESTS SECTION */}
         <div className="space-y-4 pt-4">
           <h2 className="text-2xl font-bold text-center">Active Requests</h2>
