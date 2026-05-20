@@ -60,7 +60,15 @@ export default function GeneratePage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ itineraryId: itinerary.id }),
+          body: JSON.stringify({
+            content: itinerary.contentJson,
+            days,
+            budget,
+            groupSize,
+            travelStyle,
+            tripType,
+            interests,
+          }),
         }
       );
 

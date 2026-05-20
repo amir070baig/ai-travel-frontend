@@ -6,11 +6,16 @@ import { useRouter } from "next/navigation";
 
 export default function AdminPage() {
   useAuth();
+
   const router = useRouter();
+
   const [isAdmin, setIsAdmin] = useState(false);
+
   const [requests, setRequests] = useState<any[]>([]);
   const [bookings, setBookings] = useState<any[]>([]);
   const [tours, setTours] = useState<any[]>([]);
+  const [leads, setLeads] = useState<any[]>([]);
+
   const [tourForm, setTourForm] = useState({
     title: "",
     description: "",
@@ -22,11 +27,13 @@ export default function AdminPage() {
     inclusions: "",
     exclusions: "",
   });
+
   const [editingTourId, setEditingTourId] = useState("");
-  const [leads, setLeads] = useState<any[]>([]);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const user = JSON.parse(
+      localStorage.getItem("user") || "{}"
+    );
 
     if (user.role === "ADMIN") {
       setIsAdmin(true);
@@ -37,14 +44,16 @@ export default function AdminPage() {
 
   const fetchTours = async () => {
     try {
-      const tourRes = await fetch(
+      const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/tours`,
         {
           credentials: "include",
         }
       );
-      const tourData = await tourRes.json();
-      setTours(Array.isArray(tourData) ? tourData : []);
+
+      const data = await res.json();
+
+      setTours(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
     }
@@ -55,38 +64,39 @@ export default function AdminPage() {
 
     const fetchData = async () => {
       try {
-
-        // FETCH REQUESTS
         const reqRes = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/admin/requests`,
           {
             credentials: "include",
           }
         );
+
         const reqData = await reqRes.json();
+
         setRequests(Array.isArray(reqData) ? reqData : []);
 
-        // FETCH BOOKINGS
         const bookingRes = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/admin/bookings`,
           {
             credentials: "include",
           }
         );
+
         const bookingData = await bookingRes.json();
+
         setBookings(Array.isArray(bookingData) ? bookingData : []);
 
-        // FETCH LEADS
         const leadRes = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/leads`,
           {
             credentials: "include",
           }
         );
+
         const leadData = await leadRes.json();
+
         setLeads(Array.isArray(leadData) ? leadData : []);
 
-        // FETCH TOURS
         await fetchTours();
       } catch (err) {
         console.error(err);
@@ -110,14 +120,7 @@ export default function AdminPage() {
         }
       );
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/requests`,
-        { 
-          credentials: "include",
-        }
-      );
-      const data = await res.json();
-      setRequests(Array.isArray(data) ? data : []);
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
@@ -137,15 +140,9 @@ export default function AdminPage() {
         }
       );
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/requests`,
-        { 
-          credentials: "include",
-        }
-      );
-      const data = await res.json();
-      setRequests(Array.isArray(data) ? data : []);
       alert("Rejected ❌");
+
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
@@ -153,6 +150,7 @@ export default function AdminPage() {
 
   const handleRevision = async (requestId: string) => {
     const message = prompt("Enter revision message:");
+
     if (!message) return;
 
     try {
@@ -168,62 +166,74 @@ export default function AdminPage() {
         }
       );
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/requests`,
-        { 
-          credentials: "include",
-        }
-      );
-      const data = await res.json();
-      setRequests(Array.isArray(data) ? data : []);
       alert("Revision Sent ✏️");
+
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
   };
 
   const handleTourSubmit = async () => {
-    const bodyData = {
-      ...tourForm,
-      price: Number(tourForm.price),
-      highlights: tourForm.highlights.split(",").map((s) => s.trim()),
-      inclusions: tourForm.inclusions.split(",").map((s) => s.trim()),
-      exclusions: tourForm.exclusions.split(",").map((s) => s.trim()),
-    };
-
-    // FIXED: Corrected full Railway API endpoints
-    const url = editingTourId
-      ? `${process.env.NEXT_PUBLIC_API_URL}/tours/${editingTourId}`
-      : `${process.env.NEXT_PUBLIC_API_URL}/tours`;
-
-    const method = editingTourId ? "PUT" : "POST";
-
     try {
+      const bodyData = {
+        ...tourForm,
+        price: Number(tourForm.price),
+        highlights: tourForm.highlights
+          .split(",")
+          .map((s) => s.trim()),
+        inclusions: tourForm.inclusions
+          .split(",")
+          .map((s) => s.trim()),
+        exclusions: tourForm.exclusions
+          .split(",")
+          .map((s) => s.trim()),
+        gallery: [tourForm.imageUrl],
+      };
+
+      const url = editingTourId
+        ? `${process.env.NEXT_PUBLIC_API_URL}/tours/${editingTourId}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/tours`;
+
+      const method = editingTourId
+        ? "PATCH"
+        : "POST";
+
       const res = await fetch(url, {
-        credentials: "include",
         method,
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(bodyData),
       });
 
-      if (res.ok) {
-        alert(editingTourId ? "Tour Updated! ✨" : "Tour Created! ✨");
-        setEditingTourId("");
-        setTourForm({
-          title: "",
-          description: "",
-          price: "",
-          imageUrl: "",
-          duration: "",
-          pickupPoint: "",
-          highlights: "",
-          inclusions: "",
-          exclusions: "",
-        });
-        await fetchTours();
+      if (!res.ok) {
+        alert("Failed to save tour");
+        return;
       }
+
+      alert(
+        editingTourId
+          ? "Tour updated ✨"
+          : "Tour created ✨"
+      );
+
+      setEditingTourId("");
+
+      setTourForm({
+        title: "",
+        description: "",
+        price: "",
+        imageUrl: "",
+        duration: "",
+        pickupPoint: "",
+        highlights: "",
+        inclusions: "",
+        exclusions: "",
+      });
+
+      await fetchTours();
     } catch (err) {
       console.error(err);
     }
@@ -231,6 +241,7 @@ export default function AdminPage() {
 
   const handleEditSelect = (tour: any) => {
     setEditingTourId(tour.id);
+
     setTourForm({
       title: tour.title || "",
       description: tour.description || "",
@@ -238,9 +249,15 @@ export default function AdminPage() {
       imageUrl: tour.imageUrl || "",
       duration: tour.duration || "",
       pickupPoint: tour.pickupPoint || "",
-      highlights: Array.isArray(tour.highlights) ? tour.highlights.join(", ") : "",
-      inclusions: Array.isArray(tour.inclusions) ? tour.inclusions.join(", ") : "",
-      exclusions: Array.isArray(tour.exclusions) ? tour.exclusions.join(", ") : "",
+      highlights: Array.isArray(tour.highlights)
+        ? tour.highlights.join(", ")
+        : "",
+      inclusions: Array.isArray(tour.inclusions)
+        ? tour.inclusions.join(", ")
+        : "",
+      exclusions: Array.isArray(tour.exclusions)
+        ? tour.exclusions.join(", ")
+        : "",
     });
   };
 
@@ -248,26 +265,93 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
-      <div className="max-w-5xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold text-center">Admin Dashboard</h1>
+      <div className="max-w-6xl mx-auto space-y-10">
 
-        {/* TOUR FORM */}
+        <h1 className="text-4xl font-black text-center">
+          Admin Dashboard
+        </h1>
+
+        {/* REVENUE STATS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+          <div className="bg-white rounded-3xl p-6 shadow border">
+            <p className="text-gray-500 text-sm">
+              Total Bookings
+            </p>
+
+            <h2 className="text-3xl font-black mt-2">
+              {bookings.length}
+            </h2>
+          </div>
+
+          <div className="bg-white rounded-3xl p-6 shadow border">
+            <p className="text-gray-500 text-sm">
+              Paid Bookings
+            </p>
+
+            <h2 className="text-3xl font-black mt-2 text-green-600">
+              {
+                bookings.filter(
+                  (b) => b.paymentStatus === "PAID"
+                ).length
+              }
+            </h2>
+          </div>
+
+          <div className="bg-white rounded-3xl p-6 shadow border">
+            <p className="text-gray-500 text-sm">
+              Revenue
+            </p>
+
+            <h2 className="text-3xl font-black mt-2 text-blue-600">
+              ₹
+              {
+                bookings
+                  .filter(
+                    (b) => b.paymentStatus === "PAID"
+                  )
+                  .reduce(
+                    (acc, b) =>
+                      acc + b.advanceAmount,
+                    0
+                  )
+              }
+            </h2>
+          </div>
+        </div>
+
+        {/* TOUR MANAGEMENT */}
         <div className="bg-white rounded-3xl shadow border p-6 space-y-4">
+
           <h2 className="text-3xl font-black">
-            {editingTourId ? "Edit Tour" : "Tour Management"}
+            {editingTourId
+              ? "Edit Tour"
+              : "Tour Management"}
           </h2>
 
           <div className="grid md:grid-cols-2 gap-4">
+
             <input
               placeholder="Tour Title"
               value={tourForm.title}
-              onChange={(e) => setTourForm({ ...tourForm, title: e.target.value })}
+              onChange={(e) =>
+                setTourForm({
+                  ...tourForm,
+                  title: e.target.value,
+                })
+              }
               className="border p-3 rounded-2xl"
             />
+
             <input
               placeholder="Price"
               value={tourForm.price}
-              onChange={(e) => setTourForm({ ...tourForm, price: e.target.value })}
+              onChange={(e) =>
+                setTourForm({
+                  ...tourForm,
+                  price: e.target.value,
+                })
+              }
               className="border p-3 rounded-2xl"
             />
           </div>
@@ -275,34 +359,317 @@ export default function AdminPage() {
           <textarea
             placeholder="Description"
             value={tourForm.description}
-            onChange={(e) => setTourForm({ ...tourForm, description: e.target.value })}
+            onChange={(e) =>
+              setTourForm({
+                ...tourForm,
+                description: e.target.value,
+              })
+            }
             className="border p-3 rounded-2xl w-full h-32"
           />
 
-          <div className="space-y-3">
-            <label className="font-medium">Upload Tour Image</label>
+          <input
+            placeholder="Image URL"
+            value={tourForm.imageUrl}
+            onChange={(e) =>
+              setTourForm({
+                ...tourForm,
+                imageUrl: e.target.value,
+              })
+            }
+            className="border p-3 rounded-2xl w-full"
+          />
+
+          <div className="grid md:grid-cols-2 gap-4">
             <input
-              placeholder="Image URL"
-              value={tourForm.imageUrl}
-              onChange={(e) => setTourForm({ ...tourForm, imageUrl: e.target.value })}
-              className="border p-3 rounded-2xl w-full"
+              placeholder="Duration"
+              value={tourForm.duration}
+              onChange={(e) =>
+                setTourForm({
+                  ...tourForm,
+                  duration: e.target.value,
+                })
+              }
+              className="border p-3 rounded-2xl"
+            />
+
+            <input
+              placeholder="Pickup Point"
+              value={tourForm.pickupPoint}
+              onChange={(e) =>
+                setTourForm({
+                  ...tourForm,
+                  pickupPoint: e.target.value,
+                })
+              }
+              className="border p-3 rounded-2xl"
             />
           </div>
 
+          <textarea
+            placeholder="Highlights (comma separated)"
+            value={tourForm.highlights}
+            onChange={(e) =>
+              setTourForm({
+                ...tourForm,
+                highlights: e.target.value,
+              })
+            }
+            className="border p-3 rounded-2xl w-full"
+          />
+
+          <textarea
+            placeholder="Inclusions (comma separated)"
+            value={tourForm.inclusions}
+            onChange={(e) =>
+              setTourForm({
+                ...tourForm,
+                inclusions: e.target.value,
+              })
+            }
+            className="border p-3 rounded-2xl w-full"
+          />
+
+          <textarea
+            placeholder="Exclusions (comma separated)"
+            value={tourForm.exclusions}
+            onChange={(e) =>
+              setTourForm({
+                ...tourForm,
+                exclusions: e.target.value,
+              })
+            }
+            className="border p-3 rounded-2xl w-full"
+          />
+
           <button
             onClick={handleTourSubmit}
-            className="w-full bg-black text-white p-4 rounded-2xl font-bold"
+            className="bg-blue-600 text-white px-6 py-3 rounded-2xl"
           >
-            {editingTourId ? "Update Tour" : "Create Tour"}
+            {editingTourId
+              ? "Update Tour"
+              : "Create Tour"}
           </button>
         </div>
 
-        {/* CRM LEADS SECTION */}
-        <h2 className="text-2xl font-semibold mt-10 border-b pb-2">
-          CRM Leads
-        </h2>
-
+        {/* TOURS LIST */}
         <div className="space-y-4">
+          <h2 className="text-2xl font-bold">
+            Existing Tours
+          </h2>
+
+          {tours.map((tour) => (
+            <div
+              key={tour.id}
+              className="bg-white p-5 rounded-2xl border shadow flex justify-between items-center"
+            >
+              <div>
+                <h3 className="font-bold text-lg">
+                  {tour.title}
+                </h3>
+
+                <p className="text-gray-500">
+                  ₹{tour.price}
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleEditSelect(tour)}
+                  className="bg-yellow-500 text-white px-4 py-2 rounded-xl"
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* REQUESTS */}
+        <div className="space-y-4">
+
+          <h2 className="text-2xl font-bold">
+            AI Generated Requests
+          </h2>
+
+          {requests.map((req) => (
+            <div
+              key={req.id}
+              className="bg-white p-6 rounded-2xl border shadow-sm space-y-4"
+            >
+
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="font-semibold">
+                    {req.user?.email}
+                  </p>
+
+                  <p className="text-sm text-gray-500">
+                    {req.itinerary?.days} Days · ₹{req.itinerary?.budget}
+                  </p>
+                </div>
+
+                <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
+                  {req.status}
+                </span>
+              </div>
+
+              <div className="bg-gray-50 border rounded-2xl p-4 space-y-3">
+                {req.itinerary?.contentJson
+                  ?.replace(/\*/g, "")
+                  .split("\n")
+                  .filter((line: string) => line.trim() !== "")
+                  .map((line: string, i: number) => (
+                    <div
+                      key={i}
+                      className="bg-white border rounded-xl p-3"
+                    >
+                      <p className="text-sm whitespace-pre-wrap">
+                        {line}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => handleApprove(req.id)}
+                  className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm"
+                >
+                  Approve
+                </button>
+
+                <button
+                  onClick={() => handleReject(req.id)}
+                  className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
+                >
+                  Reject
+                </button>
+
+                <button
+                  onClick={() => handleRevision(req.id)}
+                  className="bg-yellow-600 text-white px-4 py-2 rounded-xl text-sm"
+                >
+                  Request Revision
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* BOOKINGS */}
+        <div className="space-y-4">
+
+          <h2 className="text-2xl font-bold">
+            User Bookings
+          </h2>
+
+          {bookings.map((b) => (
+            <div
+              key={b.id}
+              className="bg-white p-6 rounded-2xl border shadow-sm space-y-4"
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="font-bold text-lg">
+                    {b.tour?.title || "Custom Booking"}
+                  </h3>
+
+                  <p className="text-gray-500 text-sm">
+                    {b.user?.email}
+                  </p>
+                </div>
+
+                <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
+                  {b.status}
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+
+                <button
+                  onClick={async () => {
+                    await fetch(
+                      `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
+                      {
+                        credentials: "include",
+                        method: "PATCH",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          bookingId: b.id,
+                          status: "CONFIRMED",
+                        }),
+                      }
+                    );
+
+                    window.location.reload();
+                  }}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm"
+                >
+                  Confirm
+                </button>
+
+                <button
+                  onClick={async () => {
+                    await fetch(
+                      `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
+                      {
+                        credentials: "include",
+                        method: "PATCH",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          bookingId: b.id,
+                          status: "COMPLETED",
+                        }),
+                      }
+                    );
+
+                    window.location.reload();
+                  }}
+                  className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm"
+                >
+                  Complete
+                </button>
+
+                <button
+                  onClick={async () => {
+                    await fetch(
+                      `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
+                      {
+                        credentials: "include",
+                        method: "PATCH",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          bookingId: b.id,
+                          status: "CANCELLED",
+                        }),
+                      }
+                    );
+
+                    window.location.reload();
+                  }}
+                  className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* CRM LEADS */}
+        <div className="space-y-4">
+
+          <h2 className="text-2xl font-bold">
+            CRM Leads
+          </h2>
+
           {leads.map((lead) => (
             <div
               key={lead.id}
@@ -310,17 +677,28 @@ export default function AdminPage() {
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="text-2xl font-bold">{lead.name}</h3>
-                  <p className="text-gray-500">{lead.email}</p>
-                  <p className="text-gray-500">{lead.phone}</p>
+                  <h3 className="text-2xl font-bold">
+                    {lead.name}
+                  </h3>
+
+                  <p className="text-gray-500">
+                    {lead.email}
+                  </p>
+
+                  <p className="text-gray-500">
+                    {lead.phone}
+                  </p>
                 </div>
+
                 <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
                   {lead.status}
                 </span>
               </div>
 
               <div className="bg-gray-50 rounded-2xl p-4">
-                <p className="text-gray-700 leading-relaxed">{lead.message}</p>
+                <p className="text-gray-700 leading-relaxed">
+                  {lead.message}
+                </p>
               </div>
 
               <textarea
@@ -362,6 +740,7 @@ export default function AdminPage() {
                           }),
                         }
                       );
+
                       window.location.reload();
                     }}
                     className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm"
@@ -373,9 +752,7 @@ export default function AdminPage() {
             </div>
           ))}
         </div>
-
       </div>
     </div>
   );
 }
- 

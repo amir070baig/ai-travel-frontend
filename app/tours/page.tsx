@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
+import { useRouter } from "next/navigation";
+
 
 export default function ToursPage() {
   
@@ -29,38 +31,41 @@ export default function ToursPage() {
     fetchTours();
   }, []);
 
-  const handleBooking = async (tourId: string) => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/bookings`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            tourId: tourId, // ✅ FIXED
-          }),
-        }
-      );
+  // const handleBooking = async (tourId: string) => {
+  //   try {
+  //     const res = await fetch(
+  //       `${process.env.NEXT_PUBLIC_API_URL}/bookings`,
+  //       {
+  //         method: "POST",
+  //         credentials: "include",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           tourId: tourId, // ✅ FIXED
+  //         }),
+  //       }
+  //     );
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      if (!res.ok) {
-        console.error("Booking failed:", data);
-        alert("Booking failed");
-        return;
-      }
+  //     if (!res.ok) {
+  //       console.error("Booking failed:", data);
+  //       alert("Booking failed");
+  //       return;
+  //     }
 
-      alert("Booking confirmed ✅");
+  //     alert("Booking confirmed ✅");
 
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
-    }
-    console.log("TOURS:", tours)
-  };
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert("Something went wrong");
+  //   }
+  //   console.log("TOURS:", tours)
+  // };
+
+  const router = useRouter();
+
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50 py-10 px-4">
@@ -176,7 +181,7 @@ export default function ToursPage() {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        handleBooking(tour.id);
+                        router.push(`/tours/${tour.id}`);
                       }}
                       className="bg-linear-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition-all text-white px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl font-semibold shadow-lg shadow-blue-200"
                     >

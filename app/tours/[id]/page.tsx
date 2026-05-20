@@ -89,9 +89,10 @@ export default function TourDetailsPage({
           },
           body: JSON.stringify({
             tourId: params.id,
-            travelDate,
+            travelDate: travelDate || new Date().toISOString().split('T')[0], // Fallback to today if empty
             timeSlot,
             travelers,
+            advanceAmount: 0, // ✅ Fixes Prisma Database constraint error
           }),
         }
       );
@@ -99,6 +100,8 @@ export default function TourDetailsPage({
       if (res.ok) {
         setBookingStatus("Booking confirmed successfully! 🎉");
       } else {
+        const errorData = await res.json();
+        console.error("Booking error details:", errorData);
         setBookingStatus("Booking failed. Please try again.");
       }
     } catch (err) {
@@ -106,6 +109,7 @@ export default function TourDetailsPage({
       console.error(err);
     }
   };
+
 
   if (!tour) {
     return <div className="p-10 text-center">Loading...</div>;
