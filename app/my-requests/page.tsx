@@ -313,12 +313,54 @@ export default function MyRequestsPage() {
                       : "View Full Plan"}
                   </button>
 
+                  <button
+                    onClick={async () => {
+
+                      try {
+
+                        const res = await fetch(
+                          `${process.env.NEXT_PUBLIC_API_URL}/requests`,
+                          {
+                            credentials: "include",
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                              itineraryId: trip.id,
+                            }),
+                          }
+                        );
+
+                        const data = await res.json();
+
+                        if (!res.ok) {
+                          alert(data.message || "Failed to submit request");
+                          return;
+                        }
+
+                        alert(
+                          "Request submitted ✅ You can track it in Active Requests"
+                        );
+
+                        window.location.reload();
+
+                      } catch (err) {
+
+                        console.error(err);
+
+                        alert("Something went wrong");
+
+                      }
+
+                    }}
+                    className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition"
+                  >
+                    Request This Plan
+                  </button>
                 </div>
-
               ))}
-
             </div>
-
           )}
         </div>
 
