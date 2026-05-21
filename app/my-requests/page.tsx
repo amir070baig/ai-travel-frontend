@@ -131,7 +131,7 @@ export default function MyRequestsPage() {
       const order = await res.json();
 
       const options = {
-        key: "YOUR_RAZORPAY_KEY_ID",
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: order.currency,
         name: "AI Travel App",
@@ -191,17 +191,19 @@ export default function MyRequestsPage() {
               {bookings.map((b) => (
                 <div key={b.id} className="bg-white p-6 rounded-2xl border shadow-sm flex flex-col justify-between space-y-4">
                   <div>
-                    <h3 className="font-bold text-lg text-gray-900">{b.tour?.title || "Tour Booking"}</h3>
+                    <h3 className="font-bold text-lg text-gray-900">{b.tour?.title || "AI Custom Trip"}</h3>
                     <div className="text-sm text-gray-600 mt-2 space-y-1">
                       
                       {/* INJECTED TARGET DATA METADATA SNIPPET */}
                       <p>
                         <strong>Date:</strong>{" "}
-                        {new Date(b.travelDate).toLocaleDateString()}
+                        {b.travelDate
+                          ? new Date(b.travelDate).toLocaleDateString()
+                          : "Will be finalized after consultation"}
                       </p>
                       <p>
                         <strong>Time:</strong>{" "}
-                        {b.timeSlot}
+                        {b.timeSlot || "Flexible scheduling"}
                       </p>
                       <p>
                         <strong>Travelers:</strong>{" "}
