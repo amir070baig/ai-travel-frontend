@@ -531,28 +531,34 @@ export default function AdminPage() {
                   ))}
               </div>
 
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={() => handleApprove(req.id)}
-                  className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm"
-                >
-                  Approve
-                </button>
+              {req.status === "UNDER_REVIEW" && (
 
-                <button
-                  onClick={() => handleReject(req.id)}
-                  className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
-                >
-                  Reject
-                </button>
+                <div className="flex flex-wrap gap-3">
 
-                <button
-                  onClick={() => handleRevision(req.id)}
-                  className="bg-yellow-600 text-white px-4 py-2 rounded-xl text-sm"
-                >
-                  Request Revision
-                </button>
-              </div>
+                  <button
+                    onClick={() => handleApprove(req.id)}
+                    className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm"
+                  >
+                    Approve
+                  </button>
+
+                  <button
+                    onClick={() => handleReject(req.id)}
+                    className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
+                  >
+                    Reject
+                  </button>
+
+                  <button
+                    onClick={() => handleRevision(req.id)}
+                    className="bg-yellow-600 text-white px-4 py-2 rounded-xl text-sm"
+                  >
+                    Request Revision
+                  </button>
+
+                </div>
+
+              )}
             </div>
           ))}
         </div>
