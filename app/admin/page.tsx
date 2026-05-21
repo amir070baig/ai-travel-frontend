@@ -578,7 +578,7 @@ export default function AdminPage() {
               <div className="flex justify-between items-center">
                 <div>
                   <h3 className="font-bold text-lg">
-                    {b.tour?.title || "Custom Booking"}
+                    {b.tour?.title || "AI Custom Trip"}
                   </h3>
 
                   <p className="text-gray-500 text-sm">
@@ -593,77 +593,130 @@ export default function AdminPage() {
 
               <div className="flex flex-wrap gap-3">
 
-                <button
-                  onClick={async () => {
-                    await fetch(
-                      `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
-                      {
-                        credentials: "include",
-                        method: "PATCH",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                          bookingId: b.id,
-                          status: "CONFIRMED",
-                        }),
-                      }
-                    );
+                {/* PENDING */}
+                {b.status === "PENDING" && (
 
-                    window.location.reload();
-                  }}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm"
-                >
-                  Confirm
-                </button>
+                  <>
+                    <button
+                      onClick={async () => {
+                        await fetch(
+                          `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
+                          {
+                            credentials: "include",
+                            method: "PATCH",
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                              bookingId: b.id,
+                              status: "CONFIRMED",
+                            }),
+                          }
+                        );
 
-                <button
-                  onClick={async () => {
-                    await fetch(
-                      `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
-                      {
-                        credentials: "include",
-                        method: "PATCH",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                          bookingId: b.id,
-                          status: "COMPLETED",
-                        }),
-                      }
-                    );
+                        window.location.reload();
+                      }}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm"
+                    >
+                      Confirm
+                    </button>
 
-                    window.location.reload();
-                  }}
-                  className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm"
-                >
-                  Complete
-                </button>
+                    <button
+                      onClick={async () => {
+                        await fetch(
+                          `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
+                          {
+                            credentials: "include",
+                            method: "PATCH",
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                              bookingId: b.id,
+                              status: "CANCELLED",
+                            }),
+                          }
+                        );
 
-                <button
-                  onClick={async () => {
-                    await fetch(
-                      `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
-                      {
-                        credentials: "include",
-                        method: "PATCH",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                          bookingId: b.id,
-                          status: "CANCELLED",
-                        }),
-                      }
-                    );
+                        window.location.reload();
+                      }}
+                      className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
+                    >
+                      Cancel
+                    </button>
+                  </>
 
-                    window.location.reload();
-                  }}
-                  className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
-                >
-                  Cancel
-                </button>
+                )}
+
+                {/* CONFIRMED */}
+                {b.status === "CONFIRMED" && (
+
+                  <>
+                    <button
+                      onClick={async () => {
+                        await fetch(
+                          `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
+                          {
+                            credentials: "include",
+                            method: "PATCH",
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                              bookingId: b.id,
+                              status: "COMPLETED",
+                            }),
+                          }
+                        );
+
+                        window.location.reload();
+                      }}
+                      className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm"
+                    >
+                      Complete
+                    </button>
+
+                    <button
+                      onClick={async () => {
+                        await fetch(
+                          `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
+                          {
+                            credentials: "include",
+                            method: "PATCH",
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                              bookingId: b.id,
+                              status: "CANCELLED",
+                            }),
+                          }
+                        );
+
+                        window.location.reload();
+                      }}
+                      className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
+                    >
+                      Cancel
+                    </button>
+                  </>
+
+                )}
+
+                {/* COMPLETED */}
+                {b.status === "COMPLETED" && (
+                  <div className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
+                    Trip Completed ✅
+                  </div>
+                )}
+
+                {/* CANCELLED */}
+                {b.status === "CANCELLED" && (
+                  <div className="bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-semibold">
+                    Booking Cancelled ❌
+                  </div>
+                )}
+
               </div>
             </div>
           ))}
