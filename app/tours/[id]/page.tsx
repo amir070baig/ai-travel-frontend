@@ -92,7 +92,7 @@ export default function TourDetailsPage({
             travelDate: travelDate || new Date().toISOString().split('T')[0], // Fallback to today if empty
             timeSlot,
             travelers,
-            advanceAmount: 0, // ✅ Fixes Prisma Database constraint error
+            advanceAmount: Math.floor(tour.price * 0.3),
           }),
         }
       );
