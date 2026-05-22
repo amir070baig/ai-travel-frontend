@@ -227,6 +227,10 @@ export default function MyRequestsPage() {
                         Pay Now
                       </button>
                     )}
+                    <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-sm text-blue-800">
+                      A small advance payment is required to reserve your personalized itinerary planning,
+                      consultation, and travel coordination services.
+                    </div>
                   </div>
                 </div>
               ))}

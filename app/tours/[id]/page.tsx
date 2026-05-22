@@ -255,6 +255,11 @@ export default function TourDetailsPage({
         {/* BOOKING CTA */}
         <div className="bg-white rounded-3xl shadow-xl border p-8 text-center space-y-6">
           <h2 className="text-3xl font-black">Ready to Book Your Adventure?</h2>
+
+          <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 text-sm text-yellow-800 max-w-2xl mx-auto">
+            A 30% advance payment is required to confirm your booking.
+            Remaining amount can be paid before the trip date.
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
             <div>

@@ -412,7 +412,9 @@ export default function GeneratePage() {
             </div>
 
             <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 text-sm text-yellow-800">
-              Prices, hotel rates, and ticket costs are AI-generated estimates and may vary depending on season, availability, and traveler preferences.
+              AI-generated itineraries are personalized travel suggestions.
+              Final pricing, accommodations, transportation, and experiences
+              are confirmed by our travel concierge team during booking assistance.
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -423,7 +425,7 @@ export default function GeneratePage() {
                 disabled={requestLoading}
                 className="flex-1 bg-green-600 text-white py-2 rounded-xl disabled:bg-gray-400"
               >
-                {requestLoading ? "Submitting..." : "Request This Plan"}
+                {requestLoading ? "Submitting..." : "Request Expert Travel Planning"}
               </button>
 
               <a
