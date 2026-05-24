@@ -387,7 +387,21 @@ export default function MyRequestsPage() {
                   <div className="flex justify-between items-center">
                     <p className="font-medium text-gray-700">Active Request #{index + 1}</p>
                     <p className="font-semibold text-sm">
-                      Status: <span className="text-blue-600 uppercase">{req.status.replace("_", " ")}</span>
+                      Status:{" "}
+
+                      <span className="text-blue-600 uppercase">
+
+                        {
+                          req.status === "UNDER_REVIEW"
+                            ? "UNDER EXPERT REVIEW"
+                            : req.status === "REVISION_SENT"
+                            ? "REVISION REQUESTED"
+                            : req.status === "APPROVED"
+                            ? "APPROVED"
+                            : req.status
+                        }
+
+                      </span>
                     </p>
                   </div>
 
@@ -422,19 +436,40 @@ export default function MyRequestsPage() {
                   )}
 
                   {req.status === "REVISION_SENT" && (
-                    <div className="flex gap-2 pt-2">
-                      <button
-                        onClick={() => handleAccept(req.id)}
-                        className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-green-700 transition"
-                      >
-                        Accept Revision
-                      </button>
-                      <button
-                        onClick={() => handleRejectRevision(req.id)}
-                        className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-red-700 transition"
-                      >
-                        Decline Revision
-                      </button>
+                    <div className="space-y-4 pt-2">
+
+                      {req.revisionMessage && (
+                        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm text-yellow-800">
+
+                          <strong className="block mb-1">
+                            Revision Notes from Travel Team:
+                          </strong>
+
+                          <p>
+                            {req.revisionMessage}
+                          </p>
+
+                        </div>
+                      )}
+
+                      <div className="flex gap-2">
+
+                        <button
+                          onClick={() => handleAccept(req.id)}
+                          className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-green-700 transition"
+                        >
+                          Accept Revision
+                        </button>
+
+                        <button
+                          onClick={() => handleRejectRevision(req.id)}
+                          className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-red-700 transition"
+                        >
+                          Request Further Changes
+                        </button>
+
+                      </div>
+
                     </div>
                   )}
                 </div>
