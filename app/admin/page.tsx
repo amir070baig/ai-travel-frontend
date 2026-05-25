@@ -252,6 +252,7 @@ export default function AdminPage() {
   };
 
   const handleEditSelect = (tour: any) => {
+    console.log("EDIT TOUR:", tour);
     setEditingTourId(tour.id);
 
     setTourForm({
