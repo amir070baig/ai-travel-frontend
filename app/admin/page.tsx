@@ -23,6 +23,8 @@ export default function AdminPage() {
     imageUrl: "",
     duration: "",
     pickupPoint: "",
+    pickupTime: "",
+    availabilityNote: "",
     highlights: "",
     inclusions: "",
     exclusions: "",
@@ -178,16 +180,24 @@ export default function AdminPage() {
     try {
       const bodyData = {
         ...tourForm,
+
+        pickupTime: tourForm.pickupTime,
+        availabilityNote: tourForm.availabilityNote,
+
         price: Number(tourForm.price),
+
         highlights: tourForm.highlights
           .split(",")
           .map((s) => s.trim()),
+
         inclusions: tourForm.inclusions
           .split(",")
           .map((s) => s.trim()),
+
         exclusions: tourForm.exclusions
           .split(",")
           .map((s) => s.trim()),
+
         gallery: [tourForm.imageUrl],
       };
 
@@ -228,6 +238,8 @@ export default function AdminPage() {
         imageUrl: "",
         duration: "",
         pickupPoint: "",
+        pickupTime: "",
+        availabilityNote: "",
         highlights: "",
         inclusions: "",
         exclusions: "",
@@ -249,12 +261,18 @@ export default function AdminPage() {
       imageUrl: tour.imageUrl || "",
       duration: tour.duration || "",
       pickupPoint: tour.pickupPoint || "",
+
+      pickupTime: tour.pickupTime || "",
+      availabilityNote: tour.availabilityNote || "",
+
       highlights: Array.isArray(tour.highlights)
         ? tour.highlights.join(", ")
         : "",
+
       inclusions: Array.isArray(tour.inclusions)
         ? tour.inclusions.join(", ")
         : "",
+
       exclusions: Array.isArray(tour.exclusions)
         ? tour.exclusions.join(", ")
         : "",
@@ -381,6 +399,7 @@ export default function AdminPage() {
           />
 
           <div className="grid md:grid-cols-2 gap-4">
+
             <input
               placeholder="Duration"
               value={tourForm.duration}
@@ -404,6 +423,19 @@ export default function AdminPage() {
               }
               className="border p-3 rounded-2xl"
             />
+
+            <input
+              placeholder="Pickup Time"
+              value={tourForm.pickupTime}
+              onChange={(e) =>
+                setTourForm({
+                  ...tourForm,
+                  pickupTime: e.target.value,
+                })
+              }
+              className="border p-3 rounded-2xl"
+            />
+
           </div>
 
           <textarea
@@ -440,6 +472,18 @@ export default function AdminPage() {
               })
             }
             className="border p-3 rounded-2xl w-full"
+          />
+
+          <textarea
+            placeholder="Availability / Booking Notes"
+            value={tourForm.availabilityNote}
+            onChange={(e) =>
+              setTourForm({
+                ...tourForm,
+                availabilityNote: e.target.value,
+              })
+            }
+            className="border p-3 rounded-2xl w-full h-28"
           />
 
           <button

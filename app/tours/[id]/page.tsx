@@ -140,7 +140,7 @@ export default function TourDetailsPage({
         </div>
 
         {/* GALLERY */}
-        {tour.gallery && tour.gallery.length > 0 && (
+        {tour.gallery?.length > 0 && (
           <div>
             <h2 className="text-2xl font-bold mb-6">Gallery</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -157,7 +157,7 @@ export default function TourDetailsPage({
         )}
 
         {/* HIGHLIGHTS */}
-        {tour.highlights && tour.highlights.length > 0 && (
+        {tour.highlights?.length > 0 && (
           <div className="bg-white rounded-3xl shadow border p-6">
             <h2 className="text-2xl font-bold mb-6">Highlights</h2>
             <div className="space-y-3">
@@ -172,38 +172,60 @@ export default function TourDetailsPage({
         )}
 
         {/* INCLUSIONS & EXCLUSIONS */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {tour.inclusions && (
-            <div className="bg-white rounded-3xl shadow border p-6">
-              <h2 className="text-2xl font-bold mb-6 text-green-700">Included</h2>
-              <div className="space-y-3">
-                {tour.inclusions.map((item: string, index: number) => (
-                  <p key={index}>✅ {item}</p>
-                ))}
+        {(tour.inclusions?.length > 0 || tour.exclusions?.length > 0) && (
+          <div className="grid md:grid-cols-2 gap-6">
+            {tour.inclusions?.length > 0 && (
+              <div className="bg-white rounded-3xl shadow border p-6">
+                <h2 className="text-2xl font-bold mb-6 text-green-700">Included</h2>
+                <div className="space-y-3">
+                  {tour.inclusions.map((item: string, index: number) => (
+                    <p key={index}>✅ {item}</p>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {tour.exclusions && (
-            <div className="bg-white rounded-3xl shadow border p-6">
-              <h2 className="text-2xl font-bold mb-6 text-red-700">Excluded</h2>
-              <div className="space-y-3">
-                {tour.exclusions.map((item: string, index: number) => (
-                  <p key={index}>❌ {item}</p>
-                ))}
+            {tour.exclusions?.length > 0 && (
+              <div className="bg-white rounded-3xl shadow border p-6">
+                <h2 className="text-2xl font-bold mb-6 text-red-700">Excluded</h2>
+                <div className="space-y-3">
+                  {tour.exclusions.map((item: string, index: number) => (
+                    <p key={index}>❌ {item}</p>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
         {/* DETAILS */}
-        <div className="bg-white rounded-3xl shadow border p-6">
-          <h2 className="text-2xl font-bold mb-6">Tour Details</h2>
-          <div className="space-y-3">
-            <p><strong>Duration:</strong> {tour.duration}</p>
-            <p><strong>Pickup:</strong> {tour.pickupPoint}</p>
+        {(tour.duration || tour.pickupPoint || tour.pickupTime) && (
+          <div className="bg-white rounded-3xl shadow border p-6">
+            <h2 className="text-2xl font-bold mb-6">Tour Details</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {tour.duration && (
+                <div className="bg-gray-50 rounded-2xl border p-5">
+                  <h3 className="font-bold text-lg mb-2">Duration</h3>
+                  <p className="text-gray-600">{tour.duration}</p>
+                </div>
+              )}
+
+              {tour.pickupPoint && (
+                <div className="bg-gray-50 rounded-2xl border p-5">
+                  <h3 className="font-bold text-lg mb-2">Pickup Point</h3>
+                  <p className="text-gray-600">{tour.pickupPoint}</p>
+                </div>
+              )}
+
+              {tour.pickupTime && (
+                <div className="bg-white rounded-2xl border p-5">
+                  <h3 className="font-bold text-lg mb-2">Pickup Time</h3>
+                  <p className="text-gray-600">{tour.pickupTime}</p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* REVIEWS SECTION */}
         <div className="bg-white rounded-3xl shadow border p-6 space-y-6">
@@ -240,15 +262,19 @@ export default function TourDetailsPage({
 
           {/* REVIEWS LIST */}
           <div className="space-y-4">
-            {reviews.map((review) => (
-              <div key={review.id} className="border rounded-2xl p-5 bg-gray-50">
-                <div className="flex justify-between items-center mb-3">
-                  <p className="font-semibold">{review.user?.email || "Anonymous user"}</p>
-                  <p>{"⭐".repeat(review.rating || 5)}</p>
+            {reviews && reviews.length > 0 ? (
+              reviews.map((review) => (
+                <div key={review.id} className="border rounded-2xl p-5 bg-gray-50">
+                  <div className="flex justify-between items-center mb-3">
+                    <p className="font-semibold">{review.user?.email || "Anonymous user"}</p>
+                    <p>{"⭐".repeat(review.rating || 5)}</p>
+                  </div>
+                  <p className="text-gray-700 leading-relaxed">{review.comment}</p>
                 </div>
-                <p className="text-gray-700 leading-relaxed">{review.comment}</p>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-gray-500 italic text-center py-4">No reviews yet. Be the first to leave one!</p>
+            )}
           </div>
         </div>
 
@@ -260,6 +286,18 @@ export default function TourDetailsPage({
             A 30% advance payment is required to confirm your booking.
             Remaining amount can be paid before the trip date.
           </div>
+
+          {/* EXACT PLACEMENT: Availability note renders cleanly contextually below the payment info */}
+          {tour.availabilityNote && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-5 text-left max-w-2xl mx-auto">
+              <h3 className="font-bold text-lg mb-2 text-yellow-900">
+                Important Booking Information
+              </h3>
+              <p className="text-yellow-800">
+                {tour.availabilityNote}
+              </p>
+            </div>
+          )}
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
             <div>
