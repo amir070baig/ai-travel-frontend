@@ -256,15 +256,15 @@ export default function AdminPage() {
     setEditingTourId(tour.id);
 
     setTourForm({
-      title: tour.title || "",
-      description: tour.description || "",
-      price: String(tour.price || ""),
-      imageUrl: tour.imageUrl || "",
-      duration: tour.duration || "",
-      pickupPoint: tour.pickupPoint || "",
+      title: tour.title ?? "",
+      description: tour.description ?? "",
+      price: String(tour.price ?? ""),
+      imageUrl: tour.imageUrl ?? "",
 
-      pickupTime: tour.pickupTime || "",
-      availabilityNote: tour.availabilityNote || "",
+      duration: tour.duration ?? "",
+      pickupPoint: tour.pickupPoint ?? "",
+      pickupTime: tour.pickupTime ?? "",
+      availabilityNote: tour.availabilityNote ?? "",
 
       highlights: Array.isArray(tour.highlights)
         ? tour.highlights.join(", ")
