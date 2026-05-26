@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
+import { useRouter } from "next/navigation";
 
 export default function TourDetailsPage({
   params: paramsPromise,
@@ -8,6 +9,7 @@ export default function TourDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const params = use(paramsPromise);
+  const router = useRouter();
 
   const [tour, setTour] = useState<any>(null);
   const [reviews, setReviews] = useState<any[]>([]);
@@ -98,14 +100,22 @@ export default function TourDetailsPage({
       );
 
       if (res.ok) {
-        setBookingStatus("Booking confirmed successfully! 🎉");
+        const data = await res.json();
+
+        setBookingStatus(
+          "Redirecting to payment..."
+        );
+
+        router.push(
+          `/payment/${data.booking.id}`
+        );
       } else {
         const errorData = await res.json();
         console.error("Booking error details:", errorData);
         setBookingStatus("Booking failed. Please try again.");
       }
     } catch (err) {
-      setBookingStatus("An error occurred during booking.");
+      setBookingStatus("Booking failed. Please try again.");
       console.error(err);
     }
   };
