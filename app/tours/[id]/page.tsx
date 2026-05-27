@@ -81,6 +81,10 @@ export default function TourDetailsPage({
     setBookingStatus("Processing...");
 
     try {
+      console.log(
+        "ADVANCE AMOUNT:",
+        Math.floor(tour.price * 0.3)
+      );
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/bookings`,
         {
@@ -94,7 +98,10 @@ export default function TourDetailsPage({
             travelDate: travelDate || new Date().toISOString().split('T')[0], // Fallback to today if empty
             timeSlot,
             travelers,
-            advanceAmount: Math.floor(tour.price * 0.3),
+            advanceAmount:
+              tour?.price
+                ? Math.floor(tour.price * 0.3)
+                : 0,
           }),
         }
       );
