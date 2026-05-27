@@ -132,6 +132,21 @@ export default function TourDetailsPage({
     return <div className="p-10 text-center">Loading...</div>;
   }
 
+  const today = new Date();
+
+  today.setHours(0, 0, 0, 0);
+
+  const selectedDate = travelDate
+    ? new Date(travelDate)
+    : null;
+
+  selectedDate?.setHours(0, 0, 0, 0);
+
+  const isSameDayBooking =
+    selectedDate
+      ? selectedDate.getTime() === today.getTime()
+      : false;
+
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50">
       {/* HERO */}
@@ -350,8 +365,25 @@ export default function TourDetailsPage({
             </div>
           </div>
 
+          {isSameDayBooking && (
+            <div className="bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-2xl p-4 mb-4">
+
+              Same-day bookings require manual confirmation.
+              Please contact concierge support.
+              <a
+                href="https://wa.me/YOURNUMBER"
+                target="_blank"
+                className="text-green-600 underline"
+              >
+                Contact Concierge Support
+              </a>
+
+            </div>
+          )}
+
           <button
             onClick={handleBooking}
+            disabled={isSameDayBooking}
             className="mt-4 bg-emerald-600 text-white font-bold px-10 py-4 rounded-2xl shadow-lg hover:bg-emerald-700 transition inline-block"
           >
             Confirm & Book Now
