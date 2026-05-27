@@ -33,15 +33,37 @@ export default function AdminPage() {
   const [editingTourId, setEditingTourId] = useState("");
 
   useEffect(() => {
-    const user = JSON.parse(
-      localStorage.getItem("user") || "{}"
-    );
 
-    if (user.role === "ADMIN") {
-      setIsAdmin(true);
-    } else {
-      router.push("/generate");
-    }
+    const verifyAdmin = async () => {
+
+      try {
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/admin/verify`,
+          {
+            credentials: "include",
+          }
+        );
+
+        if (!res.ok) {
+
+          router.push("/login");
+
+          return;
+        }
+
+        setIsAdmin(true);
+
+      } catch (err) {
+
+        console.error(err);
+
+        router.push("/login");
+      }
+    };
+
+    verifyAdmin();
+
   }, [router]);
 
   const fetchTours = async () => {
