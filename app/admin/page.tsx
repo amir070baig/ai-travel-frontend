@@ -629,6 +629,25 @@ export default function AdminPage() {
                   <p className="text-gray-500 text-sm">
                     {b.user?.email}
                   </p>
+
+                  <p>
+                    <strong>Travel Date:</strong>{" "}
+                    {b.travelDate
+                      ? new Date(
+                          b.travelDate
+                        ).toLocaleDateString()
+                      : "Not selected"}
+                  </p>
+
+                  <p>
+                    <strong>Travelers:</strong>{" "}
+                    {b.travelers}
+                  </p>
+
+                  <p>
+                    <strong>Advance Paid:</strong>{" "}
+                    ₹{b.advanceAmount}
+                  </p>
                 </div>
 
                 <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
