@@ -122,7 +122,16 @@ export default function AdminPage() {
         }
       );
 
-      window.location.reload();
+      setRequests((prev: any) =>
+        prev.map((r: any) =>
+          r.id === requestId
+            ? {
+                ...r,
+                status: "APPROVED",
+              }
+            : r
+        )
+      );
     } catch (err) {
       console.error(err);
     }
@@ -142,9 +151,16 @@ export default function AdminPage() {
         }
       );
 
-      alert("Rejected ❌");
-
-      window.location.reload();
+      setRequests((prev: any) =>
+        prev.map((r: any) =>
+          r.id === requestId
+            ? {
+                ...r,
+                status: "REJECTED",
+              }
+            : r
+        )
+      );
     } catch (err) {
       console.error(err);
     }
@@ -168,9 +184,16 @@ export default function AdminPage() {
         }
       );
 
-      alert("Revision Sent ✏️");
-
-      window.location.reload();
+      setRequests((prev: any) =>
+        prev.map((r: any) =>
+          r.id === requestId
+            ? {
+                ...r,
+                status: "REVISION_SENT",
+              }
+            : r
+        )
+      );
     } catch (err) {
       console.error(err);
     }

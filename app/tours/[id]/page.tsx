@@ -371,7 +371,7 @@ export default function TourDetailsPage({
               Same-day bookings require manual confirmation.
               Please contact concierge support.
               <a
-                href="https://wa.me/YOURNUMBER"
+                href="https://wa.me/7599921173"
                 target="_blank"
                 className="text-green-600 underline"
               >
