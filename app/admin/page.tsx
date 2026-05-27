@@ -636,6 +636,21 @@ export default function AdminPage() {
                 </span>
               </div>
 
+              <div className="flex gap-2 flex-wrap">
+
+                <span className="bg-blue-100 text-blue-700 text-xs px-3 py-1 rounded-full">
+                  {b.tourId
+                    ? "FIXED TOUR"
+                    : "AI CONCIERGE"}
+                </span>
+
+              </div>
+
+              <span className="bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full">
+                Payment:
+                {b.paymentStatus}
+              </span>
+
               <div className="flex flex-wrap gap-3">
 
                 {/* PENDING */}
