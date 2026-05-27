@@ -26,7 +26,7 @@ export default function PaymentPage() {
       try {
 
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/bookings/my`,
+          `${process.env.NEXT_PUBLIC_API_URL}/bookings`,
           {
             credentials: "include",
           }
