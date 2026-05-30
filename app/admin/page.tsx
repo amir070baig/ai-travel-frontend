@@ -15,6 +15,7 @@ export default function AdminPage() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [tours, setTours] = useState<any[]>([]);
   const [leads, setLeads] = useState<any[]>([]);
+  const [packagePrices, setPackagePrices] = useState<Record<string, string>>({});
 
   const [tourForm, setTourForm] = useState({
     title: "",
@@ -140,7 +141,13 @@ export default function AdminPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ requestId }),
+          body: JSON.stringify({
+            requestId,
+            finalPrice:
+              Number(
+                packagePrices[requestId]
+              ),
+          }),
         }
       );
 
@@ -625,6 +632,21 @@ export default function AdminPage() {
 
                 <div className="flex flex-wrap gap-3">
 
+                  <input
+                    type="number"
+                    placeholder="Final Package Price"
+
+                      value={packagePrices[req.id] || ""}
+
+                      onChange={(e) =>
+                        setPackagePrices({
+                          ...packagePrices,
+                          [req.id]: e.target.value,
+                        })
+                      }
+
+                    className="border rounded p-2 w-full"
+                  />
                   <button
                     onClick={() => handleApprove(req.id)}
                     className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm"
