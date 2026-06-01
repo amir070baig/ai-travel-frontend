@@ -133,6 +133,11 @@ export default function AdminPage() {
   }, [isAdmin]);
 
   const handleApprove = async (requestId: string) => {
+    console.log(
+      "APPROVE DATA",
+      requestId,
+      packagePrices[requestId]
+    );
     try {
       await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/approve`,
