@@ -385,6 +385,9 @@ export default function MyRequestsPage() {
               {activeRequests.map((req, index) => (
                 <div key={req.id} className="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
                   <div className="flex justify-between items-center">
+                    <pre>
+                      {JSON.stringify(req, null, 2)}
+                    </pre>
                     <p className="font-medium text-gray-700">Active Request #{index + 1}</p>
                     <p className="font-semibold text-sm">
                       Status:{" "}
