@@ -385,9 +385,6 @@ export default function MyRequestsPage() {
               {activeRequests.map((req, index) => (
                 <div key={req.id} className="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
                   <div className="flex justify-between items-center">
-                    <pre>
-                      {JSON.stringify(req, null, 2)}
-                    </pre>
                     <p className="font-medium text-gray-700">Active Request #{index + 1}</p>
                     <p className="font-semibold text-sm">
                       Status:{" "}
@@ -407,6 +404,21 @@ export default function MyRequestsPage() {
                       </span>
                     </p>
                   </div>
+
+                  {req.finalPrice && (
+                    <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+
+                      <p className="font-semibold text-green-700">
+                        Personalized Package Ready
+                      </p>
+
+                      <p>
+                        Final Package Price:
+                        ₹{req.finalPrice}
+                      </p>
+
+                    </div>
+                  )}
 
                   {req.itinerary?.contentJson && (
                     <div className="bg-gray-50 border border-gray-200 p-4 rounded-xl mt-2">
