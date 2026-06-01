@@ -16,6 +16,7 @@ export default function AdminPage() {
   const [tours, setTours] = useState<any[]>([]);
   const [leads, setLeads] = useState<any[]>([]);
   const [packagePrices, setPackagePrices] = useState<Record<string, string>>({});
+  const [revisionMessages, setRevisionMessages] = useState<Record<string, string>>({});
 
   const [tourForm, setTourForm] = useState({
     title: "",
@@ -196,9 +197,15 @@ export default function AdminPage() {
   };
 
   const handleRevision = async (requestId: string) => {
-    const message = prompt("Enter revision message:");
+    const message =
+      revisionMessages[requestId];
 
-    if (!message) return;
+    if (!message) {
+      alert(
+        "Please enter revision message"
+      );
+      return;
+    }
 
     try {
       await fetch(
@@ -631,6 +638,24 @@ export default function AdminPage() {
               {req.status === "UNDER_REVIEW" && (
 
                 <div className="flex flex-wrap gap-3">
+
+                  <input
+                    type="text"
+                    placeholder="Revision Message"
+
+                    value={
+                      revisionMessages[req.id] || ""
+                    }
+
+                    onChange={(e) =>
+                      setRevisionMessages({
+                        ...revisionMessages,
+                        [req.id]: e.target.value,
+                      })
+                    }
+
+                    className="border rounded p-2 w-full mb-2"
+                  />
 
                   <input
                     type="number"
