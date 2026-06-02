@@ -263,7 +263,14 @@ export default function MyRequestsPage() {
 
                     </div>
                     <p>
-                      <strong>Advance Due:</strong>
+                      <strong>
+                        {
+                          b.status === "CONFIRMED"
+                            ? "Advance Paid:"
+                            : "Advance Due:"
+                        }
+                      </strong>
+
                       ₹{b.advanceAmount}
                     </p>
                   </div>
@@ -299,7 +306,7 @@ export default function MyRequestsPage() {
                         ? "Booking Confirmed"
                         : b.status || "PENDING"}
                     </span>
-                    {b.status !== "PAID" && (
+                    {b.status === "PENDING_PAYMENT" && (
                       <button
                         onClick={() => handlePayment(b.id)}
                         className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl hover:bg-blue-700 transition"
@@ -307,10 +314,12 @@ export default function MyRequestsPage() {
                         Pay Now
                       </button>
                     )}
-                    <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-sm text-blue-800">
-                      A small advance payment is required to reserve your personalized itinerary planning,
-                      consultation, and travel coordination services.
-                    </div>
+                    {b.status === "PENDING_PAYMENT" && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-sm text-blue-800">
+                        A small advance payment is required to reserve your personalized itinerary planning,
+                        consultation, and travel coordination services.
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
