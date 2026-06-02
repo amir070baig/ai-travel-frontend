@@ -12,6 +12,8 @@ export default function MyRequestsPage() {
   const [savedItineraries, setSavedItineraries] = useState<any[]>([]);
   const [expandedTrips, setExpandedTrips] = useState<string[]>([]);
   const [travelDates, setTravelDates] = useState<Record<string, string>>({});
+  const [messages, setMessages] = useState<Record<string, any[]>>({});
+  const [messageInputs, setMessageInputs] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -206,6 +208,81 @@ export default function MyRequestsPage() {
       console.error(err);
       alert("Payment failed");
     }
+  };
+
+
+  const fetchMessages = async (requestId: string) => {
+    try {
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/requests/${requestId}/messages`,
+        {
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+
+      setMessages((prev) => ({
+        ...prev,
+        [requestId]: data,
+      }));
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+
+  const handleSendMessage = async (requestId: string) => {
+
+    const message =
+      messageInputs[requestId];
+
+    if (!message?.trim()) return;
+
+    try {
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/requests/message`,
+        {
+          method: "POST",
+
+          credentials: "include",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+
+          body: JSON.stringify({
+            requestId,
+            message,
+          }),
+        }
+      );
+
+      const newMessage =
+        await res.json();
+
+      setMessages((prev) => ({
+        ...prev,
+
+        [requestId]: [
+          ...(prev[requestId] || []),
+          newMessage,
+        ],
+      }));
+
+      setMessageInputs((prev) => ({
+        ...prev,
+        [requestId]: "",
+      }));
+
+    } catch (err) {
+      console.error(err);
+    }
+
   };
 
   return (
@@ -480,6 +557,8 @@ export default function MyRequestsPage() {
 
                       <span className="text-blue-600 uppercase">
 
+                        {!messages[req.id] &&
+                          fetchMessages(req.id)}
                         {
                           req.status === "UNDER_REVIEW"
                             ? "UNDER EXPERT REVIEW"
@@ -539,6 +618,8 @@ export default function MyRequestsPage() {
                     </div>
                   )}
 
+                  {!messages[req.id] &&
+                    fetchMessages(req.id)}
                   {req.status === "REVISION_SENT" && (
                     <div className="space-y-4 pt-2">
 
@@ -556,6 +637,75 @@ export default function MyRequestsPage() {
                         </div>
                       )}
 
+                      <div className="space-y-3">
+
+                        <h4 className="font-semibold">
+                          Conversation
+                        </h4>
+
+                        <div className="bg-gray-50 border rounded-xl p-4 space-y-2">
+
+                          {(messages[req.id] || []).map(
+                            (msg: any) => (
+
+                              <div
+                                key={msg.id}
+                                className={`p-3 rounded-xl text-sm ${
+                                  msg.senderType === "ADMIN"
+                                    ? "bg-blue-100"
+                                    : "bg-green-100"
+                                }`}
+                              >
+
+                                <strong>
+                                  {msg.senderType === "ADMIN"
+                                    ? "Travel Team"
+                                    : "You"}
+                                </strong>
+
+                                <p>
+                                  {msg.message}
+                                </p>
+
+                              </div>
+
+                            )
+                          )}
+
+                        </div>
+
+                        <textarea
+                          value={
+                            messageInputs[req.id] || ""
+                          }
+
+                          onChange={(e) =>
+                            setMessageInputs({
+                              ...messageInputs,
+
+                              [req.id]:
+                                e.target.value,
+                            })
+                          }
+
+                          placeholder="Reply to travel team..."
+
+                          className="w-full border rounded-xl p-3"
+                        />
+
+                        <button
+                          onClick={() =>
+                            handleSendMessage(
+                              req.id
+                            )
+                          }
+
+                          className="bg-blue-600 text-white px-4 py-2 rounded-xl"
+                        >
+                          Send Message
+                        </button>
+
+                      </div>
                       <div className="flex gap-2">
 
                         <button
