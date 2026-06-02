@@ -123,11 +123,11 @@ export default function MyRequestsPage() {
     const selectedDate = travelDates[bookingId];
 
     // 2. Only enforce validation if the booking needs a date but doesn't have one yet
-    const needsDateSelection = 
-      currentBooking && 
-      !currentBooking.travelDate && 
-      currentBooking.status === "PENDING_PAYMENT" && 
-      currentBooking.isAiCustomTrip; // Replace with your exact AI key name
+    const needsDateSelection =
+      currentBooking &&
+      !currentBooking.tourId &&
+      !currentBooking.travelDate &&
+      currentBooking.status === "PENDING_PAYMENT";
 
     if (needsDateSelection && !selectedDate) {
       alert("Please select your preferred travel date first.");
