@@ -11,6 +11,7 @@ export default function MyRequestsPage() {
   const [message, setMessage] = useState("");
   const [savedItineraries, setSavedItineraries] = useState<any[]>([]);
   const [expandedTrips, setExpandedTrips] = useState<string[]>([]);
+  const [travelDates, setTravelDates] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,14 +118,52 @@ export default function MyRequestsPage() {
   const activeRequests = requests.filter((req) => req.status !== "APPROVED");
 
   const handlePayment = async (bookingId: string) => {
+    // 1. Find the current booking object being paid for
+    const currentBooking = bookings.find((b) => b.id === bookingId);
+    const selectedDate = travelDates[bookingId];
+
+    // 2. Only enforce validation if the booking needs a date but doesn't have one yet
+    const needsDateSelection = 
+      currentBooking && 
+      !currentBooking.travelDate && 
+      currentBooking.status === "PENDING_PAYMENT" && 
+      currentBooking.isAiCustomTrip; // Replace with your exact AI key name
+
+    if (needsDateSelection && !selectedDate) {
+      alert("Please select your preferred travel date first.");
+      return;
+    }
+
+    // 3. Send the selected date to the backend so it gets saved!
     try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/bookings/${bookingId}/travel-date`,
+        {
+          method: "PATCH",
+
+          credentials: "include",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+
+          body: JSON.stringify({
+            travelDate:
+              selectedDate,
+          }),
+        }
+      );
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/payments/create-order`,
         {
           credentials: "include",
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ bookingId }),
+          body: JSON.stringify({ 
+            bookingId,
+            travelDate: selectedDate || currentBooking?.travelDate // Passes the date if selected
+          }),
         }
       );
 
@@ -144,7 +183,11 @@ export default function MyRequestsPage() {
               credentials: "include",
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ ...response, bookingId }),
+              body: JSON.stringify({ 
+                ...response, 
+                bookingId,
+                travelDate: selectedDate || currentBooking?.travelDate // Passes it to verification too
+              }),
             }
           );
 
@@ -192,6 +235,14 @@ export default function MyRequestsPage() {
                 <div key={b.id} className="bg-white p-6 rounded-2xl border shadow-sm flex flex-col justify-between space-y-4">
                   <div>
                     <h3 className="font-bold text-lg text-gray-900">{b.tour?.title || "AI Custom Trip"}</h3>
+                    {!b.tour && b.request?.finalPrice && (
+                      <div className="mt-2 text-sm">
+                        <p>
+                          <strong>Final Package Price:</strong>
+                          ₹{b.request.finalPrice}
+                        </p>
+                      </div>
+                    )}
                     <div className="text-sm text-gray-600 mt-2 space-y-1">
                       
                       {/* INJECTED TARGET DATA METADATA SNIPPET */}
@@ -211,13 +262,42 @@ export default function MyRequestsPage() {
                       </p>
 
                     </div>
+                    <p>
+                      <strong>Advance Due:</strong>
+                      ₹{b.advanceAmount}
+                    </p>
                   </div>
                   
                   <div className="flex items-center justify-between pt-2 border-t">
+                    {!b.travelDate && b.status === "PENDING_PAYMENT" && (
+                      <div className="space-y-2">
+
+                        <label className="block text-sm font-medium">
+                          Preferred Travel Date
+                        </label>
+
+                        <input
+                          type="date"
+                          value={travelDates[b.id] || ""}
+                          onChange={(e) =>
+                            setTravelDates({
+                              ...travelDates,
+                              [b.id]: e.target.value,
+                            })
+                          }
+                          className="border rounded-xl p-2 w-full"
+                        />
+
+                      </div>
+                    )}
                     <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
                       b.status === "PAID" ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"
                     }`}>
-                      {b.status || "PENDING"}
+                      {b.status === "PENDING_PAYMENT"
+                        ? "Awaiting Advance Payment"
+                        : b.status === "CONFIRMED"
+                        ? "Booking Confirmed"
+                        : b.status || "PENDING"}
                     </span>
                     {b.status !== "PAID" && (
                       <button
