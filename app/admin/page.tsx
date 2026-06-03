@@ -399,6 +399,7 @@ export default function AdminPage() {
 
       const newMessage =
         await res.json();
+        await fetchAdminMessages(requestId);
 
       setAdminMessages((prev) => ({
         ...prev,
@@ -883,11 +884,24 @@ export default function AdminPage() {
                         ).toLocaleDateString()
                       : "Not selected"}
                   </p>
+                  {!b.tourId && (
+                    <p>
+                      <strong>Booking Type:</strong>{" "}
+                      AI Concierge
+                    </p>
+                  )}
 
                   <p>
                     <strong>Travelers:</strong>{" "}
                     {b.travelers}
                   </p>
+
+                  {b.request?.finalPrice && (
+                    <p>
+                      <strong>Final Package Price:</strong>{" "}
+                      ₹{b.request.finalPrice}
+                    </p>
+                  )}
 
                   <p>
                     <strong>Advance Paid:</strong>{" "}
@@ -910,9 +924,17 @@ export default function AdminPage() {
 
               </div>
 
-              <span className="bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full">
-                Payment:
-                {b.paymentStatus}
+              <span
+                className={`text-xs px-3 py-1 rounded-full ${
+                  b.paymentStatus === "PAID"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-yellow-100 text-yellow-700"
+                }`}
+              >
+                Payment:{" "}
+                {b.paymentStatus === "PAID"
+                  ? "PAID ✅"
+                  : "PENDING PAYMENT"}
               </span>
 
               <div className="flex flex-wrap gap-3">
@@ -973,7 +995,13 @@ export default function AdminPage() {
                 )}
 
                 {/* CONFIRMED */}
-                {b.status === "CONFIRMED" && (
+                {b.status === "PENDING_PAYMENT" && (
+                  <div className="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm font-semibold">
+                    Waiting For Customer Payment 💳
+                  </div>
+                )}
+                {b.status === "CONFIRMED" &&
+                 b.paymentStatus === "PAID" && (
 
                   <>
                     <button

@@ -264,6 +264,7 @@ export default function MyRequestsPage() {
 
       const newMessage =
         await res.json();
+        await fetchMessages(requestId);
 
       setMessages((prev) => ({
         ...prev,
