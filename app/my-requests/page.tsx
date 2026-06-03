@@ -279,14 +279,14 @@ export default function MyRequestsPage() {
         await res.json();
         await fetchMessages(requestId);
 
-      setMessages((prev) => ({
-        ...prev,
+      // setMessages((prev) => ({
+      //   ...prev,
 
-        [requestId]: [
-          ...(prev[requestId] || []),
-          newMessage,
-        ],
-      }));
+      //   [requestId]: [
+      //     ...(prev[requestId] || []),
+      //     newMessage,
+      //   ],
+      // }));
 
       setMessageInputs((prev) => ({
         ...prev,
