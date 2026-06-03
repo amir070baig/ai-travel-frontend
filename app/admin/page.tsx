@@ -8,16 +8,15 @@ export default function AdminPage() {
   useAuth();
 
   const router = useRouter();
-
   const [isAdmin, setIsAdmin] = useState(false);
-
   const [requests, setRequests] = useState<any[]>([]);
   const [bookings, setBookings] = useState<any[]>([]);
   const [tours, setTours] = useState<any[]>([]);
   const [leads, setLeads] = useState<any[]>([]);
   const [packagePrices, setPackagePrices] = useState<Record<string, string>>({});
   const [revisionMessages, setRevisionMessages] = useState<Record<string, string>>({});
-
+  const [adminMessages, setAdminMessages] =  useState<Record<string, any[]>>({});
+  const [adminReplies, setAdminReplies] =  useState<Record<string, string>>({});
   const [tourForm, setTourForm] = useState({
     title: "",
     description: "",
@@ -31,7 +30,6 @@ export default function AdminPage() {
     inclusions: "",
     exclusions: "",
   });
-
   const [editingTourId, setEditingTourId] = useState("");
 
   useEffect(() => {
@@ -346,6 +344,83 @@ export default function AdminPage() {
 
   if (!isAdmin) return null;
 
+
+  const fetchAdminMessages = async (requestId: string) => {
+
+    try {
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/requests/${requestId}/messages`,
+        {
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+
+      setAdminMessages((prev) => ({
+        ...prev,
+        [requestId]: data,
+      }));
+
+    } catch (err) {
+      console.error(err);
+    }
+
+  };
+
+  const handleAdminReply = async (requestId: string) => {
+
+    const message =
+      adminReplies[requestId];
+
+    if (!message?.trim()) return;
+
+    try {
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/requests/message`,
+        {
+          method: "POST",
+
+          credentials: "include",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+
+          body: JSON.stringify({
+            requestId,
+            message,
+          }),
+        }
+      );
+
+      const newMessage =
+        await res.json();
+
+      setAdminMessages((prev) => ({
+        ...prev,
+
+        [requestId]: [
+          ...(prev[requestId] || []),
+          newMessage,
+        ],
+      }));
+
+      setAdminReplies((prev) => ({
+        ...prev,
+        [requestId]: "",
+      }));
+
+    } catch (err) {
+      console.error(err);
+    }
+
+  };
+
+
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
       <div className="max-w-6xl mx-auto space-y-10">
@@ -638,6 +713,79 @@ export default function AdminPage() {
                       </p>
                     </div>
                   ))}
+              </div>
+
+              {!adminMessages[req.id] &&
+                fetchAdminMessages(req.id)}
+
+              <div className="bg-gray-50 border rounded-2xl p-4 space-y-4">
+
+                <h3 className="font-semibold">
+                  Customer Conversation
+                </h3>
+
+                <div className="space-y-2">
+
+                  {(adminMessages[req.id] || []).map(
+                    (msg: any) => (
+
+                      <div
+                        key={msg.id}
+                        className={`p-3 rounded-xl text-sm ${
+                          msg.senderType === "ADMIN"
+                            ? "bg-blue-100"
+                            : "bg-green-100"
+                        }`}
+                      >
+
+                        <strong>
+                          {msg.senderType === "ADMIN"
+                            ? "Travel Team"
+                            : "Customer"}
+                        </strong>
+
+                        <p>
+                          {msg.message}
+                        </p>
+
+                      </div>
+
+                    )
+                  )}
+
+                </div>
+
+                <textarea
+                  placeholder="Reply to customer..."
+
+                  value={
+                    adminReplies[req.id] || ""
+                  }
+
+                  onChange={(e) =>
+                    setAdminReplies({
+                      ...adminReplies,
+
+                      [req.id]:
+                        e.target.value,
+                    })
+                  }
+
+                  className="w-full border rounded-xl p-3"
+                />
+
+                <button
+                  onClick={() =>
+                    handleAdminReply(
+                      req.id
+                    )
+                  }
+
+                  className="bg-blue-600 text-white px-4 py-2 rounded-xl"
+                >
+                  Send Reply
+                </button>
+
               </div>
 
               {req.status === "UNDER_REVIEW" && (
