@@ -415,14 +415,14 @@ export default function AdminPage() {
         await res.json();
         await fetchAdminMessages(requestId);
 
-      setAdminMessages((prev) => ({
-        ...prev,
+      // setAdminMessages((prev) => ({
+      //   ...prev,
 
-        [requestId]: [
-          ...(prev[requestId] || []),
-          newMessage,
-        ],
-      }));
+      //   [requestId]: [
+      //     ...(prev[requestId] || []),
+      //     newMessage,
+      //   ],
+      // }));
 
       setAdminReplies((prev) => ({
         ...prev,
