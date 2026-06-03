@@ -34,6 +34,18 @@ export default function AdminPage() {
 
   useEffect(() => {
 
+    requests.forEach((req) => {
+
+      if (!adminMessages[req.id]) {
+        fetchAdminMessages(req.id);
+      }
+
+    });
+
+  }, [requests]);
+
+  useEffect(() => {
+
     const verifyAdmin = async () => {
 
       try {
@@ -222,6 +234,8 @@ export default function AdminPage() {
           body: JSON.stringify({ requestId, message }),
         }
       );
+
+      await fetchAdminMessages(requestId);
 
       setRequests((prev: any) =>
         prev.map((r: any) =>
@@ -715,9 +729,7 @@ export default function AdminPage() {
                     </div>
                   ))}
               </div>
-
-              {!adminMessages[req.id] &&
-                fetchAdminMessages(req.id)}
+              
 
               <div className="bg-gray-50 border rounded-2xl p-4 space-y-4">
 
@@ -789,7 +801,7 @@ export default function AdminPage() {
 
               </div>
 
-              {req.status === "UNDER_REVIEW" && (
+              {(req.status === "UNDER_REVIEW" || req.status === "REVISION_SENT") && (
 
                 <div className="flex flex-wrap gap-3">
 

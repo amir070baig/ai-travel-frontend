@@ -15,6 +15,19 @@ export default function MyRequestsPage() {
   const [messages, setMessages] = useState<Record<string, any[]>>({});
   const [messageInputs, setMessageInputs] = useState<Record<string, string>>({});
 
+
+  useEffect(() => {
+
+    requests.forEach((req) => {
+
+      if (!messages[req.id]) {
+        fetchMessages(req.id);
+      }
+
+    });
+
+  }, [requests]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -557,9 +570,6 @@ export default function MyRequestsPage() {
                       Status:{" "}
 
                       <span className="text-blue-600 uppercase">
-
-                        {!messages[req.id] &&
-                          fetchMessages(req.id)}
                         {
                           req.status === "UNDER_REVIEW"
                             ? "UNDER EXPERT REVIEW"
