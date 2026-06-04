@@ -574,7 +574,7 @@ export default function MyRequestsPage() {
                           req.status === "UNDER_REVIEW"
                             ? "UNDER EXPERT REVIEW"
                             : req.status === "REVISION_SENT"
-                            ? "REVISION REQUESTED"
+                            ? "DISCUSSION IN PROGRESS"
                             : req.status === "APPROVED"
                             ? "APPROVED"
                             : req.status
@@ -717,7 +717,7 @@ export default function MyRequestsPage() {
                         </button>
 
                       </div>
-                      <div className="flex gap-2">
+                      {/* <div className="flex gap-2">
 
                         <button
                           onClick={() => handleAccept(req.id)}
@@ -733,7 +733,7 @@ export default function MyRequestsPage() {
                           Request Further Changes
                         </button>
 
-                      </div>
+                      </div> */}
 
                     </div>
                   )}
