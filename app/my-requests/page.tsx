@@ -208,8 +208,10 @@ export default function MyRequestsPage() {
 
           const verifyData = await verifyRes.json();
           if (verifyData.success) {
+
+            await fetchBookings();
+
             alert("Payment Successful ✅");
-            // window.location.reload();
           }
         },
         theme: { color: "#2563eb" },
@@ -297,6 +299,21 @@ export default function MyRequestsPage() {
       console.error(err);
     }
 
+  };
+
+  const fetchBookings = async () => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/bookings`,
+      {
+        credentials: "include",
+      }
+    );
+
+    const data = await res.json();
+
+    setBookings(
+      Array.isArray(data) ? data : []
+    );
   };
 
   console.log(bookings)
