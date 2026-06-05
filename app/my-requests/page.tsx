@@ -375,6 +375,30 @@ export default function MyRequestsPage() {
 
                     </div>
                     <p>
+                      {!b.tour && b.request?.finalPrice && (
+                        <div className="mt-2 space-y-1 text-sm">
+
+                          <p>
+                            <strong>
+                              Final Package Price:
+                            </strong>
+
+                            ₹{b.request.finalPrice}
+                          </p>
+
+                          <p>
+                            <strong>
+                              Remaining Balance:
+                            </strong>
+
+                            ₹{
+                              b.request.finalPrice -
+                              b.advanceAmount
+                            }
+                          </p>
+
+                        </div>
+                      )}
                       <strong>
                         {
                           b.status === "CONFIRMED"
