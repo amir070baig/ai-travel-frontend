@@ -215,6 +215,11 @@ export default function AdminPage() {
     const message =
       revisionMessages[requestId];
 
+      setRevisionMessages((prev) => ({
+        ...prev,
+        [requestId]: "",
+      }));
+
     if (!message) {
       alert(
         "Please enter revision message"
@@ -708,9 +713,11 @@ export default function AdminPage() {
                   </p>
                 </div>
 
-                <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
-                  {req.status}
-                </span>
+                  <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
+                    {req.status === "APPROVED" 
+                      ? "PACKAGE READY FOR PAYMENT" 
+                      : req.status}
+                  </span>
               </div>
 
               <div className="bg-gray-50 border rounded-2xl p-4 space-y-3">
@@ -916,7 +923,12 @@ export default function AdminPage() {
                   )}
 
                   <p>
-                    <strong>Advance Paid:</strong>{" "}
+                    <strong>
+                      {b.paymentStatus === "PAID"
+                        ? "Advance Paid:"
+                        : "Advance Due:"}
+                    </strong>
+
                     ₹{b.advanceAmount}
                   </p>
                 </div>
@@ -972,7 +984,7 @@ export default function AdminPage() {
                           }
                         );
 
-                        window.location.reload();
+                        // window.location.reload();
                       }}
                       className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm"
                     >
@@ -996,7 +1008,7 @@ export default function AdminPage() {
                           }
                         );
 
-                        window.location.reload();
+                        // window.location.reload();
                       }}
                       className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
                     >
@@ -1033,7 +1045,7 @@ export default function AdminPage() {
                           }
                         );
 
-                        window.location.reload();
+                        // window.location.reload();
                       }}
                       className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm"
                     >
@@ -1057,7 +1069,7 @@ export default function AdminPage() {
                           }
                         );
 
-                        window.location.reload();
+                        // window.location.reload();
                       }}
                       className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
                     >
@@ -1164,7 +1176,7 @@ export default function AdminPage() {
                         }
                       );
 
-                      window.location.reload();
+                      // window.location.reload();
                     }}
                     className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm"
                   >

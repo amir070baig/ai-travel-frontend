@@ -209,7 +209,7 @@ export default function MyRequestsPage() {
           const verifyData = await verifyRes.json();
           if (verifyData.success) {
             alert("Payment Successful ✅");
-            window.location.reload();
+            // window.location.reload();
           }
         },
         theme: { color: "#2563eb" },
@@ -343,7 +343,7 @@ export default function MyRequestsPage() {
                         <strong>Date:</strong>{" "}
                         {b.travelDate
                           ? new Date(b.travelDate).toLocaleDateString()
-                          : "Will be finalized after consultation"}
+                          : "Please select your preferred travel date below"}
                       </p>
                       <p>
                         <strong>Time:</strong>{" "}
@@ -531,7 +531,7 @@ export default function MyRequestsPage() {
                           "Request submitted ✅ You can track it in Active Requests"
                         );
 
-                        window.location.reload();
+                        // window.location.reload();
 
                       } catch (err) {
 

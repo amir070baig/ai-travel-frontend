@@ -81,7 +81,7 @@ export default function GeneratePage() {
       }
 
       alert("Request submitted ✅ You can track it in My Requests page");
-        window.location.reload(); // ✅ force refresh
+        // window.location.reload(); // ✅ force refresh
     } catch (err) {
       alert("Network error");
     }
