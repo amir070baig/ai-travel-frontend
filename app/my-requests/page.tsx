@@ -397,6 +397,13 @@ export default function MyRequestsPage() {
 
                         <input
                           type="date"
+                          min={
+                            new Date(
+                              Date.now() + 3 * 24 * 60 * 60 * 1000
+                            )
+                              .toISOString()
+                              .split("T")[0]
+                          }
                           value={travelDates[b.id] || ""}
                           onChange={(e) =>
                             setTravelDates({
@@ -406,6 +413,9 @@ export default function MyRequestsPage() {
                           }
                           className="border rounded-xl p-2 w-full"
                         />
+                        <p className="text-xs text-gray-500">
+                          Please select a travel date at least 3 days in advance.
+                        </p>
 
                       </div>
                     )}
