@@ -28,8 +28,7 @@ export default function MyRequestsPage() {
 
   }, [requests]);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchData = async () => {
       try {
         // REQUESTS
         const reqRes = await fetch(
@@ -66,6 +65,9 @@ export default function MyRequestsPage() {
         console.error(err);
       }
     };
+
+  useEffect(() => {
+    
 
     fetchData();
   }, []);
@@ -543,6 +545,8 @@ export default function MyRequestsPage() {
                           alert(data.message || "Failed to submit request");
                           return;
                         }
+
+                        await fetchData();
 
                         alert(
                           "Request submitted ✅ You can track it in Active Requests"
