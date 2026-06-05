@@ -315,6 +315,9 @@ export default function MyRequestsPage() {
 
         {/* BOOKINGS SECTION */}
         <div className="space-y-4">
+          <pre>
+            {JSON.stringify(bookings, null, 2)}
+          </pre>
           <h2 className="text-2xl font-bold">My Bookings</h2>
           {bookings.length === 0 ? (
             <p className="text-gray-500 bg-white p-6 border rounded-2xl text-center">
@@ -629,8 +632,7 @@ export default function MyRequestsPage() {
                     </div>
                   )}
 
-                  {!messages[req.id] &&
-                    fetchMessages(req.id)}
+                  
                   {req.status === "REVISION_SENT" && (
                     <div className="space-y-4 pt-2">
 
