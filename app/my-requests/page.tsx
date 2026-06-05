@@ -317,11 +317,7 @@ export default function MyRequestsPage() {
 
         {/* BOOKINGS SECTION */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold">My Bookings</h2>
-            <div className="bg-gray-100 p-4 rounded-xl overflow-auto max-h-60 text-xs my-2">
-              <p className="font-bold text-red-600 mb-1">Raw Bookings Data:</p>
-              <pre>{JSON.stringify(bookings, null, 2)}</pre>
-            </div>
+          <h2 className="text-2xl font-bold">My Bookings</h2>            
           {bookings.length === 0 ? (
             <p className="text-gray-500 bg-white p-6 border rounded-2xl text-center">
               You don't have any tour bookings yet.
