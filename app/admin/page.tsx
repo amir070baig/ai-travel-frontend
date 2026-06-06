@@ -895,99 +895,171 @@ export default function AdminPage() {
           ))}
 
           <div className="space-y-4 mt-10">
-
             <h2 className="text-2xl font-bold">
               Approved Packages
             </h2>
 
             {approvedRequests.length === 0 ? (
-
               <p className="text-gray-500">
                 No approved packages yet.
               </p>
-
             ) : (
+              approvedRequests.map((req: any) => {
+                // 1. Find the related booking for this specific request
+                const relatedBooking = bookings.find(
+                  (b: any) => b.requestId === req.id
+                );
 
-              approvedRequests.map((req: any) => (
-
-                <div
-                  key={req.id}
-                  className="bg-green-50 border border-green-200 p-4 rounded-2xl"
-                >
-
-                  <div className="flex justify-between items-center">
-
-                    <div>
-
-                      <p className="font-semibold">
-                        {req.user?.email}
-                      </p>
-
-                      <p className="text-sm text-gray-600">
-                        {req.itinerary?.days} Days
-                      </p>
-
-                    </div>
-
-                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
-                      PACKAGE READY FOR PAYMENT
-                    </span>
-
-                  </div>
-
-                  {req.finalPrice && (
-                    <div className="mt-3">
-
-                      <p>
-                        <strong>
-                          Final Package Price:
-                        </strong>
-
-                        ₹{req.finalPrice}
-                      </p>
-
-                    </div>
-                  )}
-
-                  <button
-                    onClick={() => toggleApproved(req.id)}
-                    className="mt-3 text-blue-600 text-sm font-semibold"
+                // 2. Return the JSX block explicitly
+                return (
+                  <div
+                    key={req.id}
+                    className="bg-green-50 border border-green-200 p-4 rounded-2xl"
                   >
-                    {expandedApproved.includes(req.id)
-                      ? "Hide Details"
-                      : "View Details"}
-                  </button>
-
-                  {expandedApproved.includes(req.id) && (
-
-                    <div className="mt-4 border-t pt-4">
-
-                      <p>
-                        Days:
-                        {req.itinerary?.days}
-                      </p>
-
-                      <p>
-                        Budget:
-                        {req.itinerary?.budget}
-                      </p>
-
-                      <p>
-                        Status:
-                        {req.status}
-                      </p>
-
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="font-semibold">
+                          {req.user?.email}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {req.itinerary?.days} Days
+                        </p>
+                      </div>
+                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+                        PACKAGE READY FOR PAYMENT
+                      </span>
                     </div>
 
-                  )}
+                    {req.finalPrice && (
+                      <div className="mt-3">
+                        <p>
+                          <strong>Final Package Price:</strong> ₹{req.finalPrice}
+                        </p>
+                      </div>
+                    )}
 
-                </div>
+                    {/* Example: Displaying details from the booking if it exists */}
+                    {relatedBooking && (
+                      <div className="mt-2 text-sm text-gray-700 bg-white p-2 rounded-lg border">
+                        <strong>Booking ID:</strong> {relatedBooking.id}
+                      </div>
+                    )}
 
-              ))
+                    <button
+                      onClick={() => toggleApproved(req.id)}
+                      className="mt-3 text-blue-600 text-sm font-semibold"
+                    >
+                      {expandedApproved.includes(req.id)
+                        ? "Hide Details"
+                        : "View Details"}
+                    </button>
 
+                    {expandedApproved.includes(req.id) && (
+                      <div className="mt-4 border-t pt-4">
+                        {relatedBooking && (
+                          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+
+                            <h4 className="font-semibold mb-2">
+                              Booking Information
+                            </h4>
+
+                            <p>
+                              <strong>Final Package Price:</strong>
+                              ₹{req.finalPrice}
+                            </p>
+
+                            <p>
+                              <strong>
+                                {relatedBooking.paymentStatus === "PAID"
+                                  ? "Advance Paid:"
+                                  : "Advance Due:"}
+                              </strong>
+
+                              ₹{relatedBooking.advanceAmount}
+                            </p>
+
+                            <p>
+                              <strong>Payment Status:</strong>{" "}
+
+                              {relatedBooking.paymentStatus === "PAID"
+                                ? "PAID ✅"
+                                : "PENDING PAYMENT"}
+                            </p>
+
+                            <p>
+                              <strong>Travel Date:</strong>{" "}
+
+                              {relatedBooking.travelDate
+                                ? new Date(
+                                    relatedBooking.travelDate
+                                  ).toLocaleDateString()
+                                : "Not Selected"}
+                            </p>
+
+                          </div>
+                        )}
+                        <p>Days: {req.itinerary?.days}</p>
+                        <p>Budget: {req.itinerary?.budget}</p>
+                        <div>
+                          Status: Awaiting Customer Payment
+                        </div>
+
+                        {req.itinerary?.contentJson && (
+                          <div className="mt-4 bg-gray-50 border rounded-xl p-4">
+                            <h4 className="font-semibold mb-3">
+                              Full Itinerary
+                            </h4>
+                            {req.itinerary.contentJson
+                              .replace(/\*/g, "")
+                              .split("\n")
+                              .filter((line: string) => line.trim() !== "")
+                              .map((line: string, i: number) => (
+                                <div
+                                  key={i}
+                                  className="bg-white border rounded-lg p-2 mb-2"
+                                >
+                                  <p className="text-sm whitespace-pre-wrap">
+                                    {line}
+                                  </p>
+                                </div>
+                              ))}
+                          </div>
+                        )}
+
+                        <div className="mt-4">
+                          <h4 className="font-semibold mb-2">
+                            Conversation History
+                          </h4>
+                          <div className="bg-gray-50 border rounded-xl p-4 space-y-2">
+                            {(adminMessages[req.id] || []).map(
+                              (msg: any) => (
+                                <div
+                                  key={msg.id}
+                                  className={`p-3 rounded-xl text-sm ${
+                                    msg.senderType === "ADMIN"
+                                      ? "bg-blue-100"
+                                      : "bg-green-100"
+                                  }`}
+                                >
+                                  <strong>
+                                    {msg.senderType === "ADMIN"
+                                      ? "Travel Team"
+                                      : "Customer"}
+                                  </strong>
+                                  <p>{msg.message}</p>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })
             )}
-
           </div>
+
         </div>
 
         {/* BOOKINGS */}
