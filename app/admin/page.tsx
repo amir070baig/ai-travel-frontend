@@ -31,6 +31,7 @@ export default function AdminPage() {
     exclusions: "",
   });
   const [editingTourId, setEditingTourId] = useState("");
+  const [expandedApproved, setExpandedApproved] = useState<string[]>([]);
 
   useEffect(() => {
 
@@ -440,6 +441,27 @@ export default function AdminPage() {
 
   };
 
+  const activeRequests = requests.filter(
+    (req: any) =>
+      req.status === "UNDER_REVIEW" ||
+      req.status === "REVISION_SENT"
+  );
+
+  const approvedRequests = requests.filter(
+    (req: any) =>
+      req.status === "APPROVED"
+  );
+
+  const toggleApproved = (id: string) => {
+
+    setExpandedApproved((prev) =>
+      prev.includes(id)
+        ? prev.filter((x) => x !== id)
+        : [...prev, id]
+    );
+
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
@@ -696,7 +718,7 @@ export default function AdminPage() {
             AI Generated Requests
           </h2>
 
-          {requests.map((req) => (
+          {activeRequests.map((req) => (
             <div
               key={req.id}
               className="bg-white p-6 rounded-2xl border shadow-sm space-y-4"
@@ -871,6 +893,101 @@ export default function AdminPage() {
               )}
             </div>
           ))}
+
+          <div className="space-y-4 mt-10">
+
+            <h2 className="text-2xl font-bold">
+              Approved Packages
+            </h2>
+
+            {approvedRequests.length === 0 ? (
+
+              <p className="text-gray-500">
+                No approved packages yet.
+              </p>
+
+            ) : (
+
+              approvedRequests.map((req: any) => (
+
+                <div
+                  key={req.id}
+                  className="bg-green-50 border border-green-200 p-4 rounded-2xl"
+                >
+
+                  <div className="flex justify-between items-center">
+
+                    <div>
+
+                      <p className="font-semibold">
+                        {req.user?.email}
+                      </p>
+
+                      <p className="text-sm text-gray-600">
+                        {req.itinerary?.days} Days
+                      </p>
+
+                    </div>
+
+                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+                      PACKAGE READY FOR PAYMENT
+                    </span>
+
+                  </div>
+
+                  {req.finalPrice && (
+                    <div className="mt-3">
+
+                      <p>
+                        <strong>
+                          Final Package Price:
+                        </strong>
+
+                        ₹{req.finalPrice}
+                      </p>
+
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => toggleApproved(req.id)}
+                    className="mt-3 text-blue-600 text-sm font-semibold"
+                  >
+                    {expandedApproved.includes(req.id)
+                      ? "Hide Details"
+                      : "View Details"}
+                  </button>
+
+                  {expandedApproved.includes(req.id) && (
+
+                    <div className="mt-4 border-t pt-4">
+
+                      <p>
+                        Days:
+                        {req.itinerary?.days}
+                      </p>
+
+                      <p>
+                        Budget:
+                        {req.itinerary?.budget}
+                      </p>
+
+                      <p>
+                        Status:
+                        {req.status}
+                      </p>
+
+                    </div>
+
+                  )}
+
+                </div>
+
+              ))
+
+            )}
+
+          </div>
         </div>
 
         {/* BOOKINGS */}
