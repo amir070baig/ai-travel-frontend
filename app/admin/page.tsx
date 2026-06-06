@@ -926,7 +926,9 @@ export default function AdminPage() {
                         </p>
                       </div>
                       <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
-                        PACKAGE READY FOR PAYMENT
+                        {relatedBooking?.paymentStatus === "PAID"
+                          ? "ADVANCE PAYMENT RECEIVED ✅"
+                          : "AWAITING CUSTOMER PAYMENT 💳"}
                       </span>
                     </div>
 
@@ -938,12 +940,7 @@ export default function AdminPage() {
                       </div>
                     )}
 
-                    {/* Example: Displaying details from the booking if it exists */}
-                    {relatedBooking && (
-                      <div className="mt-2 text-sm text-gray-700 bg-white p-2 rounded-lg border">
-                        <strong>Booking ID:</strong> {relatedBooking.id}
-                      </div>
-                    )}
+                    
 
                     <button
                       onClick={() => toggleApproved(req.id)}
@@ -1000,9 +997,7 @@ export default function AdminPage() {
                         )}
                         <p>Days: {req.itinerary?.days}</p>
                         <p>Budget: {req.itinerary?.budget}</p>
-                        <div>
-                          Status: Awaiting Customer Payment
-                        </div>
+                        
 
                         {req.itinerary?.contentJson && (
                           <div className="mt-4 bg-gray-50 border rounded-xl p-4">
