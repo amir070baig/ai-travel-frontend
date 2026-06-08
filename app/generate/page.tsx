@@ -47,44 +47,63 @@ export default function GeneratePage() {
     setLoading(false);
   };
 
+  const fetchData = async () => {
+    // refresh itinerary data if we have an id
+    if (!itinerary?.id) return;
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/itineraries/${itinerary.id}`, {
+        credentials: "include",
+      });
+
+      const data = await res.json();
+      if (res.ok) setItinerary(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleRequest = async () => {
     setRequestLoading(true);
 
+    // 
     try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/requests`,
+            {
+              credentials: "include",
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                itineraryId: itinerary?.id,
+              }),
+            }
+          );
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/requests`,
-        {
-          credentials: "include",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            content: itinerary.contentJson,
-            days,
-            budget,
-            groupSize,
-            travelStyle,
-            tripType,
-            interests,
-          }),
+          const data = await res.json();
+
+          if (!res.ok) {
+            alert(data.message || "Failed to submit request");
+            return;
+          }
+
+          await fetchData();
+
+          alert(
+            "Request submitted ✅ You can track it in Active Requests"
+          );
+
+          // window.location.reload();
+
+        } catch (err) {
+
+          console.error(err);
+
+          alert("Something went wrong");
+
         }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.message || "Something went wrong");
-        setRequestLoading(false);
-        return;
-      }
-
-      alert("Request submitted ✅ You can track it in My Requests page");
-        // window.location.reload(); // ✅ force refresh
-    } catch (err) {
-      alert("Network error");
-    }
 
     setRequestLoading(false);
   };
