@@ -47,63 +47,52 @@ export default function GeneratePage() {
     setLoading(false);
   };
 
-  const fetchData = async () => {
-    // refresh itinerary data if we have an id
-    if (!itinerary?.id) return;
-
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/itineraries/${itinerary.id}`, {
-        credentials: "include",
-      });
-
-      const data = await res.json();
-      if (res.ok) setItinerary(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const handleRequest = async () => {
     setRequestLoading(true);
 
-    // 
+    // If you are using Next.js App Router, you can grab the ID from the URL as a backup
+    // const { id } = useParams(); 
+
     try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/requests`,
-            {
-              credentials: "include",
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                itineraryId: itinerary?.id,
-              }),
-            }
-          );
-
-          const data = await res.json();
-
-          if (!res.ok) {
-            alert(data.message || "Failed to submit request");
-            return;
-          }
-
-          await fetchData();
-
-          alert(
-            "Request submitted ✅ You can track it in Active Requests"
-          );
-
-          // window.location.reload();
-
-        } catch (err) {
-
-          console.error(err);
-
-          alert("Something went wrong");
-
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/requests`,
+        {
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // Uses itinerary.id or falls back to itinerary._id depending on your data structure
+            itineraryId: itinerary?.id || itinerary?._id, 
+            content: itinerary.contentJson,
+            days,
+            budget,
+            groupSize,
+            travelStyle,
+            tripType,
+            interests,
+          }),
         }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Something went wrong");
+        setRequestLoading(false);
+        return;
+      }
+
+      alert("Request submitted ✅ You can track it in My Requests page");
+      
+      // Optional: If you need the UI to update automatically without fetchData, uncomment below:
+      // window.location.reload(); 
+      
+    } catch (err) {
+      console.error(err);
+      alert("Network error");
+    }
 
     setRequestLoading(false);
   };
