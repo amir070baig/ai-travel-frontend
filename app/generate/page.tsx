@@ -49,6 +49,21 @@ export default function GeneratePage() {
 
   const handleRequest = async () => {
     setRequestLoading(true);
+    
+    // 1. CREATE THE PAYLOAD
+    const payload = {
+      itineraryId: itinerary?.id || itinerary?._id || itinerary?.itineraryId, 
+      content: itinerary?.contentJson,
+      days,
+      budget,
+      groupSize,
+      travelStyle,
+      tripType,
+      interests,
+    };
+
+    // 2. DEBUG LOG (Look at your browser console!)
+    console.log("👉 SENDING PAYLOAD TO BACKEND:", payload);
 
     // If you are using Next.js App Router, you can grab the ID from the URL as a backup
     // const { id } = useParams(); 
