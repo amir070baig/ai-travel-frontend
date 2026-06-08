@@ -6,7 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 export default function GeneratePage() {
   useAuth();
   
-  const [days, setDays] = useState(3);
+  const [days, setDays] = useState(1);
   const [budget, setBudget] = useState("");
   const [groupSize, setGroupSize] = useState(2);
   const [loading, setLoading] = useState(false);
@@ -19,6 +19,7 @@ export default function GeneratePage() {
   const [tripType, setTripType] = useState("Couple");
   const [interests, setInterests] = useState("");
   const itineraryRef = useRef<HTMLDivElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -457,8 +458,10 @@ export default function GeneratePage() {
 
               {/* SAVE */}
               <button
-                disabled={saved}
+                disabled={saved || isSubmitting}
                 onClick={async () => {
+                  if (isSubmitting) return;
+                  setIsSubmitting(true);
                   try {
                     const res = await fetch(
                       `${process.env.NEXT_PUBLIC_API_URL}/itineraries/save`,
@@ -496,10 +499,13 @@ export default function GeneratePage() {
                     console.error(err);
                     alert("Something went wrong");
                   }
+                  finally {
+                    setIsSubmitting(false);
+                  }
                 }}
                 className="flex-1 bg-gray-200 py-2 rounded-xl"
               >
-                {saved ? "Saved" : "Save for Later"}
+                {isSubmitting ? "Saving..." : saved ? "Saved" : "Save Itinerary"}
               </button>
 
               <button

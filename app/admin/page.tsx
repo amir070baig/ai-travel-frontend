@@ -150,7 +150,7 @@ export default function AdminPage() {
       packagePrices[requestId]
     );
     try {
-      await fetch(
+      const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/approve`,
         {
           method: "POST",
@@ -160,13 +160,19 @@ export default function AdminPage() {
           },
           body: JSON.stringify({
             requestId,
-            finalPrice:
-              packagePrices[requestId]
-                ? Number(packagePrices[requestId])
-                : undefined,
+            finalPrice: packagePrices[requestId]
+              ? Number(packagePrices[requestId])
+              : undefined,
           }),
         }
       );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Approval failed");
+        return;
+      }
 
       setRequests((prev: any) =>
         prev.map((r: any) =>
