@@ -50,32 +50,11 @@ export default function GeneratePage() {
   const handleRequest = async () => {
     setRequestLoading(true);
 
-    // 1. EXTRACT ID FROM THE URL AS A BACKUP
-    // If your URL looks like: /itinerary/6789abc, this gets "6789abc"
-     const urlParts = window.location.pathname.split('/');
-     const idFromUrl = urlParts[urlParts.length - 1]; 
-
-    // 1. CREATE THE PAYLOAD
-    const payload = {
-      itineraryId: itinerary?.id || itinerary?._id || itinerary?.itineraryId, 
-      content: itinerary?.contentJson,
-      days,
-      budget,
-      groupSize,
-      travelStyle,
-      tripType,
-      interests,
-    };
-
-    // 2. DEBUG LOG (Look at your browser console!)
-    console.log("👉 SENDING PAYLOAD TO BACKEND:", payload);
-
-    // If you are using Next.js App Router, you can grab the ID from the URL as a backup
-    // const { id } = useParams(); 
-
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/requests`,
+      // STEP 1: Save the itinerary to the database to generate a Prisma ID
+      // Note: Change '/itineraries' to your actual creation route if it differs (e.g., '/trips')
+      const saveRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/itineraries`, 
         {
           credentials: "include",
           method: "POST",
@@ -83,9 +62,8 @@ export default function GeneratePage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            // Uses itinerary.id or falls back to itinerary._id depending on your data structure
-            itineraryId: itinerary?.id || itinerary?._id, 
-            content: itinerary.contentJson,
+            // Send all the form data your itinerary model needs to save into Prisma
+            content: itinerary?.content || itinerary?.contentJson,
             days,
             budget,
             groupSize,
@@ -96,22 +74,45 @@ export default function GeneratePage() {
         }
       );
 
+      const savedData = await saveRes.json();
+
+      // Extract the newly generated Prisma ID
+      const generatedId = savedData?.id || savedData?._id;
+
+      if (!saveRes.ok || !generatedId) {
+        alert(savedData.message || "Failed to initialize itinerary record before requesting.");
+        setRequestLoading(false);
+        return;
+      }
+
+      // STEP 2: Submit the request matching your backend's exact expectation
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/requests`,
+        {
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            itineraryId: generatedId, // 👈 This provides exactly what your backend 'const { itineraryId } = req.body' wants!
+          }),
+        }
+      );
+
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.message || "Something went wrong");
+        alert(data.message || "Failed to submit expert request");
         setRequestLoading(false);
         return;
       }
 
       alert("Request submitted ✅ You can track it in My Requests page");
       
-      // Optional: If you need the UI to update automatically without fetchData, uncomment below:
-      // window.location.reload(); 
-      
     } catch (err) {
-      console.error(err);
-      alert("Network error");
+      console.error("Error processing request:", err);
+      alert("Something went wrong");
     }
 
     setRequestLoading(false);
