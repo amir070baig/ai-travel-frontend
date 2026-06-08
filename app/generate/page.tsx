@@ -49,7 +49,12 @@ export default function GeneratePage() {
 
   const handleRequest = async () => {
     setRequestLoading(true);
-    
+
+    // 1. EXTRACT ID FROM THE URL AS A BACKUP
+    // If your URL looks like: /itinerary/6789abc, this gets "6789abc"
+     const urlParts = window.location.pathname.split('/');
+     const idFromUrl = urlParts[urlParts.length - 1]; 
+
     // 1. CREATE THE PAYLOAD
     const payload = {
       itineraryId: itinerary?.id || itinerary?._id || itinerary?.itineraryId, 
