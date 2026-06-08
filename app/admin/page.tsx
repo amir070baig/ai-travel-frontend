@@ -161,9 +161,9 @@ export default function AdminPage() {
           body: JSON.stringify({
             requestId,
             finalPrice:
-              Number(
-                packagePrices[requestId]
-              ),
+              packagePrices[requestId]
+                ? Number(packagePrices[requestId])
+                : undefined,
           }),
         }
       );
@@ -174,6 +174,10 @@ export default function AdminPage() {
             ? {
                 ...r,
                 status: "APPROVED",
+                finalPrice:
+                  packagePrices[requestId]
+                    ? Number(packagePrices[requestId])
+                    : r.itinerary?.budget,
               }
             : r
         )

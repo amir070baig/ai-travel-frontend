@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useAuth } from "../hooks/useAuth";
 
 export default function GeneratePage() {
@@ -18,6 +18,7 @@ export default function GeneratePage() {
   const [travelStyle, setTravelStyle] = useState("Luxury");
   const [tripType, setTripType] = useState("Couple");
   const [interests, setInterests] = useState("");
+  const itineraryRef = useRef<HTMLDivElement>(null);
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -40,6 +41,20 @@ export default function GeneratePage() {
       setItinerary({
         contentJson: data.content,
       });
+
+      setDays(1);
+      setBudget("");
+      setGroupSize(2);
+      setTravelStyle("Luxury");
+      setTripType("Couple");
+      setInterests("");
+
+      setTimeout(() => {
+        itineraryRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
     } catch (err) {
       console.error(err);
     }
@@ -47,76 +62,47 @@ export default function GeneratePage() {
     setLoading(false);
   };
 
-  const handleRequest = async () => {
-    setRequestLoading(true);
+  // const handleRequest = async () => {
+  //   setRequestLoading(true);
 
-    try {
-      // STEP 1: Save the itinerary to the database to generate a Prisma ID
-      // Note: Change '/itineraries' to your actual creation route if it differs (e.g., '/trips')
-      const saveRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/itineraries`, 
-        {
-          credentials: "include",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            // Send all the form data your itinerary model needs to save into Prisma
-            content: itinerary?.content || itinerary?.contentJson,
-            days,
-            budget,
-            groupSize,
-            travelStyle,
-            tripType,
-            interests,
-          }),
-        }
-      );
+  //   try {
 
-      const savedData = await saveRes.json();
+  //     const res = await fetch(
+  //       `${process.env.NEXT_PUBLIC_API_URL}/requests`,
+  //       {
+  //         credentials: "include",
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           content: itinerary.contentJson,
+  //           days,
+  //           budget,
+  //           groupSize,
+  //           travelStyle,
+  //           tripType,
+  //           interests,
+  //         }),
+  //       }
+  //     );
 
-      // Extract the newly generated Prisma ID
-      const generatedId = savedData?.id || savedData?._id;
+  //     const data = await res.json();
 
-      if (!saveRes.ok || !generatedId) {
-        alert(savedData.message || "Failed to initialize itinerary record before requesting.");
-        setRequestLoading(false);
-        return;
-      }
+  //     if (!res.ok) {
+  //       alert(data.message || "Something went wrong");
+  //       setRequestLoading(false);
+  //       return;
+  //     }
 
-      // STEP 2: Submit the request matching your backend's exact expectation
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/requests`,
-        {
-          credentials: "include",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            itineraryId: generatedId, // 👈 This provides exactly what your backend 'const { itineraryId } = req.body' wants!
-          }),
-        }
-      );
+  //     alert("Request submitted ✅ You can track it in My Requests page");
+  //       // window.location.reload(); // ✅ force refresh
+  //   } catch (err) {
+  //     alert("Network error");
+  //   }
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.message || "Failed to submit expert request");
-        setRequestLoading(false);
-        return;
-      }
-
-      alert("Request submitted ✅ You can track it in My Requests page");
-      
-    } catch (err) {
-      console.error("Error processing request:", err);
-      alert("Something went wrong");
-    }
-
-    setRequestLoading(false);
-  };
+  //   setRequestLoading(false);
+  // };
 
   const handleBooking = async () => {
     try {
@@ -405,7 +391,9 @@ export default function GeneratePage() {
 
         {/* ITINERARY */}
         {itinerary && (
-          <div className="bg-white/95 backdrop-blur border border-white/40 rounded-3xl p-5 sm:p-8 shadow-2xl shadow-black/5 space-y-6">
+          <div
+            ref={itineraryRef}
+            className="bg-white/95 backdrop-blur border border-white/40 rounded-3xl p-5 sm:p-8 shadow-2xl shadow-black/5 space-y-6">
             
             <div className="flex justify-between items-center">
               <h3 className="text-2xl font-semibold">
@@ -449,13 +437,13 @@ export default function GeneratePage() {
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
 
               {/* REQUEST */}
-              <button
+              {/* <button
                 onClick={handleRequest}
                 disabled={requestLoading}
                 className="flex-1 bg-green-600 text-white py-2 rounded-xl disabled:bg-gray-400"
               >
                 {requestLoading ? "Submitting..." : "Request Expert Travel Planning"}
-              </button>
+              </button> */}
 
               <a
                 href={`https://wa.me/917599921173?text=${encodeURIComponent(
