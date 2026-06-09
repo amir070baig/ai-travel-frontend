@@ -31,6 +31,13 @@ export default function Navbar() {
       };
 
       fetchNotifications();
+
+      const interval = setInterval(
+        fetchNotifications,
+        30000
+      );
+
+      return () => clearInterval(interval);
     }
   }, []);
 
@@ -125,6 +132,9 @@ export default function Navbar() {
                         </p>
                         <p className="text-xs text-gray-600 mt-1 leading-relaxed">
                           {n.message}
+                        </p>
+                        <p className="text-[10px] text-gray-400 mt-1">
+                          {new Date(n.createdAt).toLocaleString()}
                         </p>
                       </div>
                     ))}
