@@ -41,6 +41,12 @@ export default function GeneratePage() {
       const data = await res.json();
       setItinerary({
         contentJson: data.content,
+        days,
+        budget,
+        groupSize,
+        travelStyle,
+        tripType,
+        interests,
       });
 
       setDays(1);
@@ -400,8 +406,8 @@ export default function GeneratePage() {
               <h3 className="text-2xl font-semibold">
                 {itinerary?.contentJson?.split("\n")[0] || "Your AI Itinerary"}
               </h3>
-              <span className="text-sm text-gray-500">
-                {days} days · {budget}
+              <span>
+                {itinerary.days} days · ₹{itinerary.budget}
               </span>
             </div>
 
@@ -473,12 +479,12 @@ export default function GeneratePage() {
                         },
                         body: JSON.stringify({
                           content: itinerary.contentJson,
-                          days,
-                          budget,
-                          groupSize,
-                          travelStyle,
-                          tripType,
-                          interests,
+                          days: itinerary.days,
+                          budget: itinerary.budget,
+                          groupSize: itinerary.groupSize,
+                          travelStyle: itinerary.travelStyle,
+                          tripType: itinerary.tripType,
+                          interests: itinerary.interests,
                         }),
                       }
                     );
