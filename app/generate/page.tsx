@@ -20,13 +20,17 @@ export default function GeneratePage() {
   const [interests, setInterests] = useState("");
   const itineraryRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const handleGenerate = async () => {
-    setLoading(true);
+    if (loading) return;
+    
     if (!budget || Number(budget) < 2000) {
       setMessage("Minimum budget should be ₹2000");
       return;
     }
+
+    setLoading(true);
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ai/generate-itinerary`, {
@@ -66,7 +70,9 @@ export default function GeneratePage() {
       console.error(err);
     }
 
-    setLoading(false);
+    finally {
+      setLoading(false);
+    }
   };
 
   // const handleRequest = async () => {
@@ -509,9 +515,11 @@ export default function GeneratePage() {
               </button>
 
               <button
+                disabled={isDownloading}
                 onClick={async () => {
+                  if (isDownloading) return;
+                  setIsDownloading(true);
                   try {
-
                     const res = await fetch(
                       `${process.env.NEXT_PUBLIC_API_URL}/pdf/generate`,
                       {
@@ -552,6 +560,10 @@ export default function GeneratePage() {
                     console.error(err);
 
                     alert("Failed to download PDF");
+                  }
+
+                  finally {
+                    setIsDownloading(false);
                   }
                 }}
                 className="flex-1 bg-blue-600 text-white py-2 rounded-xl"

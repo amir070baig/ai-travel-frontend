@@ -14,6 +14,7 @@ export default function MyRequestsPage() {
   const [travelDates, setTravelDates] = useState<Record<string, string>>({});
   const [messages, setMessages] = useState<Record<string, any[]>>({});
   const [messageInputs, setMessageInputs] = useState<Record<string, string>>({});
+  const [isPaying, setIsPaying] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -135,7 +136,10 @@ export default function MyRequestsPage() {
   const activeRequests = requests.filter((req) => req.status !== "APPROVED");
 
   const handlePayment = async (bookingId: string) => {
-    // 1. Find the current booking object being paid for
+    // 1. Guard clause: Stop if ANY payment is already processing
+    if (isPaying) return;
+
+    // Find the current booking object being paid for
     const currentBooking = bookings.find((b) => b.id === bookingId);
     const selectedDate = travelDates[bookingId];
 
@@ -151,26 +155,25 @@ export default function MyRequestsPage() {
       return;
     }
 
-    // 3. Send the selected date to the backend so it gets saved!
+    // 3. Set the current booking ID to true/active right after validation passes
+    setIsPaying(bookingId);
+
     try {
+      // Send the selected date to the backend so it gets saved!
       await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/bookings/${bookingId}/travel-date`,
         {
           method: "PATCH",
-
           credentials: "include",
-
           headers: {
-            "Content-Type":
-              "application/json",
+            "Content-Type": "application/json",
           },
-
           body: JSON.stringify({
-            travelDate:
-              selectedDate,
+            travelDate: selectedDate,
           }),
         }
       );
+      
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/payments/create-order`,
         {
@@ -194,27 +197,38 @@ export default function MyRequestsPage() {
         description: "Advance Booking Payment",
         order_id: order.id,
         handler: async function (response: any) {
-          const verifyRes = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/payments/verify`,
-            {
-              credentials: "include",
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ 
-                ...response, 
-                bookingId,
-                travelDate: selectedDate || currentBooking?.travelDate // Passes it to verification too
-              }),
+          try {
+            const verifyRes = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/payments/verify`,
+              {
+                credentials: "include",
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                  ...response, 
+                  bookingId,
+                  travelDate: selectedDate || currentBooking?.travelDate
+                }),
+              }
+            );
+
+            const verifyData = await verifyRes.json();
+            if (verifyData.success) {
+              await fetchBookings();
+              alert("Payment Successful ✅");
             }
-          );
-
-          const verifyData = await verifyRes.json();
-          if (verifyData.success) {
-
-            await fetchBookings();
-
-            alert("Payment Successful ✅");
+          } catch (verifyErr) {
+            console.error("Verification error:", verifyErr);
+          } finally {
+            // Reset the payment state after validation/verification sequence finishes
+            setIsPaying(null);
           }
+        },
+        // If user closes Razorpay modal without paying, clear state
+        modal: {
+          ondismiss: function () {
+            setIsPaying(null);
+          },
         },
         theme: { color: "#2563eb" },
       };
@@ -224,6 +238,8 @@ export default function MyRequestsPage() {
     } catch (err) {
       console.error(err);
       alert("Payment failed");
+      // Clear state if the initial order creation API fails
+      setIsPaying(null);
     }
   };
 
@@ -455,9 +471,11 @@ export default function MyRequestsPage() {
                     {b.status === "PENDING_PAYMENT" && (
                       <button
                         onClick={() => handlePayment(b.id)}
-                        className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl hover:bg-blue-700 transition"
+                        // Disables the button if this specific booking or any other payment is running
+                        disabled={isPaying !== null}
+                        className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
                       >
-                        Pay Now
+                        {isPaying === b.id ? "Processing..." : "Pay Now"}
                       </button>
                     )}
                     {b.status === "PENDING_PAYMENT" && (
