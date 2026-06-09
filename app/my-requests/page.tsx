@@ -467,6 +467,30 @@ export default function MyRequestsPage() {
                       </div>
                     )}
                   </div>
+                  {b.itinerary?.contentJson && (
+                    <details className="mt-4">
+                      <summary className="cursor-pointer font-semibold text-blue-600">
+                        View Full Itinerary
+                      </summary>
+
+                      <div className="mt-3 space-y-2">
+                        {b.itinerary.contentJson
+                          .replace(/\*/g, "")
+                          .split("\n")
+                          .filter((line: string) => line.trim() !== "")
+                          .map((line: string, i: number) => (
+                            <div
+                              key={i}
+                              className="bg-gray-50 border rounded-xl p-3"
+                            >
+                              <p className="text-sm whitespace-pre-wrap">
+                                {line}
+                              </p>
+                            </div>
+                          ))}
+                      </div>
+                    </details>
+                  )}
                 </div>
               ))}
             </div>

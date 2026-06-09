@@ -6,9 +6,9 @@ import { useAuth } from "../hooks/useAuth";
 export default function GeneratePage() {
   useAuth();
   
-  const [days, setDays] = useState(1);
+  const [days, setDays] = useState("");
   const [budget, setBudget] = useState("");
-  const [groupSize, setGroupSize] = useState(2);
+  const [groupSize, setGroupSize] = useState("");
   const [loading, setLoading] = useState(false);
   const [requestLoading, setRequestLoading] = useState(false);
   const [itinerary, setItinerary] = useState<any>(null);
@@ -49,9 +49,9 @@ export default function GeneratePage() {
         interests,
       });
 
-      setDays(1);
+      setDays("");
       setBudget("");
-      setGroupSize(2);
+      setGroupSize("");
       setTravelStyle("Luxury");
       setTripType("Couple");
       setInterests("");
@@ -255,16 +255,8 @@ export default function GeneratePage() {
               type="number"
               min="1"
               value={days}
-              onChange={(e) => {
-                const value = Number(e.target.value);
-
-                if (value < 1) {
-                  setDays(1);
-                  return;
-                }
-
-                setDays(value);
-              }}
+              onChange={(e) => setDays(e.target.value)}
+              placeholder="Number of days (e.g. 5)"
               className="w-full p-3.5 border border-gray-200 rounded-2xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
@@ -275,6 +267,7 @@ export default function GeneratePage() {
               type="text"
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
+              placeholder="Total budget (e.g. ₹15,000)"
               className="w-full p-3.5 border border-gray-200 rounded-2xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
@@ -284,7 +277,8 @@ export default function GeneratePage() {
             <input
               type="number"
               value={groupSize}
-              onChange={(e) => setGroupSize(Number(e.target.value))}
+              onChange={(e) => setGroupSize(e.target.value)}
+              placeholder="Number of travelers"
               className="w-full p-3.5 border border-gray-200 rounded-2xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
