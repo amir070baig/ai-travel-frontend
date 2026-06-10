@@ -30,6 +30,16 @@ export default function GeneratePage() {
       return;
     }
 
+    if (!days || Number(days) < 1) {
+      setMessage("Please enter valid trip days");
+      return;
+    }
+
+    if (!groupSize || Number(groupSize) < 1) {
+      setMessage("Please enter valid group size");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -39,7 +49,14 @@ export default function GeneratePage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ days, budget, groupSize, travelStyle, tripType, interests }),
+          body: JSON.stringify({
+          days: Number(days),
+          budget,
+          groupSize: Number(groupSize),
+          travelStyle,
+          tripType,
+          interests,
+        }),
       });
 
       const data = await res.json();
