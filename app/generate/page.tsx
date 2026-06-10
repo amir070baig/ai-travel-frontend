@@ -61,8 +61,6 @@ export default function GeneratePage() {
 
       const data = await res.json();
 
-      console.log("GENERATE RESPONSE", data);
-
       if (!res.ok) {
         alert(data.message || "Failed to generate itinerary");
         return;
@@ -514,6 +512,9 @@ export default function GeneratePage() {
                     );
 
                     const data = await res.json();
+
+                    console.log("SAVE RESPONSE", data);
+                    console.log("SAVE STATUS", res.status);
 
                     if (!res.ok) {
                       alert(data.message || "Save failed");
