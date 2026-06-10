@@ -501,13 +501,15 @@ export default function GeneratePage() {
                         },
                         body: JSON.stringify({
                           content: itinerary.contentJson,
-                          days: itinerary.days,
+
+                          days: Number(itinerary.days),
+
                           budget: itinerary.budget,
-                          groupSize: itinerary.groupSize,
-                          travelStyle: itinerary.travelStyle,
-                          tripType: itinerary.tripType,
-                          interests: itinerary.interests,
-                        }),
+
+                          groupSize: Number(
+                            itinerary.groupSize
+                          ),
+                        })
                       }
                     );
 
