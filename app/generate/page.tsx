@@ -43,6 +43,13 @@ export default function GeneratePage() {
       });
 
       const data = await res.json();
+
+      console.log("GENERATE RESPONSE", data);
+
+      if (!res.ok) {
+        alert(data.message || "Failed to generate itinerary");
+        return;
+      }
       setItinerary({
         contentJson: data.content,
         days,
