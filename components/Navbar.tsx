@@ -111,9 +111,37 @@ export default function Navbar() {
 
               {showNotifications && (
                 <div className="absolute right-0 mt-3 w-80 max-h-96 overflow-y-auto bg-white border shadow-2xl rounded-3xl p-4 z-50">
-                  <h3 className="font-bold text-lg mb-4">
-                    Notifications
-                  </h3>
+                  <div className="flex justify-between items-center mb-4">
+
+                    <h3 className="font-bold text-lg">
+                      Notifications
+                    </h3>
+
+                    <button
+                      onClick={async () => {
+
+                        await fetch(
+                          `${process.env.NEXT_PUBLIC_API_URL}/notifications/read-all`,
+                          {
+                            method: "PATCH",
+                            credentials: "include",
+                          }
+                        );
+
+                        setNotifications((prev) =>
+                          prev.map((n) => ({
+                            ...n,
+                            isRead: true,
+                          }))
+                        );
+
+                      }}
+                      className="text-sm text-blue-600"
+                    >
+                      Mark All Read
+                    </button>
+
+                  </div>
 
                   {notifications.length === 0 && (
                     <p className="text-sm text-gray-500">
@@ -125,7 +153,39 @@ export default function Navbar() {
                     {notifications.map((n, index) => (
                       <div
                         key={n.id}
-                        className="bg-gray-50 rounded-2xl p-3 border"
+
+                        onClick={async () => {
+
+                          if (!n.isRead) {
+
+                            await fetch(
+                              `${process.env.NEXT_PUBLIC_API_URL}/notifications/${n.id}/read`,
+                              {
+                                method: "PATCH",
+                                credentials: "include",
+                              }
+                            );
+
+                            setNotifications((prev) =>
+                              prev.map((item) =>
+                                item.id === n.id
+                                  ? {
+                                      ...item,
+                                      isRead: true,
+                                    }
+                                  : item
+                              )
+                            );
+
+                          }
+
+                        }}
+
+                        className={`rounded-2xl p-3 border cursor-pointer ${
+                          n.isRead
+                            ? "bg-gray-50"
+                            : "bg-blue-50 border-blue-300"
+                        }`}
                       >
                         <p className="font-semibold text-sm text-gray-900">
                           {index + 1}. {n.title}
