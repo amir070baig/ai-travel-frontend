@@ -15,6 +15,7 @@ export default function MyRequestsPage() {
   const [messages, setMessages] = useState<Record<string, any[]>>({});
   const [messageInputs, setMessageInputs] = useState<Record<string, string>>({});
   const [isPaying, setIsPaying] = useState<string | null>(null);
+  const ADMIN_WHATSAPP = "917599921173";
   
 
 
@@ -335,6 +336,29 @@ export default function MyRequestsPage() {
     );
   };
 
+
+  const handleWhatsAppDiscussion = (trip: any) => {
+
+    const text = `
+  Hello Travel Team,
+
+  I'd like to discuss this itinerary.
+
+  City: ${trip.city}
+  Days: ${trip.days}
+  Budget: ${trip.budget}
+  Group Size: ${trip.groupSize}
+
+  My itinerary ID:
+  ${trip.id}
+  `;
+
+    const url =
+      `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(text)}`;
+
+    window.open(url, "_blank");
+  };
+
   console.log(bookings)
 
   return (
@@ -363,7 +387,7 @@ export default function MyRequestsPage() {
               {bookings.map((b) => (
                 <div key={b.id} className="bg-white p-6 rounded-2xl border shadow-sm flex flex-col justify-between space-y-4">
                   <div>
-                    <h3 className="font-bold text-lg text-gray-900">{b.tour?.title || "AI Custom Trip"}</h3>
+                    <h3 className="font-bold text-lg text-gray-900">{b.tour?.title || b.itinerary?.title}</h3>
                     {!b.tour && b.request?.finalPrice && (
                       <div className="mt-2 text-sm">
                         <p>
@@ -542,7 +566,7 @@ export default function MyRequestsPage() {
                   <div className="flex justify-between items-center">
 
                     <h3 className="font-bold text-lg">
-                      {trip.city || "Saved Trip"}
+                      {trip.title || trip.city}
                     </h3>
 
                     <span className="text-sm text-gray-500">
@@ -644,6 +668,14 @@ export default function MyRequestsPage() {
                   >
                     Request This Plan
                   </button>
+                  <button
+                    onClick={() =>
+                      handleWhatsAppDiscussion(trip)
+                    }
+                    className="mt-2 w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition"
+                  >
+                    💬 Discuss on WhatsApp
+                  </button>
                 </div>
               ))}
             </div>
@@ -668,7 +700,7 @@ export default function MyRequestsPage() {
                 return (
                   <div key={req.id} className="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
                     <div className="flex justify-between items-center">
-                      <p className="font-medium text-gray-700">Active Request #{index + 1}</p>
+                      <p className="font-medium text-gray-700">{req.itinerary?.title}</p>
                       <p className="font-semibold text-sm">
                         Status:{" "}
 

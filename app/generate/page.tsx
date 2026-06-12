@@ -21,6 +21,7 @@ export default function GeneratePage() {
   const itineraryRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const itineraryTitle = `Agra ${days}-Day ${travelStyle} Journey`;
 
   const handleGenerate = async () => {
     if (loading) return;
@@ -423,6 +424,10 @@ export default function GeneratePage() {
           <div
             ref={itineraryRef}
             className="bg-white/95 backdrop-blur border border-white/40 rounded-3xl p-5 sm:p-8 shadow-2xl shadow-black/5 space-y-6">
+
+            <h2 className="text-2xl font-bold text-blue-700 mb-2">
+              {itineraryTitle}
+            </h2>
             
             <div className="flex justify-between items-center">
               <h3 className="text-2xl font-semibold">

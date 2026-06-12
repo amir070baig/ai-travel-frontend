@@ -736,6 +736,9 @@ export default function AdminPage() {
 
               <div className="flex justify-between items-center">
                 <div>
+                  <p className="font-bold text-lg text-blue-700">
+                    {req.itinerary?.title}
+                  </p>
                   <p className="font-semibold">
                     {req.user?.email}
                   </p>
@@ -928,6 +931,9 @@ export default function AdminPage() {
                   >
                     <div className="flex justify-between items-center">
                       <div>
+                        <p className="font-bold text-lg text-blue-700">
+                          {req.itinerary?.title}
+                        </p>
                         <p className="font-semibold">
                           {req.user?.email}
                         </p>
