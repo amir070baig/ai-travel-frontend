@@ -155,6 +155,7 @@ export default function Navbar() {
                         key={n.id}
 
                         onClick={async () => {
+                        console.log("NOTIFICATION", n);
 
                           if (!n.isRead) {
 
