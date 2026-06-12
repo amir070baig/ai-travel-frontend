@@ -179,6 +179,10 @@ export default function Navbar() {
 
                           }
 
+                          if (n.link) {
+                            window.location.href = n.link;
+                          }
+
                         }}
 
                         className={`rounded-2xl p-3 border cursor-pointer ${
