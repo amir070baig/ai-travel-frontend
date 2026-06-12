@@ -514,6 +514,10 @@ export default function GeneratePage() {
                           groupSize: Number(
                             itinerary.groupSize
                           ),
+
+                          travelStyle,
+                          tripType,
+                          interests,
                         })
                       }
                     );
