@@ -15,6 +15,7 @@ export default function MyRequestsPage() {
   const [messages, setMessages] = useState<Record<string, any[]>>({});
   const [messageInputs, setMessageInputs] = useState<Record<string, string>>({});
   const [isPaying, setIsPaying] = useState<string | null>(null);
+  
 
 
   useEffect(() => {
@@ -661,182 +662,186 @@ export default function MyRequestsPage() {
               <p className="text-center text-gray-500 text-sm">
                 Trips currently under review by our travel experts
               </p>
-              {activeRequests.map((req, index) => (
-                <div key={req.id} className="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
-                  <div className="flex justify-between items-center">
-                    <p className="font-medium text-gray-700">Active Request #{index + 1}</p>
-                    <p className="font-semibold text-sm">
-                      Status:{" "}
+              {activeRequests.map((req, index) => {
+                const hasConversation = (messages[req.id] || []).length > 0;
+                
+                return (
+                  <div key={req.id} className="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
+                    <div className="flex justify-between items-center">
+                      <p className="font-medium text-gray-700">Active Request #{index + 1}</p>
+                      <p className="font-semibold text-sm">
+                        Status:{" "}
 
-                      <span className="text-blue-600 uppercase">
-                        {
-                          req.status === "UNDER_REVIEW"
-                            ? "UNDER EXPERT REVIEW"
-                            : req.status === "REVISION_SENT"
-                            ? "DISCUSSION IN PROGRESS"
-                            : req.status === "APPROVED"
-                            ? "APPROVED"
-                            : req.status
-                        }
+                        <span className="text-blue-600 uppercase">
+                          {
+                            req.status === "UNDER_REVIEW"
+                              ? "UNDER EXPERT REVIEW"
+                              : req.status === "REVISION_SENT"
+                              ? "DISCUSSION IN PROGRESS"
+                              : req.status === "APPROVED"
+                              ? "APPROVED"
+                              : req.status
+                          }
 
-                      </span>
-                    </p>
-                  </div>
-
-                  {req.finalPrice && (
-                    <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-
-                      <p className="font-semibold text-green-700">
-                        Personalized Package Ready
+                        </span>
                       </p>
-
-                      <p>
-                        Final Package Price:
-                        ₹{req.finalPrice}
-                      </p>
-
                     </div>
-                  )}
 
-                  {req.itinerary?.contentJson && (
-                    <div className="bg-gray-50 border border-gray-200 p-4 rounded-xl mt-2">
-                      <strong className="text-gray-800 block mb-2">Your Itinerary Summary:</strong>
-                      <div className="space-y-3">
-                        {req.itinerary.contentJson
-                          .replace(/\*/g, "")
-                          .split("\n")
-                          .filter((line: string) => line.trim() !== "")
-                          .slice(0, expandedTrips.includes(req.id) ? undefined : 4)
-                          .map((line: string, i: number) => (
-                            <div key={i} className="bg-white border border-gray-100 rounded-xl p-3 shadow-xs">
-                              <p className={`leading-relaxed text-sm wrap-break-word w-full overflow-hidden whitespace-pre-wrap ${
-                                line.includes("Day") || line.includes("Overview") || line.includes("Budget")
-                                  ? "font-bold text-blue-700" : "text-gray-700"
-                              }`}>
-                                {line}
-                              </p>
-                            </div>
-                          ))}
+                    {req.finalPrice && (
+                      <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+
+                        <p className="font-semibold text-green-700">
+                          Personalized Package Ready
+                        </p>
+
+                        <p>
+                          Final Package Price:
+                          ₹{req.finalPrice}
+                        </p>
+
                       </div>
-                      
-                      <button
-                        onClick={() => toggleExpand(req.id)}
-                        className="mt-3 text-sm text-blue-600 font-semibold hover:underline"
-                      >
-                        {expandedTrips.includes(req.id) ? "Show Less" : "View Full Plan Details"}
-                      </button>
-                    </div>
-                  )}
+                    )}
 
-                  
-                  {req.status === "REVISION_SENT" && (
-                    <div className="space-y-4 pt-2">
-
-                      {req.revisionMessage && (
-                        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm text-yellow-800">
-
-                          <strong className="block mb-1">
-                            Revision Notes from Travel Team:
-                          </strong>
-
-                          <p>
-                            {req.revisionMessage}
-                          </p>
-
-                        </div>
-                      )}
-
-                      <div className="space-y-3">
-
-                        <h4 className="font-semibold">
-                          Conversation
-                        </h4>
-
-                        <div className="bg-gray-50 border rounded-xl p-4 space-y-2">
-
-                          {(messages[req.id] || []).map(
-                            (msg: any) => (
-
-                              <div
-                                key={msg.id}
-                                className={`p-3 rounded-xl text-sm ${
-                                  msg.senderType === "ADMIN"
-                                    ? "bg-blue-100"
-                                    : "bg-green-100"
-                                }`}
-                              >
-
-                                <strong>
-                                  {msg.senderType === "ADMIN"
-                                    ? "Travel Team"
-                                    : "You"}
-                                </strong>
-
-                                <p>
-                                  {msg.message}
+                    {req.itinerary?.contentJson && (
+                      <div className="bg-gray-50 border border-gray-200 p-4 rounded-xl mt-2">
+                        <strong className="text-gray-800 block mb-2">Your Itinerary Summary:</strong>
+                        <div className="space-y-3">
+                          {req.itinerary.contentJson
+                            .replace(/\*/g, "")
+                            .split("\n")
+                            .filter((line: string) => line.trim() !== "")
+                            .slice(0, expandedTrips.includes(req.id) ? undefined : 4)
+                            .map((line: string, i: number) => (
+                              <div key={i} className="bg-white border border-gray-100 rounded-xl p-3 shadow-xs">
+                                <p className={`leading-relaxed text-sm wrap-break-word w-full overflow-hidden whitespace-pre-wrap ${
+                                  line.includes("Day") || line.includes("Overview") || line.includes("Budget")
+                                    ? "font-bold text-blue-700" : "text-gray-700"
+                                }`}>
+                                  {line}
                                 </p>
-
                               </div>
+                            ))}
+                        </div>
+                        
+                        <button
+                          onClick={() => toggleExpand(req.id)}
+                          className="mt-3 text-sm text-blue-600 font-semibold hover:underline"
+                        >
+                          {expandedTrips.includes(req.id) ? "Show Less" : "View Full Plan Details"}
+                        </button>
+                      </div>
+                    )}
 
-                            )
-                          )}
+                    
+                    {(req.status === "REVISION_SENT" || hasConversation) && (
+                      <div className="space-y-4 pt-2">
+
+                        {req.revisionMessage && (
+                          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm text-yellow-800">
+
+                            <strong className="block mb-1">
+                              Revision Notes from Travel Team:
+                            </strong>
+
+                            <p>
+                              {req.revisionMessage}
+                            </p>
+
+                          </div>
+                        )}
+
+                        <div className="space-y-3">
+
+                          <h4 className="font-semibold">
+                            Conversation
+                          </h4>
+
+                          <div className="bg-gray-50 border rounded-xl p-4 space-y-2">
+
+                            {(messages[req.id] || []).map(
+                              (msg: any) => (
+
+                                <div
+                                  key={msg.id}
+                                  className={`p-3 rounded-xl text-sm ${
+                                    msg.senderType === "ADMIN"
+                                      ? "bg-blue-100"
+                                      : "bg-green-100"
+                                  }`}
+                                >
+
+                                  <strong>
+                                    {msg.senderType === "ADMIN"
+                                      ? "Travel Team"
+                                      : "You"}
+                                  </strong>
+
+                                  <p>
+                                    {msg.message}
+                                  </p>
+
+                                </div>
+
+                              )
+                            )}
+
+                          </div>
+
+                          <textarea
+                            value={
+                              messageInputs[req.id] || ""
+                            }
+
+                            onChange={(e) =>
+                              setMessageInputs({
+                                ...messageInputs,
+
+                                [req.id]:
+                                  e.target.value,
+                              })
+                            }
+
+                            placeholder="Reply to travel team..."
+
+                            className="w-full border rounded-xl p-3"
+                          />
+
+                          <button
+                            onClick={() =>
+                              handleSendMessage(
+                                req.id
+                              )
+                            }
+
+                            className="bg-blue-600 text-white px-4 py-2 rounded-xl"
+                          >
+                            Send Message
+                          </button>
 
                         </div>
+                        {/* <div className="flex gap-2">
 
-                        <textarea
-                          value={
-                            messageInputs[req.id] || ""
-                          }
+                          <button
+                            onClick={() => handleAccept(req.id)}
+                            className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-green-700 transition"
+                          >
+                            Accept Revision
+                          </button>
 
-                          onChange={(e) =>
-                            setMessageInputs({
-                              ...messageInputs,
+                          <button
+                            onClick={() => handleRejectRevision(req.id)}
+                            className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-red-700 transition"
+                          >
+                            Request Further Changes
+                          </button>
 
-                              [req.id]:
-                                e.target.value,
-                            })
-                          }
-
-                          placeholder="Reply to travel team..."
-
-                          className="w-full border rounded-xl p-3"
-                        />
-
-                        <button
-                          onClick={() =>
-                            handleSendMessage(
-                              req.id
-                            )
-                          }
-
-                          className="bg-blue-600 text-white px-4 py-2 rounded-xl"
-                        >
-                          Send Message
-                        </button>
+                        </div> */}
 
                       </div>
-                      {/* <div className="flex gap-2">
-
-                        <button
-                          onClick={() => handleAccept(req.id)}
-                          className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-green-700 transition"
-                        >
-                          Accept Revision
-                        </button>
-
-                        <button
-                          onClick={() => handleRejectRevision(req.id)}
-                          className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-red-700 transition"
-                        >
-                          Request Further Changes
-                        </button>
-
-                      </div> */}
-
-                    </div>
-                  )}
-                </div>
-              ))}
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
