@@ -21,7 +21,9 @@ export default function GeneratePage() {
   const itineraryRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
-  const itineraryTitle = `Agra ${days}-Day ${travelStyle} Journey`;
+  const itineraryTitle = itinerary
+  ? `Agra ${itinerary.days}-Day ${itinerary.travelStyle} Journey`
+  : "Agra Journey";
 
   const handleGenerate = async () => {
     if (loading) return;
