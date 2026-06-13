@@ -70,9 +70,9 @@ export default function GeneratePage() {
       }
       setItinerary({
         contentJson: data.content,
-        days,
+        days: Number(days),
         budget,
-        groupSize,
+        groupSize: Number(groupSize),
         travelStyle,
         tripType,
         interests,
@@ -483,7 +483,7 @@ export default function GeneratePage() {
 
               <a
                 href={`https://wa.me/917599921173?text=${encodeURIComponent(
-                  `Hi, I generated an itinerary for ${days} days with budget ₹${budget}. I'd like help planning this trip.`
+                  `Hi, I generated a ${itinerary.days}-day ${itinerary.travelStyle} trip for ${itinerary.tripType}. Budget: ₹${itinerary.budget}. I'd like help planning this trip.`
                 )}`}
                 target="_blank"
                 className="flex-1 bg-green-500 hover:bg-green-600 transition-all text-white py-2 rounded-xl text-center"
@@ -508,18 +508,12 @@ export default function GeneratePage() {
                         },
                         body: JSON.stringify({
                           content: itinerary.contentJson,
-
                           days: Number(itinerary.days),
-
                           budget: itinerary.budget,
-
-                          groupSize: Number(
-                            itinerary.groupSize
-                          ),
-
-                          travelStyle,
-                          tripType,
-                          interests,
+                          groupSize: Number(itinerary.groupSize),
+                          travelStyle: itinerary.travelStyle,
+                          tripType: itinerary.tripType,
+                          interests: itinerary.interests,
                         })
                       }
                     );
@@ -568,12 +562,12 @@ export default function GeneratePage() {
                         },
                         body: JSON.stringify({
                           content: itinerary.contentJson,
-                          days,
-                          budget,
-                          groupSize,
-                          travelStyle,
-                          tripType,
-                          interests,
+                          days: Number(itinerary.days),
+                          budget: itinerary.budget,
+                          groupSize: Number(itinerary.groupSize),
+                          travelStyle: itinerary.travelStyle,
+                          tripType: itinerary.tripType,
+                          interests: itinerary.interests,
                         }),
                       }
                     );

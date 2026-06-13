@@ -15,6 +15,7 @@ export default function MyRequestsPage() {
   const [messages, setMessages] = useState<Record<string, any[]>>({});
   const [messageInputs, setMessageInputs] = useState<Record<string, string>>({});
   const [isPaying, setIsPaying] = useState<string | null>(null);
+  const [submittingRequestId, setSubmittingRequestId] = useState<string | null>(null);
   const ADMIN_WHATSAPP = "917599921173";
   
 
@@ -622,10 +623,13 @@ export default function MyRequestsPage() {
                   </button>
 
                   <button
+                    disabled={submittingRequestId === trip.id}
                     onClick={async () => {
+                      if (submittingRequestId === trip.id) return;
+
+                      setSubmittingRequestId(trip.id);
 
                       try {
-
                         const res = await fetch(
                           `${process.env.NEXT_PUBLIC_API_URL}/requests`,
                           {
@@ -652,29 +656,18 @@ export default function MyRequestsPage() {
                         alert(
                           "Request submitted ✅ You can track it in Active Requests"
                         );
-
-                        // window.location.reload();
-
                       } catch (err) {
-
                         console.error(err);
-
                         alert("Something went wrong");
-
+                      } finally {
+                        setSubmittingRequestId(null);
                       }
-
                     }}
-                    className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition"
+                    className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition disabled:bg-gray-400"
                   >
-                    Request This Plan
-                  </button>
-                  <button
-                    onClick={() =>
-                      handleWhatsAppDiscussion(trip)
-                    }
-                    className="mt-2 w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition"
-                  >
-                    💬 Discuss on WhatsApp
+                    {submittingRequestId === trip.id
+                      ? "Submitting..."
+                      : "Request This Plan"}
                   </button>
                 </div>
               ))}
