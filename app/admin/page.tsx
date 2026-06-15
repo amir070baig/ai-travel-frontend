@@ -17,6 +17,7 @@ export default function AdminPage() {
   const [revisionMessages, setRevisionMessages] = useState<Record<string, string>>({});
   const [adminMessages, setAdminMessages] =  useState<Record<string, any[]>>({});
   const [adminReplies, setAdminReplies] =  useState<Record<string, string>>({});
+  const [actionLoading, setActionLoading] = useState<Record<string, boolean>>({});
   const [tourForm, setTourForm] = useState({
     title: "",
     description: "",
@@ -143,13 +144,32 @@ export default function AdminPage() {
     fetchData();
   }, [isAdmin]);
 
+  const startAction = (key: string) => {
+    if (actionLoading[key]) return false;
+
+    setActionLoading((prev) => ({
+      ...prev,
+      [key]: true,
+    }));
+
+    return true;
+  };
+
+  const endAction = (key: string) => {
+    setActionLoading((prev) => ({
+      ...prev,
+      [key]: false,
+    }));
+  };
+
   const handleApprove = async (requestId: string) => {
-    console.log(
-      "APPROVE DATA",
-      requestId,
-      packagePrices[requestId]
-    );
+
+    const actionKey = `approve-${requestId}`;
+
+    if (!startAction(actionKey)) return;
+
     try {
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/approve`,
         {
@@ -180,21 +200,29 @@ export default function AdminPage() {
             ? {
                 ...r,
                 status: "APPROVED",
-                finalPrice:
-                  packagePrices[requestId]
-                    ? Number(packagePrices[requestId])
-                    : r.itinerary?.budget,
+                finalPrice: packagePrices[requestId]
+                  ? Number(packagePrices[requestId])
+                  : r.itinerary?.budget,
               }
             : r
         )
       );
+
     } catch (err) {
       console.error(err);
+    } finally {
+      endAction(actionKey);
     }
   };
 
   const handleReject = async (requestId: string) => {
+
+    const actionKey = `reject-${requestId}`;
+
+    if (!startAction(actionKey)) return;
+
     try {
+
       await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/reject`,
         {
@@ -217,56 +245,65 @@ export default function AdminPage() {
             : r
         )
       );
+
     } catch (err) {
       console.error(err);
+    } finally {
+      endAction(actionKey);
     }
   };
 
   const handleRevision = async (requestId: string) => {
-    const message =
-      revisionMessages[requestId];
 
-      setRevisionMessages((prev) => ({
-        ...prev,
-        [requestId]: "",
-      }));
+  const actionKey = `revision-${requestId}`;
 
-    if (!message) {
-      alert(
-        "Please enter revision message"
-      );
-      return;
-    }
+  if (!startAction(actionKey)) return;
 
-    try {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/revision`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ requestId, message }),
-        }
-      );
+  const message = revisionMessages[requestId];
 
-      await fetchAdminMessages(requestId);
+  setRevisionMessages((prev) => ({
+    ...prev,
+    [requestId]: "",
+  }));
 
-      setRequests((prev: any) =>
-        prev.map((r: any) =>
-          r.id === requestId
-            ? {
-                ...r,
-                status: "REVISION_SENT",
-              }
-            : r
-        )
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  if (!message) {
+    endAction(actionKey);
+    return;
+  }
+
+  try {
+
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/admin/revision`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ requestId, message }),
+      }
+    );
+
+    await fetchAdminMessages(requestId);
+
+    setRequests((prev: any) =>
+      prev.map((r: any) =>
+        r.id === requestId
+          ? {
+              ...r,
+              status: "REVISION_SENT",
+            }
+          : r
+      )
+    );
+
+  } catch (err) {
+    console.error(err);
+  } finally {
+    endAction(actionKey);
+  }
+};
 
   const handleTourSubmit = async () => {
     try {
@@ -401,10 +438,16 @@ export default function AdminPage() {
 
   const handleAdminReply = async (requestId: string) => {
 
-    const message =
-      adminReplies[requestId];
+    const actionKey = `reply-${requestId}`;
 
-    if (!message?.trim()) return;
+    if (!startAction(actionKey)) return;
+
+    const message = adminReplies[requestId];
+
+    if (!message?.trim()) {
+      endAction(actionKey);
+      return;
+    }
 
     try {
 
@@ -412,14 +455,10 @@ export default function AdminPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/requests/message`,
         {
           method: "POST",
-
           credentials: "include",
-
           headers: {
-            "Content-Type":
-              "application/json",
+            "Content-Type": "application/json",
           },
-
           body: JSON.stringify({
             requestId,
             message,
@@ -427,18 +466,9 @@ export default function AdminPage() {
         }
       );
 
-      const newMessage =
-        await res.json();
-        await fetchAdminMessages(requestId);
+      await res.json();
 
-      // setAdminMessages((prev) => ({
-      //   ...prev,
-
-      //   [requestId]: [
-      //     ...(prev[requestId] || []),
-      //     newMessage,
-      //   ],
-      // }));
+      await fetchAdminMessages(requestId);
 
       setAdminReplies((prev) => ({
         ...prev,
@@ -447,8 +477,9 @@ export default function AdminPage() {
 
     } catch (err) {
       console.error(err);
+    } finally {
+      endAction(actionKey);
     }
-
   };
 
   const activeRequests = requests.filter(
@@ -830,13 +861,9 @@ export default function AdminPage() {
                 />
 
                 <button
-                  onClick={() =>
-                    handleAdminReply(
-                      req.id
-                    )
-                  }
-
-                  className="bg-blue-600 text-white px-4 py-2 rounded-xl"
+                  disabled={actionLoading[`reply-${req.id}`]}
+                  onClick={() => handleAdminReply(req.id)}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Send Reply
                 </button>
@@ -881,22 +908,25 @@ export default function AdminPage() {
                     className="border rounded p-2 w-full"
                   />
                   <button
+                    disabled={actionLoading[`approve-${req.id}`]}
                     onClick={() => handleApprove(req.id)}
-                    className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm"
+                    className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Approve
                   </button>
 
                   <button
+                    disabled={actionLoading[`reject-${req.id}`]}
                     onClick={() => handleReject(req.id)}
-                    className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
+                    className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Reject
                   </button>
 
                   <button
+                    disabled={actionLoading[`revision-${req.id}`]}
                     onClick={() => handleRevision(req.id)}
-                    className="bg-yellow-600 text-white px-4 py-2 rounded-xl text-sm"
+                    className="bg-yellow-600 text-white px-4 py-2 rounded-xl text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Request Revision
                   </button>

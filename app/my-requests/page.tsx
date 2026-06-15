@@ -16,6 +16,8 @@ export default function MyRequestsPage() {
   const [messageInputs, setMessageInputs] = useState<Record<string, string>>({});
   const [isPaying, setIsPaying] = useState<string | null>(null);
   const [submittingRequestId, setSubmittingRequestId] = useState<string | null>(null);
+  const [sendingMessageId, setSendingMessageId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const ADMIN_WHATSAPP = "917599921173";
   
 
@@ -272,10 +274,14 @@ export default function MyRequestsPage() {
 
   const handleSendMessage = async (requestId: string) => {
 
+    if (sendingMessageId === requestId) return;
+
     const message =
       messageInputs[requestId];
 
     if (!message?.trim()) return;
+
+    setSendingMessageId(requestId);
 
     try {
 
@@ -283,14 +289,11 @@ export default function MyRequestsPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/requests/message`,
         {
           method: "POST",
-
           credentials: "include",
-
           headers: {
             "Content-Type":
               "application/json",
           },
-
           body: JSON.stringify({
             requestId,
             message,
@@ -298,18 +301,9 @@ export default function MyRequestsPage() {
         }
       );
 
-      const newMessage =
-        await res.json();
-        await fetchMessages(requestId);
+      await res.json();
 
-      // setMessages((prev) => ({
-      //   ...prev,
-
-      //   [requestId]: [
-      //     ...(prev[requestId] || []),
-      //     newMessage,
-      //   ],
-      // }));
+      await fetchMessages(requestId);
 
       setMessageInputs((prev) => ({
         ...prev,
@@ -318,8 +312,9 @@ export default function MyRequestsPage() {
 
     } catch (err) {
       console.error(err);
+    } finally {
+      setSendingMessageId(null);
     }
-
   };
 
   const fetchBookings = async () => {
@@ -335,6 +330,42 @@ export default function MyRequestsPage() {
     setBookings(
       Array.isArray(data) ? data : []
     );
+  };
+
+  // delete saved itineraries
+  const handleDeleteItinerary = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this itinerary?")) return;
+
+    setDeletingId(id);
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/itineraries/${id}`,
+        {
+          credentials: "include",
+          method: "DELETE",
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Delete failed");
+        return;
+      }
+
+      // ✅ remove from UI instantly
+      setSavedItineraries((prev) =>
+        prev.filter((trip) => trip.id !== id)
+      );
+
+      alert("Itinerary deleted successfully 🗑️");
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong");
+    } finally {
+      setDeletingId(null);
+    }
   };
 
 
@@ -669,6 +700,13 @@ export default function MyRequestsPage() {
                       ? "Submitting..."
                       : "Request This Plan"}
                   </button>
+                  <button
+                    onClick={() => handleDeleteItinerary(trip.id)}
+                    disabled={deletingId === trip.id}
+                    className="mt-2 w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-semibold transition disabled:bg-gray-400"
+                  >
+                    {deletingId === trip.id ? "Deleting..." : "Delete Itinerary"}
+                  </button>
                 </div>
               ))}
             </div>
@@ -832,15 +870,15 @@ export default function MyRequestsPage() {
                           />
 
                           <button
+                            disabled={sendingMessageId === req.id}
                             onClick={() =>
-                              handleSendMessage(
-                                req.id
-                              )
+                              handleSendMessage(req.id)
                             }
-
-                            className="bg-blue-600 text-white px-4 py-2 rounded-xl"
+                            className="bg-blue-600 text-white px-4 py-2 rounded-xl disabled:bg-gray-400"
                           >
-                            Send Message
+                            {sendingMessageId === req.id
+                              ? "Sending..."
+                              : "Send Message"}
                           </button>
 
                         </div>
