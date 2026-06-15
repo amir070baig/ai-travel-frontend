@@ -1136,7 +1136,7 @@ export default function AdminPage() {
                   {!b.tourId && (
                     <p>
                       <strong>Booking Type:</strong>{" "}
-                      AI Concierge
+                      AI
                     </p>
                   )}
 
@@ -1173,7 +1173,7 @@ export default function AdminPage() {
                 <span className="bg-blue-100 text-blue-700 text-xs px-3 py-1 rounded-full">
                   {b.tourId
                     ? "FIXED TOUR"
-                    : "AI CONCIERGE"}
+                    : "AI"}
                 </span>
 
               </div>

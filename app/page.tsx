@@ -84,7 +84,7 @@ export default function HomePage() {
               href="/generate"
               className="text-blue-600 font-semibold hover:underline"
             >
-              AI Travel Itineraries
+              TourGen
             </a>
 
           </div>
@@ -347,7 +347,7 @@ export default function HomePage() {
             <div>
 
               <h3 className="text-2xl font-black text-gray-900">
-                AI Travel Concierge
+                TourGen
               </h3>
 
               <p className="text-gray-600 mt-4 leading-relaxed">
@@ -430,7 +430,7 @@ export default function HomePage() {
 
           <div className="border-t mt-10 pt-6 text-center text-gray-500 text-sm">
 
-            © 2026 AI Travel Planner.
+            © 2026 TourGen.
             All rights reserved.
 
           </div>

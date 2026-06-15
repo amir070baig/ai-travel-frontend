@@ -67,15 +67,15 @@ export default function Navbar() {
         <a href="/" className="flex items-center gap-3">
           <img
             src="/branding/logo.png"
-            alt="AI Travel Concierge"
+            alt="TourGen"
             className="w-10 h-10 object-contain"
           />
           <div>
             <h1 className="font-black text-lg text-gray-900">
-              AI Travel Concierge
+              TourGen
             </h1>
             <p className="text-xs text-gray-500">
-              Curated Journeys. Local Expertise. AI Precision.
+              Generate. Customize. Travel.
             </p>
           </div>
         </a>

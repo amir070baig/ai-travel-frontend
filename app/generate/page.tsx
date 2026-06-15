@@ -272,7 +272,7 @@ export default function GeneratePage() {
           </h1>
 
           <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto leading-relaxed px-2">
-            Generate premium AI travel itineraries with real hotel suggestions,
+            Generate premium TourGen with real hotel suggestions,
             pricing estimates, local recommendations, and expert booking support.
           </p>
 
@@ -467,7 +467,7 @@ export default function GeneratePage() {
             <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 text-sm text-yellow-800">
               AI-generated itineraries are personalized travel suggestions.
               Final pricing, accommodations, transportation, and experiences
-              are confirmed by our travel concierge team during booking assistance.
+              are confirmed by our travel TourGen team during booking assistance.
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">

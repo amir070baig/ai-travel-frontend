@@ -369,13 +369,13 @@ export default function TourDetailsPage({
             <div className="bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-2xl p-4 mb-4">
 
               Same-day bookings require manual confirmation.
-              Please contact concierge support.
+              Please contact TourGen support.
               <a
                 href="https://wa.me/7599921173"
                 target="_blank"
                 className="text-green-600 underline"
               >
-                Contact Concierge Support
+                Contact TourGen Support
               </a>
 
             </div>

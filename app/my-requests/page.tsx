@@ -198,7 +198,7 @@ export default function MyRequestsPage() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: order.currency,
-        name: "AI Travel App",
+        name: "TourGen",
         description: "Advance Booking Payment",
         order_id: order.id,
         handler: async function (response: any) {

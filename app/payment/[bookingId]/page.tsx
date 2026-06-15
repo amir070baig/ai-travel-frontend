@@ -85,7 +85,7 @@ export default function PaymentPage() {
 
         currency: "INR",
 
-        name: "AI Travel Planner",
+        name: "TourGen",
 
         description:
           "Advance Booking Payment",
