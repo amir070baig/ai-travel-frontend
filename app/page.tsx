@@ -55,12 +55,11 @@ export default function HomePage() {
 
           </h1>
 
-          <p className="text-gray-600 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed px-2">
-
-            Generate premium AI itineraries, discover curated tours,
-            get expert travel support, and book unforgettable journeys —
-            all in one platform.
-
+          <p className="text-gray-600 mt-4 leading-relaxed">
+            TourGen helps travelers discover
+            personalized AI itineraries,
+            curated Agra tours, and expert
+            travel planning assistance.
           </p>
           
 
@@ -84,7 +83,7 @@ export default function HomePage() {
               href="/generate"
               className="text-blue-600 font-semibold hover:underline"
             >
-              TourGen
+              Generate AI Itinerary
             </a>
 
           </div>
@@ -340,7 +339,7 @@ export default function HomePage() {
 
         <div className="max-w-6xl mx-auto px-6 py-10">
 
-          <div className="grid md:grid-cols-3 gap-10">
+          <div className="grid md:grid-cols-4 gap-10">
 
             {/* BRAND */}
 
@@ -393,6 +392,49 @@ export default function HomePage() {
 
             </div>
 
+
+            {/* LEGAL */}
+
+            <div>
+
+              <h4 className="font-bold text-lg mb-4">
+                Legal
+              </h4>
+
+              <div className="flex flex-col gap-3">
+
+                <a
+                  href="/terms"
+                  className="text-gray-600 hover:text-blue-600"
+                >
+                  Terms & Conditions
+                </a>
+
+                <a
+                  href="/refund-policy"
+                  className="text-gray-600 hover:text-blue-600"
+                >
+                  Refund Policy
+                </a>
+
+                <a
+                  href="/privacy"
+                  className="text-gray-600 hover:text-blue-600"
+                >
+                  Privacy Policy
+                </a>
+
+                <a
+                  href="/contact"
+                  className="text-gray-600 hover:text-blue-600"
+                >
+                  Contact Us
+                </a>
+
+              </div>
+
+            </div>
+
             {/* CONTACT */}
 
             <div>
@@ -405,7 +447,12 @@ export default function HomePage() {
 
                 <p>
                   WhatsApp:
-                  +91-7599921173
+                  +91 75999 21173
+                </p>
+
+                <p>
+                  Email:
+                  tourgenteam@gmail.com
                 </p>
 
                 <p>

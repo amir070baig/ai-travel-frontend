@@ -1,5 +1,32 @@
 import "./globals.css";
 import Navbar from "../components/Navbar";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "TourGen",
+  icons: {
+    icon: "/favicon.png",
+  },
+  description:
+    "AI-powered travel planning, curated Agra tours, and personalized travel experiences.",
+
+  keywords: [
+    "TourGen",
+    "Agra Tours",
+    "Taj Mahal Tours",
+    "AI Travel Planner",
+    "Travel Concierge",
+    "Agra Travel",
+  ],
+
+  openGraph: {
+    title: "TourGen",
+    description:
+      "AI-powered travel planning and curated Agra experiences.",
+    siteName: "TourGen",
+    type: "website",
+  },
+};
 
 export default function RootLayout({
   children,
@@ -9,9 +36,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+
         <Navbar />
-        <div className="p-6">{children}</div>
+
+        <div className="p-6">
+          {children}
+        </div>
+
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
         <a
           href="https://wa.me/917599921173"
           target="_blank"
@@ -19,6 +52,7 @@ export default function RootLayout({
         >
           💬
         </a>
+
       </body>
     </html>
   );
