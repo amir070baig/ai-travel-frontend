@@ -34,12 +34,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="light">
       <body>
 
         <Navbar />
 
-        <div className="p-6">
+        <div className="px-4 py-4 md:p-6">
           {children}
         </div>
 
@@ -48,7 +48,7 @@ export default function RootLayout({
         <a
           href="https://wa.me/917599921173"
           target="_blank"
-          className="fixed bottom-5 right-5 bg-green-500 hover:bg-green-600 transition-all text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-3xl z-50"
+          className="fixed bottom-4 right-4 md:bottom-5 md:right-5 bg-green-500 hover:bg-green-600 transition-all text-white w-14 h-14 md:w-16 md:h-16 rounded-full shadow-2xl flex items-center justify-center text-2xl md:text-3xl z-50"
         >
           💬
         </a>

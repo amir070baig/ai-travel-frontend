@@ -395,9 +395,9 @@ export default function MyRequestsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-6xl mx-auto space-y-8">
         <div className="text-center space-y-2">
-          <h1 className="text-2xl md:text-3xl font-bold">Travel Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">Travel Dashboard</h1>
           <p className="text-gray-500">Monitor your AI trips, saved plans, and bookings</p>
         </div>
 
@@ -417,7 +417,7 @@ export default function MyRequestsPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {bookings.map((b) => (
-                <div key={b.id} className="bg-white p-6 rounded-2xl border shadow-sm flex flex-col justify-between space-y-4">
+                <div key={b.id} className="bg-white p-4 sm:p-6 rounded-2xl border shadow-sm flex flex-col justify-between space-y-4">
                   <div>
                     <h3 className="font-bold text-lg text-gray-900">{b.tour?.title || b.itinerary?.title}</h3>
                     {!b.tour && b.request?.finalPrice && (
@@ -484,7 +484,7 @@ export default function MyRequestsPage() {
                     </p>
                   </div>
                   
-                  <div className="flex items-center justify-between pt-2 border-t">
+                  <div className="flex flex-col gap-4 pt-2 border-t">
                     {!b.travelDate && b.status === "PENDING_PAYMENT" && (
                       <div className="space-y-2">
 
@@ -508,7 +508,7 @@ export default function MyRequestsPage() {
                               [b.id]: e.target.value,
                             })
                           }
-                          className="border rounded-xl p-2 w-full"
+                          className="border rounded-xl p-3 w-full"
                         />
                         <p className="text-xs text-gray-500">
                           Please select a travel date at least 3 days in advance.
@@ -516,7 +516,7 @@ export default function MyRequestsPage() {
 
                       </div>
                     )}
-                    <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
+                    <span className={`text-xs font-semibold px-3 py-2 rounded-full w-fit ${
                       b.status === "PAID" ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"
                     }`}>
                       {b.status === "PENDING_PAYMENT"
@@ -530,7 +530,7 @@ export default function MyRequestsPage() {
                         onClick={() => handlePayment(b.id)}
                         // Disables the button if this specific booking or any other payment is running
                         disabled={isPaying !== null}
-                        className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        className="w-full sm:w-auto bg-blue-600 text-white text-sm px-4 py-3 rounded-xl hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
                       >
                         {isPaying === b.id ? "Processing..." : "Pay Now"}
                       </button>
@@ -556,7 +556,7 @@ export default function MyRequestsPage() {
                           .map((line: string, i: number) => (
                             <div
                               key={i}
-                              className="bg-gray-50 border rounded-xl p-3"
+                              className="bg-gray-50 border rounded-xl p-3 overflow-hidden"
                             >
                               <p className="text-sm whitespace-pre-wrap">
                                 {line}
@@ -595,9 +595,9 @@ export default function MyRequestsPage() {
                   className="bg-white p-6 rounded-2xl border shadow-sm space-y-4"
                 >
 
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between sm:items-center">
 
-                    <h3 className="font-bold text-lg">
+                    <h3 className="font-bold text-base sm:text-lg wrap-break-word">
                       {trip.title || trip.city}
                     </h3>
 
@@ -623,7 +623,7 @@ export default function MyRequestsPage() {
 
                         <div
                           key={i}
-                          className="bg-gray-50 border rounded-xl p-3"
+                          className="bg-gray-50 border rounded-xl p-3 overflow-hidden"
                         >
 
                           <p
@@ -730,9 +730,9 @@ export default function MyRequestsPage() {
                 
                 return (
                   <div key={req.id} className="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
-                    <div className="flex justify-between items-center">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between sm:items-center">
                       <p className="font-medium text-gray-700">{req.itinerary?.title}</p>
-                      <p className="font-semibold text-sm">
+                      <p className="font-semibold text-sm wrap-break-word">
                         Status:{" "}
 
                         <span className="text-blue-600 uppercase">
@@ -819,35 +819,32 @@ export default function MyRequestsPage() {
                             Conversation
                           </h4>
 
-                          <div className="bg-gray-50 border rounded-xl p-4 space-y-2">
+                          <div className="bg-gray-50 border rounded-xl p-4 space-y-2 max-h-80 overflow-y-auto">
+                            {(messages[req.id] || []).map((msg: any) => {
+                              const bubbleClassName =
+                                msg.senderType === "ADMIN"
+                                  ? "bg-blue-100"
+                                  : "bg-green-100";
 
-                            {(messages[req.id] || []).map(
-                              (msg: any) => (
+                              const senderLabel =
+                                msg.senderType === "ADMIN"
+                                  ? "Travel Team"
+                                  : "You";
 
+                              return (
                                 <div
                                   key={msg.id}
-                                  className={`p-3 rounded-xl text-sm ${
-                                    msg.senderType === "ADMIN"
-                                      ? "bg-blue-100"
-                                      : "bg-green-100"
-                                  }`}
+                                  className={`p-3 rounded-xl text-sm wrap-break-word ${bubbleClassName}`}
                                 >
-
-                                  <strong>
-                                    {msg.senderType === "ADMIN"
-                                      ? "Travel Team"
-                                      : "You"}
-                                  </strong>
-
-                                  <p>
+                                  <span className="font-semibold">
+                                    {senderLabel}
+                                  </span>
+                                  <p className="mt-1">
                                     {msg.message}
                                   </p>
-
                                 </div>
-
-                              )
-                            )}
-
+                              );
+                            })}
                           </div>
 
                           <textarea
@@ -874,7 +871,7 @@ export default function MyRequestsPage() {
                             onClick={() =>
                               handleSendMessage(req.id)
                             }
-                            className="bg-blue-600 text-white px-4 py-2 rounded-xl disabled:bg-gray-400"
+                            className="w-full sm:w-auto bg-blue-600 text-white px-4 py-3 rounded-xl disabled:bg-gray-400"
                           >
                             {sendingMessageId === req.id
                               ? "Sending..."

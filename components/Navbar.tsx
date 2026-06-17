@@ -121,17 +121,16 @@ export default function Navbar() {
 
       {/* RIGHT */}
       <div className="flex items-center gap-3">
+        <button
+          onClick={() =>
+            setMobileMenuOpen(!mobileMenuOpen)
+          }
+          className="md:hidden text-2xl"
+        >
+          {mobileMenuOpen ? "✕" : "☰"}
+        </button>
         {!user ? (
           <>
-            <button
-              onClick={() =>
-                setMobileMenuOpen(!mobileMenuOpen)
-              }
-              className="md:hidden text-2xl"
-            >
-              {mobileMenuOpen ? "✕" : "☰"}
-            </button>
-
             <a
               href="/login"
               className="hidden md:block text-blue-600"

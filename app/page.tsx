@@ -46,7 +46,7 @@ export default function HomePage() {
             ✨ AI Powered Travel Planning
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-tight text-gray-900">
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-tight text-gray-900">
 
             Plan Luxury
             <span className="block text-blue-600">
@@ -55,7 +55,7 @@ export default function HomePage() {
 
           </h1>
 
-          <p className="text-gray-600 mt-4 leading-relaxed">
+          <p className="text-gray-600 mt-4 leading-relaxed max-w-2xl mx-auto text-sm sm:text-base">
             TourGen helps travelers discover
             personalized AI itineraries,
             curated Agra tours, and expert
@@ -155,7 +155,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {tours.slice(0, 3).map((tour) => (
             <a key={tour.id} href={`/tours?id=${tour.id}`}>
-              <div className="bg-white/90 backdrop-blur border border-white/40 rounded-3xl overflow-hidden shadow-xl shadow-black/5 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
+              <div className="h-full flex flex-col bg-white/90 backdrop-blur border border-white/40 rounded-3xl overflow-hidden shadow-xl shadow-black/5 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
                 <div className="overflow-hidden">
                   <img
                     src={tour.imageUrl}
@@ -164,7 +164,7 @@ export default function HomePage() {
                   />
                 </div>
 
-                <div className="p-5 space-y-3">
+                <div className="p-5 space-y-3 flex flex-col flex-1">
 
                   <div className="flex flex-wrap gap-2">
 
@@ -339,7 +339,7 @@ export default function HomePage() {
 
         <div className="max-w-6xl mx-auto px-6 py-10">
 
-          <div className="grid md:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
             {/* BRAND */}
 

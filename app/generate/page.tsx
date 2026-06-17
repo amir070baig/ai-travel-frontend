@@ -215,14 +215,14 @@ export default function GeneratePage() {
 
   return (
 
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 py-12 px-4">
-      <div className="bg-white/90 backdrop-blur border border-white/40 shadow-lg rounded-3xl p-5 sm:p-6">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 py-6 sm:py-12 px-4">
+      <div className="max-w-5xl mx-auto bg-white/90 backdrop-blur border border-white/40 shadow-lg rounded-3xl p-5 sm:p-6 mb-8">
 
         <h2 className="text-lg font-bold text-gray-900 mb-4">
           How It Works
         </h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
 
           <div className="bg-gray-50 rounded-2xl p-4">
             <p className="text-2xl mb-2">🧠</p>
@@ -264,7 +264,7 @@ export default function GeneratePage() {
             ✨ AI Powered Travel Planning
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight text-gray-900">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight text-gray-900">
             Build Your Perfect
             <span className="block text-blue-600">
               Agra Experience
@@ -279,7 +279,7 @@ export default function GeneratePage() {
         </div>
 
         {/* INPUTS */}
-        <div className="bg-white/90 backdrop-blur border border-white/40 shadow-xl shadow-black/5 rounded-3xl p-5 sm:p-8 space-y-6">
+        <div className="bg-white/90 backdrop-blur border border-white/40 shadow-xl shadow-black/5 rounded-3xl p-4 sm:p-8 space-y-6">
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-600">Number of Days</label>
             <input
@@ -330,7 +330,7 @@ export default function GeneratePage() {
                 )
               }
 
-              className="w-full p-3 border rounded-xl"
+              className="w-full p-3.5 border border-gray-200 rounded-xl bg-gray-50"
             >
 
               <option>
@@ -364,7 +364,7 @@ export default function GeneratePage() {
                 )
               }
 
-              className="w-full p-3 border rounded-xl"
+              className="w-full p-3.5 border border-gray-200 rounded-xl bg-gray-50"
             >
 
               <option>
@@ -404,7 +404,7 @@ export default function GeneratePage() {
                 )
               }
 
-              className="w-full p-3 border rounded-xl"
+              className="w-full p-3.5 border border-gray-200 rounded-xl bg-gray-50"
             />
 
           </div>
@@ -431,8 +431,8 @@ export default function GeneratePage() {
               {itineraryTitle}
             </h2>
             
-            <div className="flex justify-between items-center">
-              <h3 className="text-2xl font-semibold">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 justify-between sm:items-center">
+              <h3 className="text-xl sm:text-2xl font-semibold">
                 {itinerary?.contentJson?.split("\n")[0] || "Your AI Itinerary"}
               </h3>
               <span>
@@ -444,7 +444,7 @@ export default function GeneratePage() {
               {formatItinerary(itinerary?.contentJson).map((item, index) => (
                 <div
                   key={index}
-                  className="bg-gray-50 border border-gray-100 rounded-2xl p-4 sm:p-5"
+                  className="bg-gray-50 border border-gray-100 rounded-2xl p-4 sm:p-5 overflow-hidden"
                 >
 
                   <div
@@ -470,7 +470,7 @@ export default function GeneratePage() {
               are confirmed by our travel TourGen team during booking assistance.
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div className="flex flex-col gap-3 sm:flex-row pt-4">
 
               {/* REQUEST */}
               {/* <button
@@ -486,7 +486,7 @@ export default function GeneratePage() {
                   `Hi, I generated a ${itinerary.days}-day ${itinerary.travelStyle} trip for ${itinerary.tripType}. Budget: ₹${itinerary.budget}. I'd like help planning this trip.`
                 )}`}
                 target="_blank"
-                className="flex-1 bg-green-500 hover:bg-green-600 transition-all text-white py-2 rounded-xl text-center"
+                className="flex-1 bg-green-500 hover:bg-green-600 transition-all text-white py-3 rounded-xl text-center font-semibold"
               >
                 Discuss on WhatsApp
               </a>
@@ -541,7 +541,7 @@ export default function GeneratePage() {
                     setIsSubmitting(false);
                   }
                 }}
-                className="flex-1 bg-gray-200 py-2 rounded-xl"
+                className="flex-1 bg-gray-200 py-3 rounded-xl font-semibold"
               >
                 {isSubmitting ? "Saving..." : saved ? "Saved" : "Save Itinerary"}
               </button>
@@ -598,7 +598,7 @@ export default function GeneratePage() {
                     setIsDownloading(false);
                   }
                 }}
-                className="flex-1 bg-blue-600 text-white py-2 rounded-xl"
+                className="flex-1 bg-blue-600 text-white py-3 rounded-xl font-semibold"
               >
                 Download PDF
               </button>

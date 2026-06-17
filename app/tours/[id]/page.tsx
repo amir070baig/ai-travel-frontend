@@ -150,21 +150,21 @@ export default function TourDetailsPage({
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50">
       {/* HERO */}
-      <div className="relative h-100">
+      <div className="relative h-70 sm:h-100 md:h-125">
         <img
           src={tour.imageUrl}
           alt={tour.title}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/40 flex items-end">
-          <div className="p-8 text-white">
-            <h1 className="text-4xl font-black">{tour.title}</h1>
-            <p className="mt-2 text-lg">Starting from ₹{tour.price}/person</p>
+          <div className="p-4 sm:p-8 text-white">
+            <h1 className="text-2xl sm:text-4xl font-black leading-tight">{tour.title}</h1>
+            <p className="mt-2 text-sm sm:text-lg">Starting from ₹{tour.price}/person</p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-10 space-y-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-10">
         {/* DESCRIPTION */}
         <div className="bg-white rounded-3xl shadow border p-6">
           <h2 className="text-2xl font-bold mb-4">Tour Overview</h2>
@@ -181,7 +181,7 @@ export default function TourDetailsPage({
                   key={index}
                   src={img}
                   alt="Gallery image"
-                  className="rounded-3xl h-72 w-full object-cover"
+                  className="rounded-3xl h-56 sm:h-72 w-full object-cover"
                 />
               ))}
             </div>
@@ -190,7 +190,7 @@ export default function TourDetailsPage({
 
         {/* HIGHLIGHTS */}
         {tour.highlights?.length > 0 && (
-          <div className="bg-white rounded-3xl shadow border p-6">
+          <div className="bg-white rounded-3xl shadow border p-4 sm:p-6">
             <h2 className="text-2xl font-bold mb-6">Highlights</h2>
             <div className="space-y-3">
               {tour.highlights.map((item: string, index: number) => (
@@ -205,7 +205,7 @@ export default function TourDetailsPage({
 
         {/* INCLUSIONS & EXCLUSIONS */}
         {(tour.inclusions?.length > 0 || tour.exclusions?.length > 0) && (
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {tour.inclusions?.length > 0 && (
               <div className="bg-white rounded-3xl shadow border p-6">
                 <h2 className="text-2xl font-bold mb-6 text-green-700">Included</h2>
@@ -297,8 +297,10 @@ export default function TourDetailsPage({
             {reviews && reviews.length > 0 ? (
               reviews.map((review) => (
                 <div key={review.id} className="border rounded-2xl p-5 bg-gray-50">
-                  <div className="flex justify-between items-center mb-3">
-                    <p className="font-semibold">{review.user?.email || "Anonymous user"}</p>
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between sm:items-center mb-3">
+                    <p className="font-semibold truncate max-w-45">
+                      {review.user?.email || "Anonymous user"}
+                    </p>
                     <p>{"⭐".repeat(review.rating || 5)}</p>
                   </div>
                   <p className="text-gray-700 leading-relaxed">{review.comment}</p>
@@ -311,8 +313,8 @@ export default function TourDetailsPage({
         </div>
 
         {/* BOOKING CTA */}
-        <div className="bg-white rounded-3xl shadow-xl border p-8 text-center space-y-6">
-          <h2 className="text-3xl font-black">Ready to Book Your Adventure?</h2>
+        <div className="bg-white rounded-3xl shadow-xl border p-4 sm:p-8 text-center space-y-6">
+          <h2 className="text-2xl sm:text-3xl font-black">Ready to Book Your Adventure?</h2>
 
           <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 text-sm text-yellow-800 max-w-2xl mx-auto">
             A 30% advance payment is required to confirm your booking.
@@ -373,7 +375,7 @@ export default function TourDetailsPage({
               <a
                 href="https://wa.me/7599921173"
                 target="_blank"
-                className="text-green-600 underline"
+                className="block mt-2 text-green-600 underline"
               >
                 Contact TourGen Support
               </a>
@@ -384,13 +386,13 @@ export default function TourDetailsPage({
           <button
             onClick={handleBooking}
             disabled={isSameDayBooking}
-            className="mt-4 bg-emerald-600 text-white font-bold px-10 py-4 rounded-2xl shadow-lg hover:bg-emerald-700 transition inline-block"
+            className="mt-4 w-full sm:w-auto bg-emerald-600 text-white font-bold px-10 py-4 rounded-2xl shadow-lg hover:bg-emerald-700 transition"
           >
             Confirm & Book Now
           </button>
 
           {bookingStatus && (
-            <p className="text-center font-medium mt-2 text-indigo-600">{bookingStatus}</p>
+            <p className="text-center text-sm sm:text-base font-medium mt-2 text-indigo-600">{bookingStatus}</p>
           )}
         </div>
       </div>
