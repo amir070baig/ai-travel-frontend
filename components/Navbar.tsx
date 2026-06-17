@@ -6,6 +6,7 @@ export default function Navbar() {
   const [user, setUser] = useState<any>(null);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -60,41 +61,92 @@ export default function Navbar() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between md:items-center px-4 sm:px-6 py-4 bg-white/90 backdrop-blur border-b shadow-sm sticky top-0 z-50">
+    <div className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b shadow-sm">
 
       {/* LEFT */}
-      <div className="flex flex-wrap gap-3 sm:gap-4 items-center text-sm sm:text-base">
+      <div className="flex items-center justify-between px-4 py-3">
+
+        {/* LOGO */}
         <a href="/" className="flex items-center gap-3">
           <img
             src="/branding/logo.png"
             alt="TourGen"
             className="w-10 h-10 object-contain"
           />
+
           <div>
             <h1 className="font-black text-lg text-gray-900">
               TourGen
             </h1>
+
             <p className="text-xs text-gray-500">
               Generate. Customize. Travel.
             </p>
           </div>
         </a>
-        <a href="/generate">Generate</a>
-        <a href="/tours">Tours</a>
-        <a href="/my-requests">My Requests</a>
-        {user?.role === "ADMIN" && (
-          <a href="/admin">Admin</a>
-        )}
-      </div>
+
+        {/* DESKTOP NAVIGATION */}
+        <div className="hidden md:flex items-center gap-5 text-sm font-medium">
+
+          <a
+            href="/generate"
+            className="hover:text-blue-600 transition"
+          >
+            Generate
+          </a>
+
+          <a
+            href="/tours"
+            className="hover:text-blue-600 transition"
+          >
+            Tours
+          </a>
+
+          <a
+            href="/my-requests"
+            className="hover:text-blue-600 transition"
+          >
+            My Requests
+          </a>
+
+          {user?.role === "ADMIN" && (
+            <a
+              href="/admin"
+              className="hover:text-blue-600 transition"
+            >
+              Admin
+            </a>
+          )}
+        </div>
 
       {/* RIGHT */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         {!user ? (
           <>
-            <a href="/login" className="text-blue-600">Login</a>
-            <a href="/register" className="text-blue-600">Register</a>
+            <button
+              onClick={() =>
+                setMobileMenuOpen(!mobileMenuOpen)
+              }
+              className="md:hidden text-2xl"
+            >
+              {mobileMenuOpen ? "✕" : "☰"}
+            </button>
+
+            <a
+              href="/login"
+              className="hidden md:block text-blue-600"
+            >
+              Login
+            </a>
+
+            <a
+              href="/register"
+              className="hidden md:block text-blue-600"
+            >
+              Register
+            </a>
           </>
-        ) : (
+      ) : (
           <>
             <div className="relative">
               <button
@@ -110,7 +162,7 @@ export default function Navbar() {
               </button>
 
               {showNotifications && (
-                <div className="absolute right-0 mt-3 w-80 max-h-96 overflow-y-auto bg-white border shadow-2xl rounded-3xl p-4 z-50">
+                <div className="absolute right-0 mt-3 w-[90vw] max-w-sm max-h-96 overflow-y-auto bg-white border shadow-2xl rounded-3xl p-4 z-50">
                   <div className="flex justify-between items-center mb-4">
 
                     <h3 className="font-bold text-lg">
@@ -209,20 +261,83 @@ export default function Navbar() {
             </div>
 
             {/* USER INFO */}
-            <span className="hidden sm:block text-sm text-gray-600">
+            <span className="hidden lg:block text-sm text-gray-600 max-w-[180px] truncate">
               👤 {user.email}
             </span>
 
             {/* LOGOUT */}
             <button
               onClick={handleLogout}
-              className="text-red-500 font-semibold"
+              className="hidden md:block text-red-500 font-semibold"
             >
               Logout
             </button>
           </>
         )}
       </div>
+
+    </div>
+
+    {mobileMenuOpen && (
+      <div className="md:hidden border-t bg-white px-4 py-4 space-y-3">
+
+        <a
+          href="/generate"
+          className="block py-2"
+        >
+          Generate
+        </a>
+
+        <a
+          href="/tours"
+          className="block py-2"
+        >
+          Tours
+        </a>
+
+        <a
+          href="/my-requests"
+          className="block py-2"
+        >
+          My Requests
+        </a>
+
+        {user?.role === "ADMIN" && (
+          <a
+            href="/admin"
+            className="block py-2"
+          >
+            Admin
+          </a>
+        )}
+
+        {!user ? (
+          <>
+            <a
+              href="/login"
+              className="block py-2 text-blue-600"
+            >
+              Login
+            </a>
+
+            <a
+              href="/register"
+              className="block py-2 text-blue-600"
+            >
+              Register
+            </a>
+          </>
+        ) : (
+          <button
+            onClick={handleLogout}
+            className="block py-2 text-red-500"
+          >
+            Logout
+          </button>
+        )}
+      </div>
+    )}
+
     </div>
   );
 }
