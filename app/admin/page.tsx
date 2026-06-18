@@ -508,14 +508,14 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50 py-10 px-4">
       <div className="max-w-6xl mx-auto space-y-10">
 
-        <h1 className="text-4xl font-black text-center">
+        <h1 className="text-3xl sm:text-4xl font-black text-center">
           Admin Dashboard
         </h1>
 
         {/* REVENUE STATS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-          <div className="bg-white rounded-3xl p-6 shadow border">
+          <div className="bg-white rounded-3xl p-4 sm:p-6 shadow border">
             <p className="text-gray-500 text-sm">
               Total Bookings
             </p>
@@ -525,7 +525,7 @@ export default function AdminPage() {
             </h2>
           </div>
 
-          <div className="bg-white rounded-3xl p-6 shadow border">
+          <div className="bg-white rounded-3xl p-4 sm:p-6 shadow border">
             <p className="text-gray-500 text-sm">
               Paid Bookings
             </p>
@@ -539,7 +539,7 @@ export default function AdminPage() {
             </h2>
           </div>
 
-          <div className="bg-white rounded-3xl p-6 shadow border">
+          <div className="bg-white rounded-3xl p-4 sm:p-6 shadow border">
             <p className="text-gray-500 text-sm">
               Revenue
             </p>
@@ -562,7 +562,7 @@ export default function AdminPage() {
         </div>
 
         {/* TOUR MANAGEMENT */}
-        <div className="bg-white rounded-3xl shadow border p-6 space-y-4">
+        <div className="bg-white rounded-3xl shadow border p-4 sm:p-6 space-y-4">
 
           <h2 className="text-3xl font-black">
             {editingTourId
@@ -711,7 +711,7 @@ export default function AdminPage() {
 
           <button
             onClick={handleTourSubmit}
-            className="bg-blue-600 text-white px-6 py-3 rounded-2xl"
+            className="w-full sm:w-auto bg-blue-600 text-white px-6 py-3 rounded-2xl"
           >
             {editingTourId
               ? "Update Tour"
@@ -728,7 +728,7 @@ export default function AdminPage() {
           {tours.map((tour) => (
             <div
               key={tour.id}
-              className="bg-white p-5 rounded-2xl border shadow flex justify-between items-center"
+              className="bg-white p-4 sm:p-5 rounded-2xl border shadow flex flex-col sm:flex-row gap-3 sm:gap-0 justify-between sm:items-center"
             >
               <div>
                 <h3 className="font-bold text-lg">
@@ -740,10 +740,10 @@ export default function AdminPage() {
                 </p>
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex w-full sm:w-auto gap-3">
                 <button
                   onClick={() => handleEditSelect(tour)}
-                  className="bg-yellow-500 text-white px-4 py-2 rounded-xl"
+                  className="w-full sm:w-auto bg-yellow-500 text-white px-4 py-2 rounded-xl"
                 >
                   Edit
                 </button>
@@ -765,12 +765,12 @@ export default function AdminPage() {
               className="bg-white p-6 rounded-2xl border shadow-sm space-y-4"
             >
 
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 justify-between sm:items-center">
                 <div>
                   <p className="font-bold text-lg text-blue-700">
                     {req.itinerary?.title}
                   </p>
-                  <p className="font-semibold">
+                  <p className="font-semibold break-all">
                     {req.user?.email}
                   </p>
 
@@ -810,14 +810,14 @@ export default function AdminPage() {
                   Customer Conversation
                 </h3>
 
-                <div className="space-y-2">
+                <div className="space-y-2 max-h-80 overflow-y-auto">
 
                   {(adminMessages[req.id] || []).map(
                     (msg: any) => (
 
                       <div
                         key={msg.id}
-                        className={`p-3 rounded-xl text-sm ${
+                        className={`p-3 rounded-xl text-sm break-words ${
                           msg.senderType === "ADMIN"
                             ? "bg-blue-100"
                             : "bg-green-100"
@@ -863,7 +863,7 @@ export default function AdminPage() {
                 <button
                   disabled={actionLoading[`reply-${req.id}`]}
                   onClick={() => handleAdminReply(req.id)}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:w-auto bg-blue-600 text-white px-4 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Send Reply
                 </button>
@@ -872,7 +872,7 @@ export default function AdminPage() {
 
               {(req.status === "UNDER_REVIEW" || req.status === "REVISION_SENT") && (
 
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
 
                   <input
                     type="text"
@@ -959,12 +959,12 @@ export default function AdminPage() {
                     key={req.id}
                     className="bg-green-50 border border-green-200 p-4 rounded-2xl"
                   >
-                    <div className="flex justify-between items-center">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 justify-between sm:items-center">
                       <div>
                         <p className="font-bold text-lg text-blue-700">
                           {req.itinerary?.title}
                         </p>
-                        <p className="font-semibold">
+                        <p className="font-semibold break-all">
                           {req.user?.email}
                         </p>
                         <p className="text-sm text-gray-600">
@@ -1076,7 +1076,7 @@ export default function AdminPage() {
                               (msg: any) => (
                                 <div
                                   key={msg.id}
-                                  className={`p-3 rounded-xl text-sm ${
+                                  className={`p-3 rounded-xl text-sm break-words ${
                                     msg.senderType === "ADMIN"
                                       ? "bg-blue-100"
                                       : "bg-green-100"
@@ -1113,7 +1113,7 @@ export default function AdminPage() {
           {bookings.map((b) => (
             <div
               key={b.id}
-              className="bg-white p-6 rounded-2xl border shadow-sm space-y-4"
+              className="bg-white p-4 sm:p-6 rounded-2xl border shadow-sm space-y-4"
             >
               <div className="flex justify-between items-center">
                 <div>
@@ -1191,7 +1191,7 @@ export default function AdminPage() {
                   : "PENDING PAYMENT"}
               </span>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
 
                 {/* PENDING */}
                 {b.status === "PENDING" && (
@@ -1340,9 +1340,9 @@ export default function AdminPage() {
               key={lead.id}
               className="bg-white rounded-3xl border shadow p-6 space-y-4"
             >
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 justify-between sm:items-center">
                 <div>
-                  <h3 className="text-2xl font-bold">
+                  <h3 className="text-xl sm:text-2xl font-bold break-words">
                     {lead.name}
                   </h3>
 
@@ -1355,7 +1355,7 @@ export default function AdminPage() {
                   </p>
                 </div>
 
-                <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
+                <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold w-fit">
                   {lead.status}
                 </span>
               </div>
@@ -1373,7 +1373,7 @@ export default function AdminPage() {
                 className="border p-3 rounded-2xl w-full h-28"
               />
 
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-2 sm:flex gap-3">
                 {[
                   "CONTACTED",
                   "INTERESTED",

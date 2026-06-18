@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "TourGen",
   icons: {
-    icon: "/favicon.png",
+    icon: "/branding/favicon.png",
   },
   description:
     "AI-powered travel planning, curated Agra tours, and personalized travel experiences.",
