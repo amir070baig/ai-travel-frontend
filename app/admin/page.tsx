@@ -493,6 +493,11 @@ export default function AdminPage() {
       req.status === "APPROVED"
   );
 
+  const refundRequests = bookings.filter(
+    (b: any) =>
+      b.status === "REFUND_PENDING"
+  );
+
   const toggleApproved = (id: string) => {
 
     setExpandedApproved((prev) =>
@@ -503,10 +508,122 @@ export default function AdminPage() {
 
   };
 
+  const handleApproveRefund = async (bookingId: string) => {
+
+    const confirmed = window.confirm(
+      "Have you already issued the refund in Razorpay Dashboard?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/bookings/refund/process`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          body: JSON.stringify({
+            bookingId,
+            action: "APPROVE",
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        alert(
+          "Failed to approve refund"
+        );
+        return;
+      }
+
+      setBookings((prev) =>
+        prev.map((b) =>
+          b.id === bookingId
+            ? {
+                ...b,
+                status: "REFUNDED",
+              }
+            : b
+        )
+      );
+
+      alert(
+        "Refund marked as completed."
+      );
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
+
+  };
+
+  const handleRejectRefund = async (bookingId: string) => {
+
+    const confirmed = window.confirm(
+      "Reject this refund request?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/bookings/refund/process`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          body: JSON.stringify({
+            bookingId,
+            action: "REJECT",
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        alert(
+          "Failed to reject refund"
+        );
+        return;
+      }
+
+      setBookings((prev) =>
+        prev.map((b) =>
+          b.id === bookingId
+            ? {
+                ...b,
+                status: "CONFIRMED",
+              }
+            : b
+        )
+      );
+
+      alert(
+        "Refund request rejected."
+      );
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
+
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
-      <div className="max-w-6xl mx-auto space-y-10">
+      <div className="max-w-7xl mx-auto space-y-10">
 
         <h1 className="text-3xl sm:text-4xl font-black text-center">
           Admin Dashboard
@@ -817,7 +934,7 @@ export default function AdminPage() {
 
                       <div
                         key={msg.id}
-                        className={`p-3 rounded-xl text-sm break-words ${
+                        className={`p-3 rounded-xl text-sm wrap-break-wordword ${
                           msg.senderType === "ADMIN"
                             ? "bg-blue-100"
                             : "bg-green-100"
@@ -1076,7 +1193,7 @@ export default function AdminPage() {
                               (msg: any) => (
                                 <div
                                   key={msg.id}
-                                  className={`p-3 rounded-xl text-sm break-words ${
+                                  className={`p-3 rounded-xl text-sm wrap-break-word ${
                                     msg.senderType === "ADMIN"
                                       ? "bg-blue-100"
                                       : "bg-green-100"
@@ -1103,6 +1220,137 @@ export default function AdminPage() {
 
         </div>
 
+        {/* REFUND REQUESTS */}
+
+        <div className="space-y-4">
+
+          <h2 className="text-2xl font-bold text-red-600">
+            Refund Requests
+          </h2>
+
+          {refundRequests.length === 0 ? (
+
+            <div className="bg-white p-6 rounded-2xl border">
+              No refund requests.
+            </div>
+
+          ) : (
+
+            refundRequests.map((b: any) => (
+
+              <div
+                key={b.id}
+                className="bg-white border shadow rounded-2xl p-6 space-y-4"
+              >
+
+                <div className="flex flex-col lg:flex-row lg:justify-between gap-4">
+
+                  <div>
+
+                    <h3 className="font-bold text-lg">
+                      {b.tour?.title ||
+                        "AI Custom Trip"}
+                    </h3>
+
+                    <p className="text-gray-500">
+                      {b.user?.email}
+                    </p>
+
+                    <p>
+                      Travel Date:{" "}
+                      {b.travelDate
+                        ? new Date(
+                            b.travelDate
+                          ).toLocaleDateString()
+                        : "Not selected"}
+                    </p>
+
+                  </div>
+
+                  <div className="bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-semibold h-fit">
+                    REFUND_PENDING
+                  </div>
+
+                </div>
+
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+
+                  <div className="bg-gray-50 p-3 rounded-xl">
+                    <p className="text-xs text-gray-500">
+                      Advance Paid
+                    </p>
+
+                    <p className="font-bold">
+                      ₹{b.advanceAmount}
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 p-3 rounded-xl">
+                    <p className="text-xs text-gray-500">
+                      Refund %
+                    </p>
+
+                    <p className="font-bold">
+                      {b.refundPercentage ?? 0}%
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 p-3 rounded-xl">
+                    <p className="text-xs text-gray-500">
+                      Refund Amount
+                    </p>
+
+                    <p className="font-bold">
+                      ₹{b.refundAmount ?? 0}
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 p-3 rounded-xl">
+                    <p className="text-xs text-gray-500">
+                      Payment ID
+                    </p>
+
+                    <p className="font-bold break-all">
+                      {b.paymentId || "-"}
+                    </p>
+                  </div>
+
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+
+                  <button
+                    onClick={() =>
+                      handleApproveRefund(
+                        b.id
+                      )
+                    }
+                    className="bg-green-600 text-white px-4 py-2 rounded-xl"
+                  >
+                    Mark Refunded
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      handleRejectRefund(
+                        b.id
+                      )
+                    }
+                    className="bg-red-600 text-white px-4 py-2 rounded-xl"
+                  >
+                    Reject Request
+                  </button>
+
+                </div>
+
+              </div>
+
+            ))
+
+          )}
+
+        </div>
+
         {/* BOOKINGS */}
         <div className="space-y-4">
 
@@ -1115,7 +1363,7 @@ export default function AdminPage() {
               key={b.id}
               className="bg-white p-4 sm:p-6 rounded-2xl border shadow-sm space-y-4"
             >
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
                 <div>
                   <h3 className="font-bold text-lg">
                     {b.tour?.title || "AI Custom Trip"}
@@ -1191,7 +1439,7 @@ export default function AdminPage() {
                   : "PENDING PAYMENT"}
               </span>
 
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-wrap gap-3">
 
                 {/* PENDING */}
                 {b.status === "PENDING" && (
@@ -1342,7 +1590,7 @@ export default function AdminPage() {
             >
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 justify-between sm:items-center">
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-bold break-words">
+                  <h3 className="text-xl sm:text-2xl font-bold wrap-break-word">
                     {lead.name}
                   </h3>
 
