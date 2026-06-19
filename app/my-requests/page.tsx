@@ -253,7 +253,13 @@ export default function MyRequestsPage() {
 
     const confirmed =
       window.confirm(
-        `Request cancellation?\n\nRefund Policy:\n\n• More than 72 hours: 100%\n• 24-72 hours: 50%\n• Less than 24 hours: 0%\n\nYour request will be reviewed by TourGen.`
+        `Request Cancellation?
+
+    Your cancellation request will be reviewed according to TourGen's refund policy.
+
+    Refund eligibility and refund amount will be determined based on your booking type, travel date, and booking status.
+
+    Do you want to continue?`
       );
 
     if (!confirmed) return;
