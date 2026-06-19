@@ -249,6 +249,54 @@ export default function MyRequestsPage() {
   };
 
 
+  const handleRefundRequest = async (bookingId: string) => {
+
+    const confirmed =
+      window.confirm(
+        `Request cancellation?\n\nRefund Policy:\n\n• More than 72 hours: 100%\n• 24-72 hours: 50%\n• Less than 24 hours: 0%\n\nYour request will be reviewed by TourGen.`
+      );
+
+    if (!confirmed) return;
+
+    try {
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/bookings/${bookingId}/request-refund`,
+        {
+          method: "PATCH",
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(
+          data.message ||
+            "Unable to submit request"
+        );
+        return;
+      }
+
+      alert(
+        "Cancellation request submitted successfully."
+      );
+
+      await fetchBookings();
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert(
+        "Something went wrong"
+      );
+
+    }
+
+  };
+
+
   const fetchMessages = async (requestId: string) => {
     try {
 
@@ -519,11 +567,17 @@ export default function MyRequestsPage() {
                     <span className={`text-xs font-semibold px-3 py-2 rounded-full w-fit ${
                       b.status === "PAID" ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"
                     }`}>
-                      {b.status === "PENDING_PAYMENT"
-                        ? "Awaiting Advance Payment"
-                        : b.status === "CONFIRMED"
-                        ? "Booking Confirmed"
-                        : b.status || "PENDING"}
+                      {
+                        b.status === "PENDING_PAYMENT"
+                          ? "Awaiting Advance Payment"
+                          : b.status === "CONFIRMED"
+                          ? "Booking Confirmed"
+                          : b.status === "REFUND_PENDING"
+                          ? "Refund Review In Progress"
+                          : b.status === "REFUNDED"
+                          ? "Refunded"
+                          : b.status || "PENDING"
+                      }
                     </span>
                     {b.status === "PENDING_PAYMENT" && (
                       <button
@@ -540,6 +594,19 @@ export default function MyRequestsPage() {
                         A small advance payment is required to reserve your personalized itinerary planning,
                         consultation, and travel coordination services.
                       </div>
+                    )}
+
+                    {b.status === "CONFIRMED" && (
+                      <button
+                        onClick={() =>
+                          handleRefundRequest(
+                            b.id
+                          )
+                        }
+                        className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-xl font-semibold transition"
+                      >
+                        Request Cancellation
+                      </button>
                     )}
                   </div>
                   {b.itinerary?.contentJson && (
