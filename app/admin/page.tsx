@@ -1336,16 +1336,33 @@ export default function AdminPage() {
 
                 <div className="flex flex-wrap gap-3">
 
-                  <button
-                    onClick={() =>
-                      handleApproveRefund(
-                        b.id
-                      )
-                    }
-                    className="bg-green-600 text-white px-4 py-2 rounded-xl"
-                  >
-                    Mark Refunded
-                  </button>
+                  {(b.refundAmount ?? 0) > 0 ? (
+
+                    <button
+                      onClick={() =>
+                        handleApproveRefund(
+                          b.id
+                        )
+                      }
+                      className="bg-green-600 text-white px-4 py-2 rounded-xl"
+                    >
+                      Mark Refunded
+                    </button>
+
+                  ) : (
+
+                    <button
+                      onClick={() =>
+                        handleRejectRefund(
+                          b.id
+                        )
+                      }
+                      className="bg-orange-600 text-white px-4 py-2 rounded-xl"
+                    >
+                      Cancel Booking (No Refund)
+                    </button>
+
+                  )}
 
                   <button
                     onClick={() =>
