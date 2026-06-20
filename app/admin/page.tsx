@@ -97,6 +97,32 @@ export default function AdminPage() {
     }
   };
 
+  const fetchBookings = async () => {
+    try {
+
+      const bookingRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/bookings`,
+        {
+          credentials: "include",
+        }
+      );
+
+      const bookingData =
+        await bookingRes.json();
+
+      setBookings(
+        Array.isArray(bookingData)
+          ? bookingData
+          : []
+      );
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
+  };
+
   useEffect(() => {
     if (!isAdmin) return;
 
@@ -113,16 +139,7 @@ export default function AdminPage() {
 
         setRequests(Array.isArray(reqData) ? reqData : []);
 
-        const bookingRes = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/admin/bookings`,
-          {
-            credentials: "include",
-          }
-        );
-
-        const bookingData = await bookingRes.json();
-
-        setBookings(Array.isArray(bookingData) ? bookingData : []);
+        await fetchBookings();
 
         const leadRes = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/leads`,
@@ -1388,6 +1405,21 @@ export default function AdminPage() {
                     </p>
                   )}
 
+                  {!b.tourId && (
+                    <span
+                      className={`text-xs px-3 py-1 rounded-full ${
+                        b.supplierBookingStarted
+                          ? "bg-red-100 text-red-700"
+                          : "bg-green-100 text-green-700"
+                      }`}
+                    >
+                      Supplier Booking:
+                      {b.supplierBookingStarted
+                        ? " STARTED"
+                        : " NOT STARTED"}
+                    </span>
+                  )}
+
                   <p>
                     <strong>Travelers:</strong>{" "}
                     {b.travelers}
@@ -1445,7 +1477,7 @@ export default function AdminPage() {
                 {b.status === "PENDING" && (
 
                   <>
-                    <button
+                    {/* <button
                       onClick={async () => {
                         await fetch(
                           `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
@@ -1462,12 +1494,12 @@ export default function AdminPage() {
                           }
                         );
 
-                        // window.location.reload();
+                        await fetchBookings();
                       }}
                       className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm"
                     >
                       Confirm
-                    </button>
+                    </button> */}
 
                     <button
                       onClick={async () => {
@@ -1486,7 +1518,7 @@ export default function AdminPage() {
                           }
                         );
 
-                        // window.location.reload();
+                        await fetchBookings();
                       }}
                       className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
                     >
@@ -1523,12 +1555,43 @@ export default function AdminPage() {
                           }
                         );
 
-                        // window.location.reload();
+                        await fetchBookings();
                       }}
                       className="bg-green-600 text-white px-4 py-2 rounded-xl text-sm"
                     >
                       Complete
                     </button>
+
+                    {!b.tourId &&
+                      !b.supplierBookingStarted && (
+
+                        <button
+                          onClick={async () => {
+
+                            await fetch(
+                              `${process.env.NEXT_PUBLIC_API_URL}/bookings/supplier-booking`,
+                              {
+                                method: "PATCH",
+                                credentials: "include",
+                                headers: {
+                                  "Content-Type":
+                                    "application/json",
+                                },
+                                body: JSON.stringify({
+                                  bookingId: b.id,
+                                }),
+                              }
+                            );
+
+                            await fetchBookings();
+
+                          }}
+                          className="bg-orange-600 text-white px-4 py-2 rounded-xl text-sm"
+                        >
+                          Start Supplier Booking
+                        </button>
+
+                      )}
 
                     <button
                       onClick={async () => {
@@ -1547,7 +1610,7 @@ export default function AdminPage() {
                           }
                         );
 
-                        // window.location.reload();
+                        await fetchBookings();
                       }}
                       className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
                     >
