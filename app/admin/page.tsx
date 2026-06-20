@@ -637,6 +637,53 @@ export default function AdminPage() {
 
   };
 
+  const handleCancelNoRefund = async (bookingId: string) => {
+
+    const confirmed = window.confirm(
+      "Cancel this booking without refund?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/bookings/refund/process`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          body: JSON.stringify({
+            bookingId,
+            action: "CANCEL_NO_REFUND",
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        alert(
+          "Failed to cancel booking"
+        );
+        return;
+      }
+
+      await fetchBookings();
+
+      alert(
+        "Booking cancelled successfully."
+      );
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
+
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
@@ -1353,7 +1400,7 @@ export default function AdminPage() {
 
                     <button
                       onClick={() =>
-                        handleRejectRefund(
+                        handleCancelNoRefund(
                           b.id
                         )
                       }
