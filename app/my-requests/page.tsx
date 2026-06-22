@@ -482,9 +482,12 @@ export default function MyRequestsPage() {
                     : 9999;
 
                 const refundEligible =
-                  b.tourId
-                    ? hoursUntilTravel >= 24
-                    : !b.supplierBookingStarted;
+                  (
+                    b.tourId
+                      ? hoursUntilTravel >= 24
+                      : !b.supplierBookingStarted
+                  ) &&
+                  !b.refundRejectedAt;
 
                 return (
                   <div
@@ -547,7 +550,7 @@ export default function MyRequestsPage() {
                       )}
                       <strong>
                         {
-                          b.status === "CONFIRMED"
+                          b.status === "PAID"
                             ? "Advance Paid:"
                             : "Advance Due:"
                         }
@@ -719,7 +722,12 @@ export default function MyRequestsPage() {
 
                         <div
                           className={
-                            ["CONFIRMED", "COMPLETED"].includes(b.status)
+                            [
+                              "CONFIRMED",
+                              "COMPLETED",
+                              "REFUND_PENDING",
+                              "REFUNDED",
+                            ].includes(b.status)
                               ? "text-green-600 font-medium"
                               : "text-gray-400"
                           }
@@ -794,7 +802,7 @@ export default function MyRequestsPage() {
                       <div className="bg-gray-100 text-gray-700 p-3 rounded-xl text-sm">
                         {b.tourId
                           ? "Refund window has closed for this booking."
-                          : "Supplier bookings have already been initiated. This booking is no longer eligible for refund."}
+                          : "Supplier bookings have already been initiated. Travel arrangements are currently being finalized and this booking is no longer eligible for cancellation or refund under our policy."}
                       </div>
                     )}
                   </div>
