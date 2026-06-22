@@ -604,6 +604,53 @@ export default function MyRequestsPage() {
                           : b.status || "PENDING"
                       }
                     </span>
+                    {b.status === "REFUND_PENDING" && (
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm space-y-1">
+
+                        <p className="font-semibold text-yellow-800">
+                          Refund Request Submitted
+                        </p>
+
+                        <p>
+                          Eligible Refund:
+                          ₹{b.refundAmount ?? 0}
+                        </p>
+
+                        <p>
+                          Refund Percentage:
+                          {b.refundPercentage ?? 0}%
+                        </p>
+
+                        <p className="text-gray-600">
+                          Your request is currently under review by our team.
+                        </p>
+
+                      </div>
+                    )}
+
+                    {b.status === "REFUNDED" && (
+                      <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-sm space-y-1">
+
+                        <p className="font-semibold text-green-700">
+                          Refund Processed ✅
+                        </p>
+
+                        <p>
+                          Refunded Amount:
+                          ₹{b.refundAmount ?? 0}
+                        </p>
+
+                        <p>
+                          Refund Percentage:
+                          {b.refundPercentage ?? 0}%
+                        </p>
+
+                        <p className="text-gray-600">
+                          Refund has been approved and processed.
+                        </p>
+
+                      </div>
+                    )}
                     {b.status === "PENDING_PAYMENT" && (
                       <button
                         onClick={() => handlePayment(b.id)}
@@ -620,6 +667,101 @@ export default function MyRequestsPage() {
                         consultation, and travel coordination services.
                       </div>
                     )}
+
+
+                    <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
+
+                      <h4 className="font-semibold text-sm">
+                        Booking Progress
+                      </h4>
+
+                      <div className="space-y-2 text-sm">
+
+                        <div className="text-green-600 font-medium">
+                          ✅ Booking Created
+                        </div>
+
+                        <div
+                          className={
+                            b.paymentStatus === "PAID"
+                              ? "text-green-600 font-medium"
+                              : "text-gray-400"
+                          }
+                        >
+                          {b.paymentStatus === "PAID"
+                            ? "✅"
+                            : "⏳"}{" "}
+                          Advance Payment Received
+                        </div>
+
+                        {!b.tourId && (
+                          <div
+                            className={
+                              b.paymentStatus === "PAID"
+                                ? "text-green-600 font-medium"
+                                : "text-gray-400"
+                            }
+                          >
+                            {b.supplierBookingStarted
+                              ? "✅"
+                              : "⏳"}{" "}
+                            Travel Arrangements Started
+                          </div>
+                        )}
+
+                        <div
+                          className={
+                            b.paymentStatus === "PAID"
+                              ? "text-green-600 font-medium"
+                              : "text-gray-400"
+                          }
+                        >
+                          {[
+                            "CONFIRMED",
+                            "COMPLETED",
+                          ].includes(b.status)
+                            ? "✅"
+                            : "⏳"}{" "}
+                          Booking Confirmed
+                        </div>
+
+                        <div
+                          className={
+                            b.status === "COMPLETED"
+                              ? "text-green-600 font-medium"
+                              : "text-gray-400"
+                          }
+                        >
+                          {b.status === "COMPLETED"
+                            ? "✅"
+                            : "⏳"}{" "}
+                          Trip Completed
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-sm text-blue-800">
+
+                      {b.status === "PENDING_PAYMENT" &&
+                        "Waiting for advance payment."}
+
+                      {b.status === "CONFIRMED" &&
+                        !b.supplierBookingStarted &&
+                        !b.tourId &&
+                        "Your trip is confirmed. Travel arrangements will begin shortly."}
+
+                      {b.status === "CONFIRMED" &&
+                        b.supplierBookingStarted &&
+                        "Travel arrangements are currently being finalized."}
+
+                      {b.status === "COMPLETED" &&
+                        "Your trip has been completed. Thank you for choosing TourGen."}
+
+                    </div>
+
+
 
                     {b.status === "CONFIRMED" && refundEligible && (
                       <button
