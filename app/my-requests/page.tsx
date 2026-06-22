@@ -590,7 +590,15 @@ export default function MyRequestsPage() {
                       </div>
                     )}
                     <span className={`text-xs font-semibold px-3 py-2 rounded-full w-fit ${
-                      b.status === "PAID" ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"
+                      ["CONFIRMED", "COMPLETED"].includes(b.status)
+                        ? "bg-green-100 text-green-800"
+                        : b.status === "REFUND_PENDING"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : b.status === "REFUNDED"
+                        ? "bg-blue-100 text-blue-800"
+                        : b.status === "CANCELLED"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-amber-100 text-amber-800"
                     }`}>
                       {
                         b.status === "PENDING_PAYMENT"
@@ -697,7 +705,7 @@ export default function MyRequestsPage() {
                         {!b.tourId && (
                           <div
                             className={
-                              b.paymentStatus === "PAID"
+                              b.supplierBookingStarted
                                 ? "text-green-600 font-medium"
                                 : "text-gray-400"
                             }
@@ -711,7 +719,7 @@ export default function MyRequestsPage() {
 
                         <div
                           className={
-                            b.paymentStatus === "PAID"
+                            ["CONFIRMED", "COMPLETED"].includes(b.status)
                               ? "text-green-600 font-medium"
                               : "text-gray-400"
                           }
@@ -742,7 +750,12 @@ export default function MyRequestsPage() {
 
                     </div>
 
-                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-sm text-blue-800">
+                    {(
+                      b.status === "PENDING_PAYMENT" ||
+                      b.status === "CONFIRMED" ||
+                      b.status === "COMPLETED"
+                    ) && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-sm text-blue-800">
 
                       {b.status === "PENDING_PAYMENT" &&
                         "Waiting for advance payment."}
@@ -759,7 +772,8 @@ export default function MyRequestsPage() {
                       {b.status === "COMPLETED" &&
                         "Your trip has been completed. Thank you for choosing TourGen."}
 
-                    </div>
+                      </div>
+                    )}
 
 
 
