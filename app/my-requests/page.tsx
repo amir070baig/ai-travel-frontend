@@ -470,8 +470,27 @@ export default function MyRequestsPage() {
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {bookings.map((b) => (
-                <div key={b.id} className="bg-white p-4 sm:p-6 rounded-2xl border shadow-sm flex flex-col justify-between space-y-4">
+              {bookings.map((b) => {
+
+                const hoursUntilTravel =
+                  b.travelDate
+                    ? (
+                        new Date(b.travelDate).getTime() -
+                        Date.now()
+                      ) /
+                      (1000 * 60 * 60)
+                    : 9999;
+
+                const refundEligible =
+                  b.tourId
+                    ? hoursUntilTravel >= 24
+                    : !b.supplierBookingStarted;
+
+                return (
+                  <div
+                    key={b.id}
+                    className="bg-white p-4 sm:p-6 rounded-2xl border shadow-sm flex flex-col justify-between space-y-4"
+                  >
                   <div>
                     <h3 className="font-bold text-lg text-gray-900">{b.tour?.title || b.itinerary?.title}</h3>
                     {!b.tour && b.request?.finalPrice && (
@@ -602,7 +621,7 @@ export default function MyRequestsPage() {
                       </div>
                     )}
 
-                    {b.status === "CONFIRMED" && (
+                    {b.status === "CONFIRMED" && refundEligible && (
                       <button
                         onClick={() =>
                           handleRefundRequest(
@@ -613,6 +632,14 @@ export default function MyRequestsPage() {
                       >
                         Request Cancellation
                       </button>
+                    )}
+
+                    {b.status === "CONFIRMED" && !refundEligible && (
+                      <div className="bg-gray-100 text-gray-700 p-3 rounded-xl text-sm">
+                        {b.tourId
+                          ? "Refund window has closed for this booking."
+                          : "Supplier bookings have already been initiated. This booking is no longer eligible for refund."}
+                      </div>
                     )}
                   </div>
                   {b.itinerary?.contentJson && (
@@ -640,7 +667,8 @@ export default function MyRequestsPage() {
                     </details>
                   )}
                 </div>
-              ))}
+                )
+              })}
             </div>
           )}
         </div>
