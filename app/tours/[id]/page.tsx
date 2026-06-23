@@ -358,6 +358,9 @@ export default function TourDetailsPage({
                 onChange={(e) => setTravelDate(e.target.value)} 
                 className="w-full border p-3 rounded-xl"
               />
+              <p className="text-xs text-gray-500 mt-1">
+                Fixed tours require at least 12 hours advance notice.
+              </p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Time Slot</label>
@@ -386,12 +389,22 @@ export default function TourDetailsPage({
           {isLateBooking && (
             <div className="bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-2xl p-4 mb-4">
 
-              Same-day bookings require manual confirmation.
-              Please contact TourGen support.
+              <p className="font-semibold">
+                Advance Notice Required
+              </p>
+
+              <p className="mt-2">
+                This tour requires at least 12 hours advance notice.
+              </p>
+
+              <p className="mt-2">
+                For urgent or last-minute bookings, please contact TourGen directly.
+              </p>
+
               <a
                 href="https://wa.me/7599921173"
                 target="_blank"
-                className="block mt-2 text-green-600 underline"
+                className="block mt-3 text-green-600 underline"
               >
                 Contact TourGen Support
               </a>
@@ -402,9 +415,15 @@ export default function TourDetailsPage({
           <button
             onClick={handleBooking}
             disabled={isLateBooking}
-            className="mt-4 w-full sm:w-auto bg-emerald-600 text-white font-bold px-10 py-4 rounded-2xl shadow-lg hover:bg-emerald-700 transition"
+            className={`mt-4 w-full sm:w-auto text-white font-bold px-10 py-4 rounded-2xl shadow-lg transition ${
+              isLateBooking
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-emerald-600 hover:bg-emerald-700"
+            }`}
           >
-            Confirm & Book Now
+            {isLateBooking
+              ? "Advance Notice Required"
+              : "Confirm & Book Now"}
           </button>
 
           {bookingStatus && (
