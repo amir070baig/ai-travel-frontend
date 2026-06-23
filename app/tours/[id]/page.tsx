@@ -146,19 +146,37 @@ export default function TourDetailsPage({
 
   selectedDate?.setHours(0, 0, 0, 0);
 
-  const selectedTravelDate =
-    travelDate
-      ? new Date(`${travelDate}T00:00:00`)
-      : null;
+  let hoursUntilTour = 9999;
 
-  const hoursUntilTour =
-    selectedTravelDate
-      ? (
-          selectedTravelDate.getTime() -
-          Date.now()
-        ) /
-        (1000 * 60 * 60)
-      : 9999;
+  if (travelDate) {
+
+    let tourHour = 6;
+
+      if (timeSlot === "Morning") {
+        tourHour = 9;
+      }
+
+      if (timeSlot === "Afternoon") {
+        tourHour = 14;
+      }
+
+      if (timeSlot === "Sunset") {
+        tourHour = 17;
+      }
+
+    const selectedTourDateTime =
+      new Date(
+        `${travelDate}T${String(tourHour).padStart(2, "0")}:00:00`
+      );
+
+    hoursUntilTour =
+      (
+        selectedTourDateTime.getTime() -
+        Date.now()
+      ) /
+      (1000 * 60 * 60);
+
+  }
 
   const isLateBooking =
     hoursUntilTour < 12;
@@ -358,20 +376,36 @@ export default function TourDetailsPage({
                 onChange={(e) => setTravelDate(e.target.value)} 
                 className="w-full border p-3 rounded-xl"
               />
+              <p className="text-xs text-gray-500">
+                Hours until tour:
+                {Math.floor(hoursUntilTour)}
+              </p>
               <p className="text-xs text-gray-500 mt-1">
                 Fixed tours require at least 12 hours advance notice.
               </p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Time Slot</label>
-              <select 
-                value={timeSlot} 
-                onChange={(e) => setTimeSlot(e.target.value)} 
+              <select
+                value={timeSlot}
+                onChange={(e) => setTimeSlot(e.target.value)}
                 className="w-full border p-3 rounded-xl"
               >
-                <option value="Sunrise">Sunrise</option>
-                <option value="Morning">Morning</option>
-                <option value="Afternoon">Afternoon</option>
+                <option value="Sunrise">
+                  Sunrise
+                </option>
+
+                <option value="Morning">
+                  Morning
+                </option>
+
+                <option value="Afternoon">
+                  Afternoon
+                </option>
+
+                <option value="Sunset">
+                  Sunset
+                </option>
               </select>
             </div>
             <div>
