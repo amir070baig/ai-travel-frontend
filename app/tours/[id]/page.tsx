@@ -100,8 +100,12 @@ export default function TourDetailsPage({
             travelers,
             advanceAmount:
               tour?.price
-                ? Math.floor(tour.price * 0.3)
-                : 0,
+                ? Math.floor(
+                    tour.price *
+                    travelers *
+                    0.3
+                  )
+                : 0
           }),
         }
       );
@@ -142,10 +146,22 @@ export default function TourDetailsPage({
 
   selectedDate?.setHours(0, 0, 0, 0);
 
-  const isSameDayBooking =
-    selectedDate
-      ? selectedDate.getTime() === today.getTime()
-      : false;
+  const selectedTravelDate =
+    travelDate
+      ? new Date(`${travelDate}T00:00:00`)
+      : null;
+
+  const hoursUntilTour =
+    selectedTravelDate
+      ? (
+          selectedTravelDate.getTime() -
+          Date.now()
+        ) /
+        (1000 * 60 * 60)
+      : 9999;
+
+  const isLateBooking =
+    hoursUntilTour < 12;
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50">
@@ -367,7 +383,7 @@ export default function TourDetailsPage({
             </div>
           </div>
 
-          {isSameDayBooking && (
+          {isLateBooking && (
             <div className="bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-2xl p-4 mb-4">
 
               Same-day bookings require manual confirmation.
@@ -385,7 +401,7 @@ export default function TourDetailsPage({
 
           <button
             onClick={handleBooking}
-            disabled={isSameDayBooking}
+            disabled={isLateBooking}
             className="mt-4 w-full sm:w-auto bg-emerald-600 text-white font-bold px-10 py-4 rounded-2xl shadow-lg hover:bg-emerald-700 transition"
           >
             Confirm & Book Now
