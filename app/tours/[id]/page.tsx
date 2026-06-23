@@ -49,14 +49,17 @@ export default function TourDetailsPage({
   }, [params.id]);
 
   const handleReviewSubmit = async () => {
+
     try {
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/reviews`,
         {
           method: "POST",
           credentials: "include",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type":
+              "application/json",
           },
           body: JSON.stringify({
             tourId: params.id,
@@ -66,15 +69,43 @@ export default function TourDetailsPage({
         }
       );
 
-      if (res.ok) {
-        const newReview = await res.json();
-        setReviews((prev) => [newReview, ...prev]);
-        setComment("");
-        setRating(5);
+      const data =
+        await res.json();
+
+      if (!res.ok) {
+
+        alert(
+          data.message ||
+          "Unable to submit review"
+        );
+
+        return;
+
       }
+
+      setReviews((prev) => [
+        data,
+        ...prev,
+      ]);
+
+      setComment("");
+
+      setRating(5);
+
+      alert(
+        "Review submitted successfully!"
+      );
+
     } catch (err) {
+
       console.error(err);
+
+      alert(
+        "Something went wrong"
+      );
+
     }
+
   };
 
   const handleBooking = async () => {
@@ -123,10 +154,15 @@ export default function TourDetailsPage({
       } else {
         const errorData = await res.json();
         console.error("Booking error details:", errorData);
-        setBookingStatus("Booking failed. Please try again.");
+        setBookingStatus(
+          errorData.message ||
+          "Booking failed. Please try again."
+        );
       }
     } catch (err) {
-      setBookingStatus("Booking failed. Please try again.");
+      setBookingStatus(
+        "Booking failed. Please try again."
+      );
       console.error(err);
     }
   };
@@ -392,19 +428,19 @@ export default function TourDetailsPage({
                 className="w-full border p-3 rounded-xl"
               >
                 <option value="Sunrise">
-                  Sunrise
+                  Sunrise (6:00 AM)
                 </option>
 
                 <option value="Morning">
-                  Morning
+                  Morning (9:00 AM)
                 </option>
 
                 <option value="Afternoon">
-                  Afternoon
+                  Afternoon (2:00 PM)
                 </option>
 
                 <option value="Sunset">
-                  Sunset
+                  Sunset (5:00 PM)
                 </option>
               </select>
             </div>
