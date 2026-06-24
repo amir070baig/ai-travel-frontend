@@ -217,6 +217,13 @@ export default function TourDetailsPage({
   const isLateBooking =
     hoursUntilTour < 12;
 
+
+  const galleryImages =
+    tour.gallery?.filter(
+      (img: string) =>
+        img !== tour.imageUrl
+    ) || [];
+
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50">
       {/* HERO */}
@@ -234,6 +241,48 @@ export default function TourDetailsPage({
         </div>
       </div>
 
+      
+      {/* QUICK FACTS */}
+      {/* <div className="max-w-6xl mx-auto px-4 -mt-8 relative z-10">
+        <div className="bg-white rounded-3xl shadow-lg border p-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+            <div className="text-center">
+              <div className="text-3xl mb-2">⏰</div>
+              <p className="font-bold">Duration</p>
+              <p className="text-gray-600">
+                {tour.duration || "N/A"}
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="text-3xl mb-2">🚗</div>
+              <p className="font-bold">Pickup</p>
+              <p className="text-gray-600">
+                {tour.pickupPoint || "N/A"}
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="text-3xl mb-2">🕒</div>
+              <p className="font-bold">Pickup Time</p>
+              <p className="text-gray-600">
+                {tour.pickupTime || "N/A"}
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="text-3xl mb-2">📅</div>
+              <p className="font-bold">Availability</p>
+              <p className="text-gray-600">
+                Daily
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div> */}
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-10">
         {/* DESCRIPTION */}
         <div className="bg-white rounded-3xl shadow border p-6">
@@ -242,11 +291,11 @@ export default function TourDetailsPage({
         </div>
 
         {/* GALLERY */}
-        {tour.gallery?.length > 0 && (
+        {galleryImages.length > 0 && (
           <div>
             <h2 className="text-2xl font-bold mb-6">Gallery</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {tour.gallery.map((img: string, index: number) => (
+              {galleryImages.map((img: string, index: number) => (
                 <img
                   key={index}
                   src={img}
@@ -267,6 +316,30 @@ export default function TourDetailsPage({
                 <div key={index} className="flex gap-3 items-start">
                   <div className="text-blue-600">✨</div>
                   <p>{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ITINERARY */}
+        {tour.itinerary?.length > 0 && (
+          <div className="bg-white rounded-3xl shadow border p-6">
+            <h2 className="text-2xl font-bold mb-6">
+              Tour Itinerary
+            </h2>
+
+            <div className="space-y-4">
+              {tour.itinerary.map((step: string, index: number) => (
+                <div
+                  key={index}
+                  className="flex gap-4"
+                >
+                  <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center">
+                    {index + 1}
+                  </div>
+
+                  <p>{step}</p>
                 </div>
               ))}
             </div>
@@ -381,6 +454,26 @@ export default function TourDetailsPage({
             )}
           </div>
         </div>
+
+        {/* FAQs */}
+        {tour.faq?.length > 0 && (
+          <div className="bg-white rounded-3xl shadow border p-6">
+            <h2 className="text-2xl font-bold mb-6">
+              Frequently Asked Questions
+            </h2>
+
+            <div className="space-y-4">
+              {tour.faq.map((item: string, index: number) => (
+                <div
+                  key={index}
+                  className="border-b pb-3"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* BOOKING CTA */}
         <div className="bg-white rounded-3xl shadow-xl border p-4 sm:p-8 text-center space-y-6">
