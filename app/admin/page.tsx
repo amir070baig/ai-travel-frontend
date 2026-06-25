@@ -344,6 +344,11 @@ export default function AdminPage() {
           .map((step) => step.trim())
           .filter(Boolean),
 
+        faq: tourForm.faq
+          .split("\n")
+          .map((item) => item.trim())
+          .filter(Boolean),
+
         inclusions: tourForm.inclusions
           .split(",")
           .map((s) => s.trim()),
@@ -366,6 +371,8 @@ export default function AdminPage() {
         ? "PATCH"
         : "POST";
 
+      console.log(bodyData);
+      
       const res = await fetch(url, {
         method,
         credentials: "include",
