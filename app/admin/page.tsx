@@ -30,6 +30,7 @@ export default function AdminPage() {
     availabilityNote: "",
     highlights: "",
     itinerary:"",
+    faq:"",
     inclusions: "",
     exclusions: "",
   });
@@ -399,6 +400,7 @@ export default function AdminPage() {
         availabilityNote: "",
         highlights: "",
         itinerary:"",
+        faq:"",
         inclusions: "",
         exclusions: "",
       });
@@ -430,6 +432,10 @@ export default function AdminPage() {
       availabilityNote: tour.availabilityNote ?? "",
       itinerary: Array.isArray(tour.itinerary)
         ? tour.itinerary.join("\n")
+        : "",
+
+      faq: Array.isArray(tour.faq)
+        ? tour.faq.join("\n")
         : "",
 
       highlights: Array.isArray(tour.highlights)
@@ -923,6 +929,23 @@ export default function AdminPage() {
               setTourForm({
                 ...tourForm,
                 itinerary: e.target.value,
+              })
+            }
+            className="border p-3 rounded-2xl w-full h-40"
+          />
+
+          <textarea
+            placeholder={`Frequently Asked Questions (one FAQ per line)
+
+          Example:
+          Is pickup included?|Yes, complimentary pickup is available from hotels in Delhi NCR.
+          Are monument tickets included?|No, unless specifically mentioned in the tour inclusions.
+          Can I customize the itinerary?|Private tours can be customized before booking.`}
+            value={tourForm.faq}
+            onChange={(e) =>
+              setTourForm({
+                ...tourForm,
+                faq: e.target.value,
               })
             }
             className="border p-3 rounded-2xl w-full h-40"

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function TourDetailsPage({
   params: paramsPromise,
@@ -19,6 +20,7 @@ export default function TourDetailsPage({
   const [timeSlot, setTimeSlot] = useState("Sunrise");
   const [travelers, setTravelers] = useState(2);
   const [bookingStatus, setBookingStatus] = useState("");
+
 
   useEffect(() => {
     const fetchTour = async () => {
@@ -329,13 +331,26 @@ export default function TourDetailsPage({
               {tour.itinerary.map((step: string, index: number) => (
                 <div
                   key={index}
-                  className="flex gap-4"
+                  className="relative flex gap-5 pb-8"
                 >
-                  <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center">
-                    {index + 1}
-                  </div>
+                  {/* Timeline Line */}
+                  {index !== tour.itinerary.length - 1 && (
+                    <div className="absolute left-4 top-8 w-0.5 h-full bg-gray-300"></div>
+                  )}
 
-                  <p>{step}</p>
+                  {/* Timeline Dot */}
+                  <div className="relative z-10 w-5 h-5 rounded-full bg-blue-600 border-4 border-white shadow flex-shrink-0 mt-1"></div>
+
+                  {/* Content */}
+                  <div className="flex-1">
+                      <p className="inline-block bg-blue-100 text-blue-700 text-sm font-semibold px-3 py-1 rounded-full">
+                        {step.split("|")[0]}
+                      </p>
+
+                    <p className="text-gray-700 mt-1 leading-relaxed">
+                      {step.split("|")[1]}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -358,6 +373,101 @@ export default function TourDetailsPage({
             </div>
           </div>
         )}
+
+        {/* WHY BOOK WITH TOURGEN */}
+
+        <div className="bg-white rounded-3xl shadow border p-6">
+          <h2 className="text-2xl font-bold mb-6">
+            Why Book With TourGen?
+          </h2>
+
+          <div className="mb-8 rounded-2xl bg-blue-50 border border-blue-100 p-5">
+            <div className="flex items-start gap-4">
+              <div className="text-3xl">🛡️</div>
+
+              <div>
+                <h3 className="font-semibold text-lg text-gray-900">
+                  Book with confidence
+                </h3>
+
+                <p className="text-gray-600 mt-2">
+                  Every TourGen experience is designed to provide transparent pricing,
+                  professional service, and dedicated support from booking to the end
+                  of your journey.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+            <div className="flex gap-4">
+              <div className="text-3xl">🏛️</div>
+
+              <div>
+                <h3 className="font-semibold">
+                  Local Expertise
+                </h3>
+
+                <h4 className="font-semibold">
+                  Carefully Curated Tours
+                </h4>
+
+                <p className="text-gray-600 text-sm mt-1">
+                  Every tour is thoughtfully planned to help you experience Agra's most iconic attractions with comfort and convenience.
+                </p>
+
+                <p className="text-gray-600 text-sm mt-1">
+                  Transparent Pricing
+                  No hidden charges. You'll always know exactly what's included before you book.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="text-3xl">💳</div>
+
+              <div>
+                <h3 className="font-semibold">
+                  Secure Online Payments
+                </h3>
+
+                <p className="text-gray-600 text-sm mt-1">
+                  Pay safely using trusted online payment methods.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="text-3xl">🚗</div>
+
+              <div>
+                <h3 className="font-semibold">
+                  Comfortable Transportation
+                </h3>
+
+                <p className="text-gray-600 text-sm mt-1">
+                  Clean, air-conditioned vehicles with professional drivers.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="text-3xl">📞</div>
+
+              <div>
+                <h3 className="font-semibold">
+                  Dedicated Support
+                </h3>
+
+                <p className="text-gray-600 text-sm mt-1">
+                  Our team is available to assist you before and during your tour.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
 
         {/* INCLUSIONS & EXCLUSIONS */}
         {(tour.inclusions?.length > 0 || tour.exclusions?.length > 0) && (
@@ -634,6 +744,15 @@ export default function TourDetailsPage({
               ? "Advance Notice Required"
               : "Confirm & Book Now"}
           </button>
+
+          <div className="text-center mb-4">
+            <Link
+              href="/refund-policy"
+              className="text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium"
+            >
+              📋 Refund Policy & Cancellation Policy →
+            </Link>
+          </div>
 
           {bookingStatus && (
             <p className="text-center text-sm sm:text-base font-medium mt-2 text-indigo-600">{bookingStatus}</p>
