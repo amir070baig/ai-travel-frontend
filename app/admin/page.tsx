@@ -29,6 +29,7 @@ export default function AdminPage() {
     pickupTime: "",
     availabilityNote: "",
     highlights: "",
+    itinerary:"",
     inclusions: "",
     exclusions: "",
   });
@@ -337,6 +338,11 @@ export default function AdminPage() {
           .split(",")
           .map((s) => s.trim()),
 
+        itinerary: tourForm.itinerary
+          .split("\n")
+          .map((step) => step.trim())
+          .filter(Boolean),
+
         inclusions: tourForm.inclusions
           .split(",")
           .map((s) => s.trim()),
@@ -392,6 +398,7 @@ export default function AdminPage() {
         pickupTime: "",
         availabilityNote: "",
         highlights: "",
+        itinerary:"",
         inclusions: "",
         exclusions: "",
       });
@@ -421,6 +428,9 @@ export default function AdminPage() {
       pickupPoint: tour.pickupPoint ?? "",
       pickupTime: tour.pickupTime ?? "",
       availabilityNote: tour.availabilityNote ?? "",
+      itinerary: Array.isArray(tour.itinerary)
+        ? tour.itinerary.join("\n")
+        : "",
 
       highlights: Array.isArray(tour.highlights)
         ? tour.highlights.join(", ")
@@ -898,6 +908,24 @@ export default function AdminPage() {
               })
             }
             className="border p-3 rounded-2xl w-full"
+          />
+
+          <textarea
+            placeholder={`Tour Itinerary (one step per line)
+
+          Example:
+          03:00 AM|Pickup from hotel
+          06:00 AM|Reach Taj Mahal
+          08:30 AM|Breakfast
+          10:00 AM|Visit Agra Fort`}
+            value={tourForm.itinerary}
+            onChange={(e) =>
+              setTourForm({
+                ...tourForm,
+                itinerary: e.target.value,
+              })
+            }
+            className="border p-3 rounded-2xl w-full h-40"
           />
 
           <textarea
