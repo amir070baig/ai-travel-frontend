@@ -621,9 +621,18 @@ export default function TourDetailsPage({
                       ❓
                     </div>
 
-                    <p className="font-medium text-gray-800">
-                      {item}
-                    </p>
+                    <div
+                      key={index}
+                      className="border rounded-2xl bg-gray-50 p-5 hover:bg-gray-100 transition"
+                    >
+                      <h3 className="font-semibold text-lg text-gray-900">
+                        ❓ {item.split("|")[0]}
+                      </h3>
+
+                      <p className="text-gray-600 mt-3 leading-relaxed">
+                        {item.split("|")[1]}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
