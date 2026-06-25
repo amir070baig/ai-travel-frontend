@@ -23,6 +23,7 @@ export default function AdminPage() {
     description: "",
     price: "",
     imageUrl: "",
+    gallery:"",
     duration: "",
     pickupPoint: "",
     pickupTime: "",
@@ -344,7 +345,10 @@ export default function AdminPage() {
           .split(",")
           .map((s) => s.trim()),
 
-        gallery: [tourForm.imageUrl],
+        gallery: tourForm.gallery
+          .split(",")
+          .map((img) => img.trim())
+          .filter((img) => img !== ""),
       };
 
       const url = editingTourId
@@ -382,6 +386,7 @@ export default function AdminPage() {
         description: "",
         price: "",
         imageUrl: "",
+        gallery: "",
         duration: "",
         pickupPoint: "",
         pickupTime: "",
@@ -405,7 +410,12 @@ export default function AdminPage() {
       title: tour.title ?? "",
       description: tour.description ?? "",
       price: String(tour.price ?? ""),
+
       imageUrl: tour.imageUrl ?? "",
+
+      gallery: Array.isArray(tour.gallery)
+        ? tour.gallery.join(", ")
+        : "",
 
       duration: tour.duration ?? "",
       pickupPoint: tour.pickupPoint ?? "",
@@ -800,6 +810,18 @@ export default function AdminPage() {
               })
             }
             className="border p-3 rounded-2xl w-full"
+          />
+
+          <textarea
+            placeholder="Gallery Image URLs (comma separated)"
+            value={tourForm.gallery}
+            onChange={(e) =>
+              setTourForm({
+                ...tourForm,
+                gallery: e.target.value,
+              })
+            }
+            className="border p-3 rounded-2xl w-full h-32"
           />
 
           <div className="grid md:grid-cols-2 gap-4">

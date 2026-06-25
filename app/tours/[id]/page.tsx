@@ -220,8 +220,7 @@ export default function TourDetailsPage({
 
   const galleryImages =
     tour.gallery?.filter(
-      (img: string) =>
-        img !== tour.imageUrl
+      (img: string) => img !== tour.imageUrl
     ) || [];
 
   return (
@@ -237,6 +236,19 @@ export default function TourDetailsPage({
           <div className="p-4 sm:p-8 text-white">
             <h1 className="text-2xl sm:text-4xl font-black leading-tight">{tour.title}</h1>
             <p className="mt-2 text-sm sm:text-lg">Starting from ₹{tour.price}/person</p>
+            <div className="flex flex-wrap gap-3 mt-4">
+              {tour.duration && (
+                <span className="bg-white/20 px-3 py-1 rounded-full">
+                  ⏰ {tour.duration}
+                </span>
+              )}
+
+              {tour.pickupPoint && (
+                <span className="bg-white/20 px-3 py-1 rounded-full">
+                  🚗 Pickup Included
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -290,22 +302,6 @@ export default function TourDetailsPage({
           <p className="text-gray-700 leading-relaxed">{tour.description}</p>
         </div>
 
-        {/* GALLERY */}
-        {galleryImages.length > 0 && (
-          <div>
-            <h2 className="text-2xl font-bold mb-6">Gallery</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {galleryImages.map((img: string, index: number) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt="Gallery image"
-                  className="rounded-3xl h-56 sm:h-72 w-full object-cover"
-                />
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* HIGHLIGHTS */}
         {tour.highlights?.length > 0 && (
@@ -341,6 +337,23 @@ export default function TourDetailsPage({
 
                   <p>{step}</p>
                 </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* GALLERY */}
+        {galleryImages.length > 0 && (
+          <div>
+            <h2 className="text-2xl font-bold mb-6">Gallery</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {galleryImages.map((img: string, index: number) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt="Gallery image"
+                  className="rounded-3xl h-56 sm:h-72 w-full object-cover"
+                />
               ))}
             </div>
           </div>
@@ -393,7 +406,7 @@ export default function TourDetailsPage({
               )}
 
               {tour.pickupTime && (
-                <div className="bg-white rounded-2xl border p-5">
+                <div className="bg-gray-50 rounded-2xl border p-5">
                   <h3 className="font-bold text-lg mb-2">Pickup Time</h3>
                   <p className="text-gray-600">{tour.pickupTime}</p>
                 </div>
@@ -439,18 +452,43 @@ export default function TourDetailsPage({
           <div className="space-y-4">
             {reviews && reviews.length > 0 ? (
               reviews.map((review) => (
-                <div key={review.id} className="border rounded-2xl p-5 bg-gray-50">
-                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between sm:items-center mb-3">
-                    <p className="font-semibold truncate max-w-45">
-                      {review.user?.email || "Anonymous user"}
-                    </p>
-                    <p>{"⭐".repeat(review.rating || 5)}</p>
+                <div
+                  key={review.id}
+                  className="bg-white border rounded-3xl shadow-sm p-6"
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <p className="font-bold text-lg">
+                        {review.user?.email?.split("@")[0] || "Anonymous"}
+                      </p>
+
+                      <p className="text-sm text-gray-500">
+                        Verified Traveler
+                      </p>
+                    </div>
+                    <div className="text-yellow-500 text-lg">
+                      {"⭐".repeat(review.rating || 5)}
+                    </div>
                   </div>
-                  <p className="text-gray-700 leading-relaxed">{review.comment}</p>
+                  <p className="text-gray-700 leading-7">
+                    {review.comment}
+                </p>
                 </div>
               ))
             ) : (
-              <p className="text-gray-500 italic text-center py-4">No reviews yet. Be the first to leave one!</p>
+              <div className="text-center py-10">
+                <div className="text-5xl mb-4">
+                  ⭐
+                </div>
+
+                <p className="font-semibold text-lg">
+                  No Reviews Yet
+                </p>
+
+                <p className="text-gray-500 mt-2">
+                  Be the first traveler to share your experience.
+                </p>
+              </div>
             )}
           </div>
         </div>
@@ -466,9 +504,17 @@ export default function TourDetailsPage({
               {tour.faq.map((item: string, index: number) => (
                 <div
                   key={index}
-                  className="border-b pb-3"
+                  className="border rounded-2xl bg-gray-50 p-5 hover:bg-gray-100 transition"
                 >
-                  {item}
+                  <div className="flex items-start gap-3">
+                    <div className="text-blue-600 text-xl">
+                      ❓
+                    </div>
+
+                    <p className="font-medium text-gray-800">
+                      {item}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
