@@ -19,6 +19,7 @@ export default function TourDetailsPage({
   const [travelDate, setTravelDate] = useState("");
   const [timeSlot, setTimeSlot] = useState("Sunrise");
   const [travelers, setTravelers] = useState(2);
+  const [language, setLanguage] = useState("English");
   const [bookingStatus, setBookingStatus] = useState("");
 
 
@@ -131,6 +132,7 @@ export default function TourDetailsPage({
             travelDate: travelDate || new Date().toISOString().split('T')[0], // Fallback to today if empty
             timeSlot,
             travelers,
+            language,
             advanceAmount:
               tour?.price
                 ? Math.floor(
@@ -184,39 +186,31 @@ export default function TourDetailsPage({
 
   selectedDate?.setHours(0, 0, 0, 0);
 
-  let hoursUntilTour = 9999;
+  let hoursUntilTour: number | null = null;
 
   if (travelDate) {
-
     let tourHour = 6;
 
-      if (timeSlot === "Morning") {
-        tourHour = 9;
-      }
+    if (timeSlot === "Morning") tourHour = 9;
+    if (timeSlot === "Afternoon") tourHour = 14;
+    if (timeSlot === "Sunset") tourHour = 17;
 
-      if (timeSlot === "Afternoon") {
-        tourHour = 14;
-      }
-
-      if (timeSlot === "Sunset") {
-        tourHour = 17;
-      }
-
-    const selectedTourDateTime =
-      new Date(
-        `${travelDate}T${String(tourHour).padStart(2, "0")}:00:00`
-      );
+    const selectedTourDateTime = new Date(
+      `${travelDate}T${String(tourHour).padStart(2, "0")}:00:00`
+    );
 
     hoursUntilTour =
-      (
-        selectedTourDateTime.getTime() -
-        Date.now()
-      ) /
+      (selectedTourDateTime.getTime() - Date.now()) /
       (1000 * 60 * 60);
-
   }
 
+  const daysUntilTour =
+    hoursUntilTour !== null
+      ? Math.floor(hoursUntilTour / 24)
+      : null;
+
   const isLateBooking =
+    hoursUntilTour !== null &&
     hoursUntilTour < 12;
 
 
@@ -339,7 +333,7 @@ export default function TourDetailsPage({
                   )}
 
                   {/* Timeline Dot */}
-                  <div className="relative z-10 w-5 h-5 rounded-full bg-blue-600 border-4 border-white shadow flex-shrink-0 mt-1"></div>
+                  <div className="relative z-10 w-5 h-5 rounded-full bg-blue-600 border-4 border-white shadow shrink-0 mt-1"></div>
 
                   {/* Content */}
                   <div className="flex-1">
@@ -361,7 +355,7 @@ export default function TourDetailsPage({
         {galleryImages.length > 0 && (
           <div>
             <h2 className="text-2xl font-bold mb-6">Gallery</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {galleryImages.map((img: string, index: number) => (
                 <img
                   key={index}
@@ -611,43 +605,56 @@ export default function TourDetailsPage({
             </h2>
 
             <div className="space-y-4">
-              {tour.faq.map((item: string, index: number) => (
-                <div
-                  key={index}
-                  className="border rounded-2xl bg-gray-50 p-5 hover:bg-gray-100 transition"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="text-blue-600 text-xl">
-                      ❓
-                    </div>
+              {tour.faq.map((item: string, index: number) => {
+                const [question, answer] = item.split("|");
 
-                    <div
-                      key={index}
-                      className="border rounded-2xl bg-gray-50 p-5 hover:bg-gray-100 transition"
-                    >
-                      <h3 className="font-semibold text-lg text-gray-900">
-                        ❓ {item.split("|")[0]}
-                      </h3>
+                return(
+                  <div
+                    key={index}
+                    className="border rounded-2xl bg-gray-50 p-5 hover:bg-gray-100 transition"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="text-2xl shrink-0">
+                        ❓
+                      </div>
 
-                      <p className="text-gray-600 mt-3 leading-relaxed">
-                        {item.split("|")[1]}
-                      </p>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg text-gray-900">
+                          {item.split("|")[0]}
+                        </h3>
+
+                        <p className="text-gray-600 mt-2 leading-relaxed">
+                          {item.split("|")[1]}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
 
         {/* BOOKING CTA */}
         <div className="bg-white rounded-3xl shadow-xl border p-4 sm:p-8 text-center space-y-6">
-          <h2 className="text-2xl sm:text-3xl font-black">Ready to Book Your Adventure?</h2>
+          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 max-w-xl mx-auto">
+            <p className="text-sm text-gray-600">
+              Pay today
+            </p>
 
-          <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 text-sm text-yellow-800 max-w-2xl mx-auto">
+            <p className="text-3xl font-black text-emerald-700 mt-1">
+              ₹{Math.floor((tour.price * travelers * 0.3)).toLocaleString()}
+            </p>
+
+            <p className="text-sm text-gray-600 mt-2">
+              Remaining balance is payable before your tour begins.
+            </p>
+          </div>
+
+          {/* <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 text-sm text-yellow-800 max-w-2xl mx-auto">
             A 30% advance payment is required to confirm your booking.
             Remaining amount can be paid before the trip date.
-          </div>
+          </div> */}
 
           {/* EXACT PLACEMENT: Availability note renders cleanly contextually below the payment info */}
           {tour.availabilityNote && (
@@ -664,19 +671,37 @@ export default function TourDetailsPage({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Travel Date</label>
-              <input 
-                type="date" 
-                value={travelDate} 
-                onChange={(e) => setTravelDate(e.target.value)} 
-                className="w-full border p-3 rounded-xl"
+              <input
+                type="date"
+                min={new Date().toISOString().split("T")[0]}
+                value={travelDate}
+                onChange={(e) => setTravelDate(e.target.value)}
+                className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
-              <p className="text-xs text-gray-500">
-                Hours until tour:
-                {Math.floor(hoursUntilTour)}
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                Fixed tours require at least 12 hours advance notice.
-              </p>
+              {hoursUntilTour === null ? (
+                <p className="text-sm text-gray-500 mt-2">
+                  📅 Select your preferred travel date.
+                </p>
+              ) : hoursUntilTour >= 24 ? (
+                <p className="text-sm text-green-700 mt-2">
+                  ⏰ Tour starts in{" "}
+                  <span className="font-semibold">
+                    {daysUntilTour} {daysUntilTour === 1 ? "day" : "days"}
+                  </span>
+                </p>
+              ) : (
+                <p className="text-sm text-amber-700 mt-2">
+                  ⏰ Tour starts in{" "}
+                  <span className="font-semibold">
+                    {Math.floor(hoursUntilTour)} hours
+                  </span>
+                </p>
+              )}
+              {hoursUntilTour !== null && hoursUntilTour < 12 && (
+                <p className="mt-2 text-sm text-red-600 font-medium">
+                  ⚠ Fixed tours require at least 12 hours advance notice.
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Time Slot</label>
@@ -702,19 +727,57 @@ export default function TourDetailsPage({
                 </option>
               </select>
             </div>
+            <div className="flex flex-wrap justify-center gap-5 text-sm text-gray-600">
+
+              <div>
+                🔒 Secure Payment
+              </div>
+
+              <div>
+                ⚡ Instant Confirmation
+              </div>
+
+              <div>
+                📞 Customer Support
+              </div>
+
+            </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Number of Travelers</label>
-              <input 
-                type="number" 
-                min="1" 
-                value={travelers} 
-                onChange={(e) => setTravelers(Number(e.target.value))} 
-                className="w-full border p-3 rounded-xl"
+              <input
+                type="number"
+                min="1"
+                max="20"
+                value={travelers}
+                onChange={(e) => setTravelers(Number(e.target.value))}
+                className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Guide Language
+              </label>
+
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              >
+                <option value="English">🇬🇧 English</option>
+                <option value="Hindi">🇮🇳 Hindi</option>
+                <option value="French">🇫🇷 French</option>
+                <option value="Spanish">🇪🇸 Spanish</option>
+                <option value="German">🇩🇪 German</option>
+                <option value="Italian">🇮🇹 Italian</option>
+                <option value="Japanese">🇯🇵 Japanese</option>
+                <option value="Russian">🇷🇺 Russian</option>
+                <option value="Chinese">🇨🇳 Chinese</option>
+              </select>
             </div>
           </div>
 
-          {isLateBooking && (
+          {hoursUntilTour !== null && isLateBooking && (
             <div className="bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-2xl p-4 mb-4">
 
               <p className="font-semibold">
@@ -751,7 +814,7 @@ export default function TourDetailsPage({
           >
             {isLateBooking
               ? "Advance Notice Required"
-              : "Confirm & Book Now"}
+              : "Reserve Your Tour"}
           </button>
 
           <div className="text-center mb-4">
