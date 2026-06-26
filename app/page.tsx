@@ -8,6 +8,7 @@ export default function HomePage() {
   const [leadEmail, setLeadEmail] = useState("");
   const [leadPhone, setLeadPhone] = useState("");
   const [leadMessage, setLeadMessage] = useState("");
+  const [reviews, setReviews] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -32,6 +33,46 @@ export default function HomePage() {
     };
 
     fetchTours();
+
+    const fetchReviews = async () => {
+
+      try {
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/reviews/ai`
+        );
+
+        const data = await res.json();
+
+        setReviews(
+          Array.isArray(data)
+            ? data
+                .sort((a, b) => {
+                  if (b.rating !== a.rating) {
+                    return b.rating - a.rating;
+                  }
+
+                  return (
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+                  );
+                })
+                .slice(0, 3)
+            : []
+        );
+
+      } catch (err) {
+
+        console.error(
+          "Error fetching reviews:",
+          err
+        );
+
+      }
+
+    };
+
+    fetchReviews();
   }, []);
 
   return (
@@ -327,6 +368,106 @@ export default function HomePage() {
           >
             Submit Inquiry
           </button>
+
+        </div>
+
+      </div>
+
+
+      {/* AI SUCCESS STORIES */}
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+
+        <div className="text-center mb-12">
+
+          <p className="text-blue-600 font-semibold">
+
+            ⭐ Trusted by AI Travelers
+
+          </p>
+
+          <h2 className="text-4xl font-black mt-3">
+
+            AI Concierge Success Stories
+
+          </h2>
+
+          <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
+
+            Discover how TourGen's AI helped
+            travelers plan unforgettable journeys.
+
+          </p>
+
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+
+          {reviews.map((review) => (
+
+            <div
+              key={review.id}
+              className="bg-white rounded-3xl border shadow-sm p-6 hover:shadow-xl transition"
+            >
+
+              <div className="text-xl">
+
+                {"⭐".repeat(review.rating)}
+
+              </div>
+
+              <p className="mt-5 text-gray-700 leading-relaxed italic">
+
+                "{review.comment}"
+
+              </p>
+
+              <div className="border-t my-6"></div>
+
+              <div className="space-y-2 text-sm text-gray-600">
+
+                <p>
+
+                  ✔ Verified AI Traveler
+
+                </p>
+
+                <p>
+
+                  📍 {review.itinerary.city}
+
+                </p>
+
+                <p>
+
+                  🗓 {review.itinerary.days} Day Trip
+
+                </p>
+
+                <p>
+
+                  👥 {review.itinerary.groupSize} Travelers
+
+                </p>
+
+              </div>
+
+            </div>
+
+          ))}
+
+        </div>
+
+        <div className="text-center mt-10">
+
+          <a
+            href="/ai-reviews"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-7 py-4 rounded-2xl font-semibold transition"
+          >
+
+            View All Success Stories →
+
+          </a>
 
         </div>
 
