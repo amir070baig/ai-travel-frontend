@@ -18,6 +18,9 @@ export default function MyRequestsPage() {
   const [submittingRequestId, setSubmittingRequestId] = useState<string | null>(null);
   const [sendingMessageId, setSendingMessageId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [reviewRating, setReviewRating] = useState<Record<string, number>>({});
+  const [reviewComment, setReviewComment] = useState<Record<string, string>>({});
+  const [submittedReviews, setSubmittedReviews] = useState<string[]>([]);
   const ADMIN_WHATSAPP = "917599921173";
   
 
@@ -296,6 +299,75 @@ export default function MyRequestsPage() {
 
       alert(
         "Something went wrong"
+      );
+
+    }
+
+  };
+
+
+  const handleAIReview = async (booking: any) => {
+
+    try {
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/reviews`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+
+            itineraryId: booking.itineraryId,
+
+            rating:
+              reviewRating[booking.id] || 5,
+
+            comment:
+              reviewComment[booking.id] || "",
+
+          }),
+        }
+      );
+
+      const data =
+        await res.json();
+
+      if (!res.ok) {
+
+        alert(
+          data.message ||
+          "Unable to submit review"
+        );
+
+        return;
+
+      }
+
+      await fetchBookings();
+
+      alert(
+        "Thank you for reviewing your AI travel experience! ❤️"
+      );
+
+      setReviewComment((prev) => ({
+        ...prev,
+        [booking.id]: "",
+      }));
+
+      setReviewRating((prev) => ({
+        ...prev,
+        [booking.id]: 5,
+      }));
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert(
+        "Something went wrong."
       );
 
     }
@@ -753,6 +825,96 @@ export default function MyRequestsPage() {
                             : "⏳"}{" "}
                           Trip Completed
                         </div>
+
+                        {/* AI TOUR REVIEW */}
+                        {!b.tourId &&
+                          b.status === "COMPLETED" &&
+                          !b.hasReviewed && (
+
+                            <div className="mt-4 border rounded-2xl p-5 bg-gray-50">
+
+                              <h3 className="font-bold text-lg">
+                                How was your AI Travel Planning?
+                              </h3>
+
+                              <p className="text-sm text-gray-600 mt-1">
+                                Your feedback helps other travelers
+                                trust AI-generated itineraries.
+                              </p>
+
+                              <div className="flex gap-2 mt-4">
+
+                                {[1,2,3,4,5].map((star) => (
+
+                                  <button
+                                    key={star}
+                                    type="button"
+                                    onClick={() =>
+                                      setReviewRating({
+                                        ...reviewRating,
+                                        [b.id]: star,
+                                      })
+                                    }
+                                    className="text-3xl"
+                                  >
+                                    {star <= (reviewRating[b.id] || 5)
+                                      ? "⭐"
+                                      : "☆"}
+                                  </button>
+
+                                ))}
+
+                              </div>
+
+                              <textarea
+                                value={
+                                  reviewComment[b.id] || ""
+                                }
+                                onChange={(e) =>
+                                  setReviewComment({
+                                    ...reviewComment,
+                                    [b.id]:
+                                      e.target.value,
+                                  })
+                                }
+                                placeholder="Tell us about your AI itinerary..."
+                                className="w-full border rounded-xl p-3 mt-4"
+                                rows={4}
+                              />
+
+                              <button
+                                onClick={() =>
+                                  handleAIReview(b)
+                                }
+                                className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold"
+                              >
+                                Submit Review
+                              </button>
+
+                            </div>
+
+                          )}
+
+
+                        {/* already reviewd */}
+                        {!b.tourId &&
+                            b.status === "COMPLETED" &&
+                            b.hasReviewed && (
+
+                              <div className="mt-4 bg-green-50 border border-green-200 rounded-2xl p-5">
+
+                                <h3 className="font-bold text-green-700">
+                                  Thank you for your feedback! ❤️
+                                </h3>
+
+                                <p className="text-sm text-green-700 mt-2">
+                                  Your review helps future travelers
+                                  trust AI-powered trip planning.
+                                </p>
+
+                              </div>
+
+                            )}
 
                       </div>
 
