@@ -132,7 +132,7 @@ export default function TourDetailsPage({
             travelDate: travelDate || new Date().toISOString().split('T')[0], // Fallback to today if empty
             timeSlot,
             travelers,
-            language,
+            guideLanguage: language,
             advanceAmount:
               tour?.price
                 ? Math.floor(
@@ -637,7 +637,9 @@ export default function TourDetailsPage({
 
         {/* BOOKING CTA */}
         <div className="bg-white rounded-3xl shadow-xl border p-4 sm:p-8 text-center space-y-6">
-          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 max-w-xl mx-auto">
+
+          {/* DON'T DELETE */}
+          {/* <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 max-w-xl mx-auto">
             <p className="text-sm text-gray-600">
               Pay today
             </p>
@@ -649,7 +651,7 @@ export default function TourDetailsPage({
             <p className="text-sm text-gray-600 mt-2">
               Remaining balance is payable before your tour begins.
             </p>
-          </div>
+          </div> */}
 
           {/* <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 text-sm text-yellow-800 max-w-2xl mx-auto">
             A 30% advance payment is required to confirm your booking.
@@ -727,21 +729,7 @@ export default function TourDetailsPage({
                 </option>
               </select>
             </div>
-            <div className="flex flex-wrap justify-center gap-5 text-sm text-gray-600">
-
-              <div>
-                🔒 Secure Payment
-              </div>
-
-              <div>
-                ⚡ Instant Confirmation
-              </div>
-
-              <div>
-                📞 Customer Support
-              </div>
-
-            </div>
+            
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Number of Travelers</label>
               <input
@@ -756,7 +744,7 @@ export default function TourDetailsPage({
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Guide Language
+                Preferred Guide Language
               </label>
 
               <select
@@ -775,6 +763,22 @@ export default function TourDetailsPage({
                 <option value="Chinese">🇨🇳 Chinese</option>
               </select>
             </div>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-6 border-t border-gray-200 pt-6 mt-6 text-sm text-gray-600">
+
+            <div className="flex items-center gap-2">
+              🔒 <span>Secure Payment</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              ⚡ <span>Instant Confirmation</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              📞 <span>Customer Support</span>
+            </div>
+
           </div>
 
           {hoursUntilTour !== null && isLateBooking && (
