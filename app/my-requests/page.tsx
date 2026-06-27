@@ -520,11 +520,18 @@ export default function MyRequestsPage() {
   console.log(bookings)
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold">Travel Dashboard</h1>
-          <p className="text-gray-500">Monitor your AI trips, saved plans, and bookings</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 py-16 lg:py-20 px-4">
+      <div className="max-w-7xl mx-auto space-y-12">
+        <div className="text-center border-b border-gray-200 pb-8">
+
+          <h1 className="text-4xl sm:text-5xl font-black text-gray-900">
+            Travel Dashboard
+          </h1>
+
+          <p className="mt-3 text-lg text-gray-600 max-w-2xl mx-auto">
+            Manage your bookings, saved itineraries and conversations with our travel experts—all in one place.
+          </p>
+
         </div>
 
         {message && (
@@ -533,13 +540,90 @@ export default function MyRequestsPage() {
           </div>
         )}
 
-        {/* BOOKINGS SECTION */}
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold">My Bookings</h2>            
-          {bookings.length === 0 ? (
-            <p className="text-gray-500 bg-white p-6 border rounded-2xl text-center">
-              You don't have any tour bookings yet.
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+
+          <div className="bg-white rounded-3xl border shadow-sm p-6 text-center">
+            <p className="text-3xl font-black text-blue-600">
+              {bookings.length}
             </p>
+
+            <p className="text-gray-600 mt-2">
+              Bookings
+            </p>
+          </div>
+
+          <div className="bg-white rounded-3xl border shadow-sm p-6 text-center">
+            <p className="text-3xl font-black text-green-600">
+              {savedItineraries.length}
+            </p>
+
+            <p className="text-gray-600 mt-2">
+              Saved Plans
+            </p>
+          </div>
+
+          <div className="bg-white rounded-3xl border shadow-sm p-6 text-center">
+            <p className="text-3xl font-black text-orange-500">
+              {activeRequests.length}
+            </p>
+
+            <p className="text-gray-600 mt-2">
+              Active Requests
+            </p>
+          </div>
+
+          <div className="bg-white rounded-3xl border shadow-sm p-6 text-center">
+            <p className="text-3xl font-black text-purple-600">
+              {
+                bookings.filter(
+                  (b) => b.status === "COMPLETED"
+                ).length
+              }
+            </p>
+
+            <p className="text-gray-600 mt-2">
+              Trips Completed
+            </p>
+          </div>
+
+        </div>
+
+        {/* BOOKINGS SECTION */}
+        <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 space-y-6">
+          <div>
+
+            <h2 className="text-3xl font-black text-gray-900">
+              📅 My Bookings
+            </h2>
+
+            <p className="text-gray-500 mt-2">
+              Track payments, booking status and travel progress.
+            </p>
+
+          </div> 
+          {bookings.length === 0 ? (
+            <div className="bg-white border rounded-3xl p-10 text-center shadow-sm">
+
+              <div className="text-5xl mb-4">
+                ✈️
+              </div>
+
+              <h3 className="text-xl font-bold text-gray-900">
+                No Bookings Yet
+              </h3>
+
+              <p className="text-gray-500 mt-3">
+                Once you book a tour or AI itinerary, it will appear here.
+              </p>
+
+              <a
+                href="/tours"
+                className="inline-block mt-6 bg-blue-600 text-white px-6 py-3 rounded-2xl font-semibold hover:bg-blue-700 transition"
+              >
+                Explore Tours
+              </a>
+
+            </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {bookings.map((b) => {
@@ -564,10 +648,33 @@ export default function MyRequestsPage() {
                 return (
                   <div
                     key={b.id}
-                    className="bg-white p-4 sm:p-6 rounded-2xl border shadow-sm flex flex-col justify-between space-y-4"
+                    className="bg-white rounded-3xl border border-gray-200 shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all duration-300 p-6 flex flex-col justify-between space-y-5"
                   >
                   <div>
-                    <h3 className="font-bold text-lg text-gray-900">{b.tour?.title || b.itinerary?.title}</h3>
+
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+
+                      <h3 className="text-xl font-bold text-gray-900 leading-snug">
+                        {b.tour?.title || b.itinerary?.title}
+                      </h3>
+
+                      <span
+                        className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap ${
+                          ["CONFIRMED", "COMPLETED"].includes(b.status)
+                            ? "bg-green-100 text-green-700"
+                            : b.status === "REFUND_PENDING"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : b.status === "REFUNDED"
+                            ? "bg-blue-100 text-blue-700"
+                            : b.status === "CANCELLED"
+                            ? "bg-red-100 text-red-700"
+                            : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {b.status.replace("_", " ")}
+                      </span>
+
+                    </div>
                     {!b.tour && b.request?.finalPrice && (
                       <div className="mt-2 text-sm">
                         <p>
@@ -576,23 +683,35 @@ export default function MyRequestsPage() {
                         </p>
                       </div>
                     )}
-                    <div className="text-sm text-gray-600 mt-2 space-y-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5 text-sm">
                       
                       {/* INJECTED TARGET DATA METADATA SNIPPET */}
-                      <p>
-                        <strong>Date:</strong>{" "}
-                        {b.travelDate
-                          ? new Date(b.travelDate).toLocaleDateString()
-                          : "Please select your preferred travel date below"}
-                      </p>
-                      <p>
-                        <strong>Time:</strong>{" "}
-                        {b.timeSlot || "Flexible scheduling"}
-                      </p>
-                      <p>
-                        <strong>Travelers:</strong>{" "}
-                        {b.travelers}
-                      </p>
+                      <div className="bg-gray-50 rounded-2xl p-3">
+                        <p className="text-xs text-gray-500">
+                          📅 Travel Date
+                        </p>
+                        <p className="font-semibold text-gray-900 mt-1">
+                          {b.travelDate
+                            ? new Date(b.travelDate).toLocaleDateString()
+                            : "Select Below"}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 rounded-2xl p-3">
+                        <p className="text-xs text-gray-500">
+                          🕒 Time
+                        </p>
+                        <p className="font-semibold text-gray-900 mt-1">
+                          {b.timeSlot || "Flexible"}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 rounded-2xl p-3">
+                        <p className="text-xs text-gray-500">
+                          👥 Travelers
+                        </p>
+                        <p className="font-semibold text-gray-900 mt-1">
+                          {b.travelers}
+                        </p>
+                      </div>
 
                     </div>
                     <p>
@@ -620,15 +739,21 @@ export default function MyRequestsPage() {
 
                         </div>
                       )}
-                      <strong>
-                        {
-                          b.status === "PAID"
-                            ? "Advance Paid:"
-                            : "Advance Due:"
-                        }
-                      </strong>
+                      <div className="mt-4 bg-blue-50 rounded-2xl p-4">
 
-                      ₹{b.advanceAmount}
+                        <p className="text-sm text-gray-600">
+                          {
+                            b.status === "PAID"
+                              ? "Advance Paid"
+                              : "Advance Due"
+                          }
+                        </p>
+
+                        <p className="text-3xl font-black text-blue-600 mt-1">
+                          ₹{b.advanceAmount}
+                        </p>
+
+                      </div>
                     </p>
                   </div>
                   
@@ -636,7 +761,7 @@ export default function MyRequestsPage() {
                     {!b.travelDate && b.status === "PENDING_PAYMENT" && (
                       <div className="space-y-2">
 
-                        <label className="block text-sm font-medium">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
                           Preferred Travel Date
                         </label>
 
@@ -656,7 +781,7 @@ export default function MyRequestsPage() {
                               [b.id]: e.target.value,
                             })
                           }
-                          className="border rounded-xl p-3 w-full"
+                          className="w-full rounded-2xl border border-gray-300 bg-white p-3 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition"
                         />
                         <p className="text-xs text-gray-500">
                           Please select a travel date at least 3 days in advance.
@@ -739,23 +864,23 @@ export default function MyRequestsPage() {
                         onClick={() => handlePayment(b.id)}
                         // Disables the button if this specific booking or any other payment is running
                         disabled={isPaying !== null}
-                        className="w-full sm:w-auto bg-blue-600 text-white text-sm px-4 py-3 rounded-xl hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100"
                       >
                         {isPaying === b.id ? "Processing..." : "Pay Now"}
                       </button>
                     )}
                     {b.status === "PENDING_PAYMENT" && (
-                      <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-sm text-blue-800">
+                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-3xl p-5 text-sm text-blue-900">
                         A small advance payment is required to reserve your personalized itinerary planning,
                         consultation, and travel coordination services.
                       </div>
                     )}
 
 
-                    <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
+                    <div className="bg-gradient-to-br from-gray-50 to-white border rounded-3xl p-5 space-y-4">
 
-                      <h4 className="font-semibold text-sm">
-                        Booking Progress
+                      <h4 className="text-lg font-bold text-gray-900">
+                        📍 Booking Progress
                       </h4>
 
                       <div className="space-y-2 text-sm">
@@ -1001,9 +1126,17 @@ export default function MyRequestsPage() {
 
         {/* SAVED ITINERARIES */}
         <div className="space-y-4 pt-4">
-          <h2 className="text-2xl font-bold text-center">
-            Saved Itineraries
-          </h2>
+          <div>
+
+            <h2 className="text-3xl font-black text-gray-900">
+              ❤️ Saved Itineraries
+            </h2>
+
+            <p className="text-gray-500 mt-2">
+              AI generated trips you've saved for later.
+            </p>
+
+          </div>
 
           {savedItineraries.length === 0 ? (
 
@@ -1019,17 +1152,17 @@ export default function MyRequestsPage() {
 
                 <div
                   key={trip.id}
-                  className="bg-white p-6 rounded-2xl border shadow-sm space-y-4"
+                  className="bg-white rounded-3xl border border-gray-200 shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all duration-300 p-6 space-y-5"
                 >
 
-                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between sm:items-center">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
 
-                    <h3 className="font-bold text-base sm:text-lg wrap-break-word">
+                    <h3 className="text-xl font-bold text-gray-900 break-words">
                       {trip.title || trip.city}
                     </h3>
 
-                    <span className="text-sm text-gray-500">
-                      {trip.days} Days
+                    <span className="bg-blue-100 text-blue-700 text-sm font-semibold px-4 py-2 rounded-full w-fit">
+                      📅 {trip.days} Days
                     </span>
 
                   </div>
@@ -1050,11 +1183,11 @@ export default function MyRequestsPage() {
 
                         <div
                           key={i}
-                          className="bg-gray-50 border rounded-xl p-3 overflow-hidden"
+                          className="bg-gradient-to-r from-gray-50 to-white border rounded-2xl p-4 overflow-hidden"
                         >
 
                           <p
-                            className={`text-sm whitespace-pre-wrap ${
+                            className={`leading-relaxed whitespace-pre-wrap ${
                               line.includes("Day") ||
                               line.includes("Overview") ||
                               line.includes("Budget")
@@ -1073,67 +1206,69 @@ export default function MyRequestsPage() {
 
                   <button
                     onClick={() => toggleExpand(trip.id)}
-                    className="text-blue-600 text-sm font-semibold hover:underline"
+                    className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition"
                   >
                     {expandedTrips.includes(trip.id)
                       ? "Show Less"
-                      : "View Full Plan"}
+                      : "View Full Plan →"}
                   </button>
 
-                  <button
-                    disabled={submittingRequestId === trip.id}
-                    onClick={async () => {
-                      if (submittingRequestId === trip.id) return;
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button
+                      disabled={submittingRequestId === trip.id}
+                      onClick={async () => {
+                        if (submittingRequestId === trip.id) return;
 
-                      setSubmittingRequestId(trip.id);
+                        setSubmittingRequestId(trip.id);
 
-                      try {
-                        const res = await fetch(
-                          `${process.env.NEXT_PUBLIC_API_URL}/requests`,
-                          {
-                            credentials: "include",
-                            method: "POST",
-                            headers: {
-                              "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                              itineraryId: trip.id,
-                            }),
+                        try {
+                          const res = await fetch(
+                            `${process.env.NEXT_PUBLIC_API_URL}/requests`,
+                            {
+                              credentials: "include",
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                itineraryId: trip.id,
+                              }),
+                            }
+                          );
+
+                          const data = await res.json();
+
+                          if (!res.ok) {
+                            alert(data.message || "Failed to submit request");
+                            return;
                           }
-                        );
 
-                        const data = await res.json();
+                          await fetchData();
 
-                        if (!res.ok) {
-                          alert(data.message || "Failed to submit request");
-                          return;
+                          alert(
+                            "Request submitted ✅ You can track it in Active Requests"
+                          );
+                        } catch (err) {
+                          console.error(err);
+                          alert("Something went wrong");
+                        } finally {
+                          setSubmittingRequestId(null);
                         }
-
-                        await fetchData();
-
-                        alert(
-                          "Request submitted ✅ You can track it in Active Requests"
-                        );
-                      } catch (err) {
-                        console.error(err);
-                        alert("Something went wrong");
-                      } finally {
-                        setSubmittingRequestId(null);
-                      }
-                    }}
-                    className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition disabled:bg-gray-400"
-                  >
-                    {submittingRequestId === trip.id
-                      ? "Submitting..."
-                      : "Request This Plan"}
-                  </button>
-                  <button
-                    onClick={() => handleDeleteItinerary(trip.id)}
-                    disabled={deletingId === trip.id}
-                    className="mt-2 w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-semibold transition disabled:bg-gray-400"
-                  >
-                    {deletingId === trip.id ? "Deleting..." : "Delete Itinerary"}
-                  </button>
+                      }}
+                      className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:scale-[1.02] transition-all text-white py-3 rounded-2xl font-semibold shadow-md disabled:bg-gray-400"
+                    >
+                      {submittingRequestId === trip.id
+                        ? "Submitting..."
+                        : "Request This Plan"}
+                    </button>
+                    <button
+                      onClick={() => handleDeleteItinerary(trip.id)}
+                      disabled={deletingId === trip.id}
+                      className="flex-1 bg-red-50 border border-red-200 text-red-600 hover:bg-red-600 hover:text-white transition-all py-3 rounded-2xl font-semibold disabled:bg-gray-100"
+                    >
+                      {deletingId === trip.id ? "Deleting..." : "Delete Itinerary"}
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -1142,11 +1277,33 @@ export default function MyRequestsPage() {
 
         {/* ACTIVE REQUESTS SECTION */}
         <div className="space-y-4 pt-4">
-          <h2 className="text-2xl font-bold text-center">Active Requests</h2>
-          {activeRequests.length === 0 ? (
-            <p className="text-center text-gray-500">
-              No active requests right now. Saved itineraries can be submitted for review anytime.
+          <div>
+
+            <h2 className="text-3xl font-black text-gray-900">
+              💬 Active Requests
+            </h2>
+
+            <p className="text-gray-500 mt-2">
+              Chat with our travel experts about your itinerary.
             </p>
+
+          </div>
+          {activeRequests.length === 0 ? (
+            <div className="bg-white rounded-3xl border shadow-sm p-10 text-center">
+
+              <div className="text-5xl mb-4">
+                💬
+              </div>
+
+              <h3 className="text-xl font-bold text-gray-900">
+                No Active Requests
+              </h3>
+
+              <p className="text-gray-500 mt-3">
+                Submit one of your saved itineraries to start working with our travel experts.
+              </p>
+
+            </div>
           ) : (
             <div className="space-y-4">
               <p className="text-center text-gray-500 text-sm">
@@ -1156,9 +1313,9 @@ export default function MyRequestsPage() {
                 const hasConversation = (messages[req.id] || []).length > 0;
                 
                 return (
-                  <div key={req.id} className="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
-                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between sm:items-center">
-                      <p className="font-medium text-gray-700">{req.itinerary?.title}</p>
+                  <div key={req.id} className="bg-white rounded-3xl border border-gray-200 shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all duration-300 p-6 space-y-5">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                      <p className="text-sm font-semibold">{req.itinerary?.title}</p>
                       <p className="font-semibold text-sm wrap-break-word">
                         Status:{" "}
 
@@ -1178,14 +1335,17 @@ export default function MyRequestsPage() {
                     </div>
 
                     {req.finalPrice && (
-                      <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-3xl p-5">
 
                         <p className="font-semibold text-green-700">
                           Personalized Package Ready
                         </p>
 
-                        <p>
-                          Final Package Price:
+                        <p className="text-gray-600">
+                          Final Package Price
+                        </p>
+
+                        <p className="text-3xl font-black text-green-600 mt-2">
                           ₹{req.finalPrice}
                         </p>
 
@@ -1217,7 +1377,7 @@ export default function MyRequestsPage() {
                           onClick={() => toggleExpand(req.id)}
                           className="mt-3 text-sm text-blue-600 font-semibold hover:underline"
                         >
-                          {expandedTrips.includes(req.id) ? "Show Less" : "View Full Plan Details"}
+                          {expandedTrips.includes(req.id) ? "← Show Less" : "View Full Plan Details"}
                         </button>
                       </div>
                     )}
@@ -1246,7 +1406,7 @@ export default function MyRequestsPage() {
                             Conversation
                           </h4>
 
-                          <div className="bg-gray-50 border rounded-xl p-4 space-y-2 max-h-80 overflow-y-auto">
+                          <div className="bg-gray-50 border rounded-3xl p-5 space-y-3 max-h-96 overflow-y-auto">
                             {(messages[req.id] || []).map((msg: any) => {
                               const bubbleClassName =
                                 msg.senderType === "ADMIN"
@@ -1261,7 +1421,7 @@ export default function MyRequestsPage() {
                               return (
                                 <div
                                   key={msg.id}
-                                  className={`p-3 rounded-xl text-sm wrap-break-word ${bubbleClassName}`}
+                                  className={`p-4 rounded-2xl text-sm break-words max-w-[85%] ${msg.senderType === "ADMIN" ? "bg-blue-100 mr-auto" : "bg-green-100 ml-auto"}`}
                                 >
                                   <span className="font-semibold">
                                     {senderLabel}
@@ -1290,7 +1450,7 @@ export default function MyRequestsPage() {
 
                             placeholder="Reply to travel team..."
 
-                            className="w-full border rounded-xl p-3"
+                            className="w-full rounded-2xl border border-gray-300 p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition"
                           />
 
                           <button
@@ -1298,7 +1458,7 @@ export default function MyRequestsPage() {
                             onClick={() =>
                               handleSendMessage(req.id)
                             }
-                            className="w-full sm:w-auto bg-blue-600 text-white px-4 py-3 rounded-xl disabled:bg-gray-400"
+                            className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold px-6 py-3 rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all disabled:bg-gray-400"
                           >
                             {sendingMessageId === req.id
                               ? "Sending..."

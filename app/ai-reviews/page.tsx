@@ -5,22 +5,35 @@ import { useEffect, useState } from "react";
 export default function AIReviewsPage() {
 
   const [reviews, setReviews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
 
     const fetchReviews = async () => {
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/reviews/ai`
-      );
+      try {
 
-      const data = await res.json();
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/reviews/ai`
+        );
 
-      setReviews(
-        Array.isArray(data)
-          ? data
-          : []
-      );
+        const data = await res.json();
+
+        setReviews(
+          Array.isArray(data)
+            ? data
+            : []
+        );
+
+      } catch (error) {
+
+        setReviews([]);
+
+      } finally {
+
+        setLoading(false);
+
+      }
 
     };
 
@@ -39,8 +52,17 @@ export default function AIReviewsPage() {
         ).toFixed(1)
       : "0.0";
 
-  return (
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg text-gray-500">
+          Loading reviews...
+        </p>
+      </div>
+    );
+  }
 
+  return (
     <div className="min-h-screen bg-gray-50">
 
       {/* Hero */}
@@ -70,28 +92,21 @@ export default function AIReviewsPage() {
 
         <div className="bg-white rounded-3xl shadow-xl border p-8 text-center">
 
-        <div className="text-6xl">
+          <div className="text-6xl">
+            ⭐
+          </div>
 
-        ⭐
+          <h2 className="text-5xl font-black mt-4">
+            {averageRating}
+          </h2>
 
-        </div>
-
-        <h2 className="text-5xl font-black mt-4">
-
-        {averageRating}
-
-        </h2>
-
-        <p className="mt-3 text-gray-600">
-
-        Based on {reviews.length}
-        verified AI travel experiences
-
-        </p>
+          <p className="mt-3 text-gray-600">
+            Based on {reviews.length} verified AI travel experiences
+          </p>
 
         </div>
 
-        </div>
+      </div>
 
       {/* Review grid */}
       <div className="max-w-6xl mx-auto px-6 py-16">
@@ -101,7 +116,7 @@ export default function AIReviewsPage() {
           <div className="text-center py-20">
 
             <h2 className="text-3xl font-bold">
-              No AI reviews yet
+              No success stories yet
             </h2>
 
             <p className="mt-4 text-gray-600">
@@ -119,14 +134,14 @@ export default function AIReviewsPage() {
 
               <div
                 key={review.id}
-                className="bg-white rounded-3xl border shadow-sm p-6 hover:shadow-xl transition"
+                className="bg-white rounded-3xl border shadow-sm p-6 hover:shadow-xl transition flex flex-col h-full"
               >
 
                 <div className="text-2xl">
                   {"⭐".repeat(review.rating)}
                 </div>
 
-                <p className="mt-5 leading-relaxed text-gray-700">
+                <p className="mt-5 leading-relaxed text-gray-700 line-clamp-4">
                   "{review.comment}"
                 </p>
 
@@ -151,11 +166,7 @@ export default function AIReviewsPage() {
                 </div>
 
                 <p className="mt-5 text-xs text-gray-500">
-
-                  {new Date(
-                    review.createdAt
-                  ).toLocaleDateString()}
-
+                  {new Date(review.createdAt).toLocaleDateString()}
                 </p>
 
               </div>
@@ -168,7 +179,6 @@ export default function AIReviewsPage() {
 
       </div>
     </div>
-
   );
 
 }

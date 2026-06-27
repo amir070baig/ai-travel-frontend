@@ -79,7 +79,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50">
 
       {/* HERO */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20 lg:py-24 sm:py-24">
 
         <div className="text-center space-y-6">
 
@@ -87,7 +87,7 @@ export default function HomePage() {
             ✨ AI Powered Travel Planning
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-tight text-gray-900">
+          <h1 className="max-w-4xl mx-auto text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-tight text-gray-900">
 
             Plan Luxury
             <span className="block text-blue-600">
@@ -96,7 +96,7 @@ export default function HomePage() {
 
           </h1>
 
-          <p className="text-gray-600 mt-4 leading-relaxed max-w-2xl mx-auto text-sm sm:text-base">
+          <p className="text-gray-600 mt-4 leading-relaxed max-w-3xl mx-auto text-sm sm:text-base">
             TourGen helps travelers discover
             personalized AI itineraries,
             curated Agra tours, and expert
@@ -188,7 +188,7 @@ export default function HomePage() {
       </div>
 
       {/* TOURS PREVIEW */}
-      <div className="max-w-6xl mx-auto py-16 px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto py-20 lg:py-24 px-4 sm:px-6">
         <h2 className="text-3xl md:text-4xl font-black mb-10 text-center text-gray-900">
           Popular Tours 🌍
         </h2>
@@ -364,7 +364,7 @@ export default function HomePage() {
               setLeadMessage("");
 
             }}
-            className="w-full bg-blue-600 text-white py-4 rounded-2xl font-semibold mt-8"
+            className="w-full bg-blue-600 text-white py-4 rounded-2xl font-semibold mt-8 hover:shadow-md hover:border-blue-300"
           >
             Submit Inquiry
           </button>
@@ -376,7 +376,7 @@ export default function HomePage() {
 
       {/* AI SUCCESS STORIES */}
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20 lg:py-24">
 
         <div className="text-center mb-12">
 
@@ -388,11 +388,11 @@ export default function HomePage() {
 
           <h2 className="text-4xl font-black mt-3">
 
-            AI Concierge Success Stories
+            TourGen's AI concierge Success Stories
 
           </h2>
 
-          <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
+          <p className="text-gray-600 mt-4 max-w-3xl mx-auto">
 
             Discover how TourGen's AI helped
             travelers plan unforgettable journeys.
@@ -401,62 +401,66 @@ export default function HomePage() {
 
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        {reviews.length > 0 && (
 
-          {reviews.map((review) => (
+            <div className="grid md:grid-cols-3 gap-6">
 
-            <div
-              key={review.id}
-              className="bg-white rounded-3xl border shadow-sm p-6 hover:shadow-xl transition"
-            >
+              {reviews.map((review) => (
 
-              <div className="text-xl">
+                <div
+                  key={review.id}
+                  className="bg-white rounded-3xl border shadow-sm p-6 hover:shadow-xl transition"
+                >
 
-                {"⭐".repeat(review.rating)}
+                  <div className="text-xl">
 
-              </div>
+                    {"⭐".repeat(review.rating)}
 
-              <p className="mt-5 text-gray-700 leading-relaxed italic">
+                  </div>
 
-                "{review.comment}"
+                  <p className="mt-5 text-gray-700 leading-relaxed italic">
 
-              </p>
+                    "{review.comment}"
 
-              <div className="border-t my-6"></div>
+                  </p>
 
-              <div className="space-y-2 text-sm text-gray-600">
+                  <div className="border-t my-6"></div>
 
-                <p>
+                  <div className="space-y-2 text-sm text-gray-600">
 
-                  ✔ Verified AI Traveler
+                    <p>
 
-                </p>
+                      ✔ Verified AI Traveler
 
-                <p>
+                    </p>
 
-                  📍 {review.itinerary.city}
+                    <p>
 
-                </p>
+                      📍 {review.itinerary.city}
 
-                <p>
+                    </p>
 
-                  🗓 {review.itinerary.days} Day Trip
+                    <p>
 
-                </p>
+                      🗓 {review.itinerary.days} Day Trip
 
-                <p>
+                    </p>
 
-                  👥 {review.itinerary.groupSize} Travelers
+                    <p>
 
-                </p>
+                      👥 {review.itinerary.groupSize} Travelers
 
-              </div>
+                    </p>
+
+                  </div>
+
+                </div>
+
+              ))}
 
             </div>
-
-          ))}
-
-        </div>
+          )
+        }
 
         <div className="text-center mt-10">
 
