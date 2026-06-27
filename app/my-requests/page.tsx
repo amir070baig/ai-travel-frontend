@@ -675,14 +675,14 @@ export default function MyRequestsPage() {
                       </span>
 
                     </div>
-                    {!b.tour && b.request?.finalPrice && (
+                    {/* {!b.tour && b.request?.finalPrice && (
                       <div className="mt-2 text-sm">
                         <p>
                           <strong>Final Package Price:</strong>
                           ₹{b.request.finalPrice}
                         </p>
                       </div>
-                    )}
+                    )} */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5 text-sm">
                       
                       {/* INJECTED TARGET DATA METADATA SNIPPET */}
@@ -714,7 +714,7 @@ export default function MyRequestsPage() {
                       </div>
 
                     </div>
-                    <p>
+                    <div>
                       {!b.tour && b.request?.finalPrice && (
                         <div className="mt-2 space-y-1 text-sm">
 
@@ -743,18 +743,24 @@ export default function MyRequestsPage() {
 
                         <p className="text-sm text-gray-600">
                           {
-                            b.status === "PAID"
+                            b.paymentStatus === "PAID"
                               ? "Advance Paid"
                               : "Advance Due"
                           }
                         </p>
 
-                        <p className="text-3xl font-black text-blue-600 mt-1">
+                        <p
+                          className={`text-3xl font-black mt-1 ${
+                            b.paymentStatus === "PAID"
+                              ? "text-green-600"
+                              : "text-blue-600"
+                          }`}
+                        >
                           ₹{b.advanceAmount}
                         </p>
 
                       </div>
-                    </p>
+                    </div>
                   </div>
                   
                   <div className="flex flex-col gap-4 pt-2 border-t">
