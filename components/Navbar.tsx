@@ -8,38 +8,68 @@ export default function Navbar() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+  const fetchNotifications = async () => {
 
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
+    try {
 
-      const fetchNotifications = async () => {
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/notifications`,
-            {
-              credentials: "include",
-            }
-          );
-
-          const data = await res.json();
-          setNotifications(Array.isArray(data) ? data : []);
-        } catch (err) {
-          console.error(err);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/notifications`,
+        {
+          credentials: "include",
         }
-      };
-
-      fetchNotifications();
-
-      const interval = setInterval(
-        fetchNotifications,
-        30000
       );
 
-      return () => clearInterval(interval);
+      const data = await res.json();
+
+      setNotifications(
+        Array.isArray(data)
+          ? data
+          : []
+      );
+
+    } catch (err) {
+
+      console.error(err);
+
     }
+
+  };
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
+          {
+            credentials: "include",
+          }
+        );
+
+        if (!res.ok) {
+          setUser(null);
+          return;
+        }
+
+        const currentUser = await res.json();
+
+        setUser(currentUser);
+
+        await fetchNotifications();
+
+      } catch (err) {
+        console.error(err);
+        setUser(null);
+      }
+    };
+
+    loadUser();
+
+    const interval = setInterval(() => {
+      fetchNotifications();
+    }, 30000);
+
+    return () => clearInterval(interval);
+
   }, []);
 
   // Corrected async handler function
@@ -55,8 +85,11 @@ export default function Navbar() {
     } catch (err) {
       console.error("Logout request failed:", err);
     } finally {
-      localStorage.removeItem("user");
-      window.location.href = "/login";
+
+      setUser(null);
+
+      window.location.href="/login";
+
     }
   };
 
