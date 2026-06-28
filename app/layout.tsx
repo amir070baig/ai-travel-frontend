@@ -3,28 +3,88 @@ import Navbar from "../components/Navbar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "TourGen",
+  metadataBase: new URL("https://tourgen.in"),
+
+  title: {
+    default: "TourGen | Agra Tours & AI Travel Planner",
+    template: "%s | TourGen",
+  },
+
+  description:
+    "Book Agra tours, Taj Mahal tours, and AI-powered custom travel itineraries. TourGen combines expert local travel planning with AI to create unforgettable experiences.",
+
+  keywords: [
+    "Agra Tours",
+    "Taj Mahal Tour",
+    "Delhi to Agra Tour",
+    "Agra Sightseeing",
+    "Private Agra Tour",
+    "Sunrise Taj Mahal Tour",
+    "AI Travel Planner",
+    "Custom India Itinerary",
+    "TourGen",
+  ],
+
+  authors: [
+    {
+      name: "TourGen",
+    },
+  ],
+
+  creator: "TourGen",
+
+  publisher: "TourGen",
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
+  alternates: {
+    canonical: "/",
+  },
+
   icons: {
     icon: "/favicon.png",
   },
-  description:
-    "AI-powered travel planning, curated Agra tours, and personalized travel experiences.",
 
-  keywords: [
-    "TourGen",
-    "Agra Tours",
-    "Taj Mahal Tours",
-    "AI Travel Planner",
-    "Travel Concierge",
-    "Agra Travel",
-  ],
+  themeColor: "#2563eb",
+
+  category: "Travel",
 
   openGraph: {
-    title: "TourGen",
+    title: "TourGen | Agra Tours & AI Travel Planner",
+
     description:
-      "AI-powered travel planning and curated Agra experiences.",
+      "Discover curated Agra tours, Taj Mahal experiences, and AI-powered personalized travel planning.",
+
+    url: "https://tourgen.in",
+
     siteName: "TourGen",
+
+    locale: "en_US",
+
     type: "website",
+
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "TourGen - Agra Tours & AI Travel Planner",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title: "TourGen | Agra Tours & AI Travel Planner",
+
+    description:
+      "Book Agra tours and generate AI-powered travel itineraries.",
+
+    images: ["/og-image.jpg"],
   },
 };
 
