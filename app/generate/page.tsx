@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useRouter } from "next/navigation";
+// import { useAuth } from "../hooks/useAuth";
 
 export default function GeneratePage() {
-  useAuth();
+  // useAuth();
   
   const [days, setDays] = useState("");
   const [budget, setBudget] = useState("");
@@ -21,9 +22,11 @@ export default function GeneratePage() {
   const itineraryRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const router = useRouter();
   const itineraryTitle = itinerary
   ? `Agra ${itinerary.days}-Day ${itinerary.travelStyle} Journey`
   : "Agra Journey";
+
 
   const handleGenerate = async () => {
     if (loading) return;
@@ -498,6 +501,26 @@ export default function GeneratePage() {
                   if (isSubmitting) return;
                   setIsSubmitting(true);
                   try {
+                    // First check if user is logged in
+                    const authRes = await fetch(
+                      `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
+                      {
+                        credentials: "include",
+                      }
+                    );
+
+                    if (!authRes.ok) {
+
+                      alert(
+                        "Please login to save your itinerary."
+                      );
+
+                      router.push("/login");
+
+                      return;
+                    }
+
+                    // User is authenticated, now save
                     const res = await fetch(
                       `${process.env.NEXT_PUBLIC_API_URL}/itineraries/save`,
                       {
@@ -514,7 +537,7 @@ export default function GeneratePage() {
                           travelStyle: itinerary.travelStyle,
                           tripType: itinerary.tripType,
                           interests: itinerary.interests,
-                        })
+                        }),
                       }
                     );
 
