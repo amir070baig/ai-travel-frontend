@@ -4,7 +4,15 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 
 export default function MyRequestsPage() {
-  useAuth();
+  const { loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
   
   const [requests, setRequests] = useState<any[]>([]);
   const [bookings, setBookings] = useState<any[]>([]);

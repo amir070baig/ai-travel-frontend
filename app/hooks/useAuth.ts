@@ -1,16 +1,56 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export const useAuth = () => {
+export function useAuth() {
   const router = useRouter();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-    if (!token) {
-      router.push("/login");
-    }
-  }, []);
-};
+  useEffect(() => {
+
+    const checkAuth = async () => {
+
+      try {
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
+          {
+            credentials: "include",
+          }
+        );
+
+        if (!res.ok) {
+          router.replace("/login");
+          return;
+        }
+
+        const data = await res.json();
+
+        setUser(data);
+
+      } catch (err) {
+
+        console.error(err);
+
+        router.replace("/login");
+
+      } finally {
+
+        setLoading(false);
+
+      }
+
+    };
+
+    checkAuth();
+
+  }, [router]);
+
+  return {
+    user,
+    loading,
+  };
+}
