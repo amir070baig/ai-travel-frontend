@@ -5,14 +5,6 @@ import { useAuth } from "../hooks/useAuth";
 
 export default function MyRequestsPage() {
   const { loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
-    );
-  }
   
   const [requests, setRequests] = useState<any[]>([]);
   const [bookings, setBookings] = useState<any[]>([]);
@@ -526,6 +518,14 @@ export default function MyRequestsPage() {
   };
 
   console.log(bookings)
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 py-16 lg:py-20 px-4">
