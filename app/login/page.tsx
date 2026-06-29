@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleLogin = async () => {
     const res = await fetch(
@@ -31,7 +32,11 @@ export default function LoginPage() {
     // localStorage.setItem("token", data.token);
     // localStorage.setItem("user", JSON.stringify(data.user));
 
-    window.location.href = "/";
+    const redirect =
+      searchParams.get("redirect") || "/";
+
+    router.push(redirect);
+    router.refresh();
   };
 
   return (

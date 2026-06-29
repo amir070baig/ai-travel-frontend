@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 // import { useAuth } from "../hooks/useAuth";
 
@@ -26,6 +27,24 @@ export default function GeneratePage() {
   const itineraryTitle = itinerary
   ? `Agra ${itinerary.days}-Day ${itinerary.travelStyle} Journey`
   : "Agra Journey";
+
+  useEffect(() => {
+    const pending = sessionStorage.getItem("pendingItinerary");
+
+    if (!pending) return;
+
+    try {
+      const restored = JSON.parse(pending);
+
+      setItinerary(restored);
+      setSaved(false);
+      setMessage("");
+
+      sessionStorage.removeItem("pendingItinerary");
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
 
   const handleGenerate = async () => {
@@ -511,11 +530,22 @@ export default function GeneratePage() {
 
                     if (!authRes.ok) {
 
-                      alert(
-                        "Please login to save your itinerary."
+                      sessionStorage.setItem(
+                        "pendingItinerary",
+                        JSON.stringify({
+                          contentJson: itinerary.contentJson,
+                          days: itinerary.days,
+                          budget: itinerary.budget,
+                          groupSize: itinerary.groupSize,
+                          travelStyle: itinerary.travelStyle,
+                          tripType: itinerary.tripType,
+                          interests: itinerary.interests,
+                        })
                       );
 
-                      router.push("/login");
+                      alert("Please login to save your itinerary.");
+
+                      router.push("/login?redirect=/generate");
 
                       return;
                     }
