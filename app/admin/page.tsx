@@ -86,7 +86,7 @@ export default function AdminPage() {
   const fetchTours = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/tours`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tours/admin/all`,
         {
           credentials: "include",
         }
@@ -1047,7 +1047,7 @@ export default function AdminPage() {
                       : "bg-red-100 text-red-700"
                   }`}
                 >
-                  {tour.isActive ? "🟢 Active" : "🔴 Disabled"}
+                  {tour.isActive ? "🟢 Open for Booking" : "🔴 Bookings Closed"}
                 </span>
 
               </div>
@@ -1072,8 +1072,8 @@ export default function AdminPage() {
                 }`}
               >
                 {tour.isActive
-                  ? "Disable Tour"
-                  : "Enable Tour"}
+                  ? "Close Bookings"
+                  : "Open Bookings"}
               </button>
             </div>
           ))}
