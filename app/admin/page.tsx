@@ -310,57 +310,108 @@ export default function AdminPage() {
 
   };
 
-  const handleRevision = async (requestId: string) => {
+  const handleAdminCancelBooking = async (
+  bookingId: string
+) => {
 
-  const actionKey = `revision-${requestId}`;
+  const reason = prompt(
+    "Reason for cancellation:"
+  );
 
-  if (!startAction(actionKey)) return;
-
-  const message = revisionMessages[requestId];
-
-  setRevisionMessages((prev) => ({
-    ...prev,
-    [requestId]: "",
-  }));
-
-  if (!message) {
-    endAction(actionKey);
-    return;
-  }
+  if (!reason?.trim()) return;
 
   try {
 
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/revision`,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/bookings/admin-cancel`,
       {
-        method: "POST",
+        method: "PATCH",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ requestId, message }),
+        body: JSON.stringify({
+          bookingId,
+          reason,
+        }),
       }
     );
 
-    await fetchAdminMessages(requestId);
+    const data = await res.json();
 
-    setRequests((prev: any) =>
-      prev.map((r: any) =>
-        r.id === requestId
-          ? {
-              ...r,
-              status: "REVISION_SENT",
-            }
-          : r
-      )
-    );
+    if (!res.ok) {
+      alert(
+        data.message ||
+        "Unable to cancel booking."
+      );
+      return;
+    }
+
+    alert("Booking cancelled successfully.");
+
+    await fetchBookings();
 
   } catch (err) {
+
     console.error(err);
-  } finally {
-    endAction(actionKey);
+
+    alert("Something went wrong.");
+
   }
+
 };
+
+  const handleRevision = async (requestId: string) => {
+
+    const actionKey = `revision-${requestId}`;
+
+    if (!startAction(actionKey)) return;
+
+    const message = revisionMessages[requestId];
+
+    setRevisionMessages((prev) => ({
+      ...prev,
+      [requestId]: "",
+    }));
+
+    if (!message) {
+      endAction(actionKey);
+      return;
+    }
+
+    try {
+
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/revision`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ requestId, message }),
+        }
+      );
+
+      await fetchAdminMessages(requestId);
+
+      setRequests((prev: any) =>
+        prev.map((r: any) =>
+          r.id === requestId
+            ? {
+                ...r,
+                status: "REVISION_SENT",
+              }
+            : r
+        )
+      );
+
+    } catch (err) {
+      console.error(err);
+    } finally {
+      endAction(actionKey);
+    }
+  };
 
   const handleTourSubmit = async () => {
     try {
@@ -1052,6 +1103,26 @@ export default function AdminPage() {
 
               </div>
 
+              <p className="text-sm text-gray-600 mt-2">
+
+                👥 {
+                  tour.bookings.filter(
+                    (booking: any) =>
+                      booking.status !== "CANCELLED" &&
+                      booking.status !== "REFUNDED"
+                  ).length
+                } Active Reservation{
+                  tour.bookings.filter(
+                    (booking: any) =>
+                      booking.status !== "CANCELLED" &&
+                      booking.status !== "REFUNDED"
+                  ).length !== 1
+                    ? "s"
+                    : ""
+                }
+
+              </p>
+
               <div className="flex w-full sm:w-auto gap-3">
                 <button
                   onClick={() => handleEditSelect(tour)}
@@ -1712,6 +1783,17 @@ export default function AdminPage() {
                     </button> */}
 
                     <button
+                      onClick={() =>
+                        handleAdminCancelBooking(b.id)
+                      }
+                      className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
+                    >
+                      Cancel Trip
+                    </button>
+
+
+                    {/* Don't delete */}
+                    {/* <button
                       onClick={async () => {
                         await fetch(
                           `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
@@ -1733,7 +1815,7 @@ export default function AdminPage() {
                       className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
                     >
                       Cancel
-                    </button>
+                    </button> */}
                   </>
 
                 )}
@@ -1803,7 +1885,18 @@ export default function AdminPage() {
 
                       )}
 
+                    
                     <button
+                      onClick={() =>
+                        handleAdminCancelBooking(b.id)
+                      }
+                      className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
+                    >
+                      Cancel Trip
+                    </button>
+
+                    {/* DON'T DELETE */}
+                    {/* <button
                       onClick={async () => {
                         await fetch(
                           `${process.env.NEXT_PUBLIC_API_URL}/bookings/status`,
@@ -1825,7 +1918,7 @@ export default function AdminPage() {
                       className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm"
                     >
                       Cancel
-                    </button>
+                    </button> */}
                   </>
 
                 )}
