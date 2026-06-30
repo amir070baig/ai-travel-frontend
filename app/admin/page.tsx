@@ -273,6 +273,43 @@ export default function AdminPage() {
     }
   };
 
+  const handleToggleTourAvailability = async (tourId: string) => {
+
+    try {
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/tours/${tourId}/toggle-availability`,
+        {
+          method: "PATCH",
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+
+        alert(
+          data.message ||
+          "Unable to update tour."
+        );
+
+        return;
+
+      }
+
+      await fetchTours();
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert("Something went wrong.");
+
+    }
+
+  };
+
   const handleRevision = async (requestId: string) => {
 
   const actionKey = `revision-${requestId}`;
@@ -1001,6 +1038,20 @@ export default function AdminPage() {
                 </p>
               </div>
 
+              <div className="flex items-center gap-2 mt-2">
+
+                <span
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    tour.isActive
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {tour.isActive ? "🟢 Active" : "🔴 Disabled"}
+                </span>
+
+              </div>
+
               <div className="flex w-full sm:w-auto gap-3">
                 <button
                   onClick={() => handleEditSelect(tour)}
@@ -1009,6 +1060,21 @@ export default function AdminPage() {
                   Edit
                 </button>
               </div>
+
+              <button
+                onClick={() =>
+                  handleToggleTourAvailability(tour.id)
+                }
+                className={`px-4 py-2 rounded-xl text-white font-medium ${
+                  tour.isActive
+                    ? "bg-red-600 hover:bg-red-700"
+                    : "bg-green-600 hover:bg-green-700"
+                }`}
+              >
+                {tour.isActive
+                  ? "Disable Tour"
+                  : "Enable Tour"}
+              </button>
             </div>
           ))}
         </div>

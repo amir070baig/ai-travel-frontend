@@ -195,7 +195,7 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {tours.slice(0, 3).map((tour) => (
-            <a key={tour.id} href={`/tours?id=${tour.id}`}>
+            <a key={tour.id} href={`/tours/${tour.id}`}>
               <div className="h-full flex flex-col bg-white/90 backdrop-blur border border-white/40 rounded-3xl overflow-hidden shadow-xl shadow-black/5 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
                 <div className="overflow-hidden">
                   <img
