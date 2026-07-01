@@ -396,7 +396,7 @@ export default function GeneratePage() {
 
   if (
     settings &&
-    !settings.aiBookingsEnabled
+    !settings.aiConciergeEnabled
   ) {
 
     return (
@@ -735,7 +735,7 @@ export default function GeneratePage() {
               >
                 {isSubmitting
                   ? "Submitting..."
-                  : "Request This Tour"}
+                  : "Request This Itinerary"}
               </button>
 
               {/* SAVE */}
@@ -781,7 +781,7 @@ export default function GeneratePage() {
                 }}
                 className="flex-1 bg-gray-200 py-3 rounded-xl font-semibold"
               >
-                {isSubmitting ? "Saving..." : saved ? "Saved" : "Save Itinerary"}
+                {isSubmitting ? "Saving..." : saved ? "Saved" : "Save for later"}
               </button>
 
               <button
