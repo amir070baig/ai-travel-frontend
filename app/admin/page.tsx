@@ -17,6 +17,7 @@ export default function AdminPage() {
   const [revisionMessages, setRevisionMessages] = useState<Record<string, string>>({});
   const [adminMessages, setAdminMessages] =  useState<Record<string, any[]>>({});
   const [adminReplies, setAdminReplies] =  useState<Record<string, string>>({});
+  const [settings, setSettings] = useState<any>(null);
   const [actionLoading, setActionLoading] = useState<Record<string, boolean>>({});
   const [tourForm, setTourForm] = useState({
     title: "",
@@ -82,6 +83,29 @@ export default function AdminPage() {
     verifyAdmin();
 
   }, [router]);
+
+  const fetchSettings = async () => {
+
+    try {
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/settings`,
+        {
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+
+      setSettings(data);
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
+
+  };
 
   const fetchTours = async () => {
     try {
@@ -156,6 +180,7 @@ export default function AdminPage() {
         setLeads(Array.isArray(leadData) ? leadData : []);
 
         await fetchTours();
+        await fetchSettings();
       } catch (err) {
         console.error(err);
       }
@@ -305,6 +330,28 @@ export default function AdminPage() {
       console.error(err);
 
       alert("Something went wrong.");
+
+    }
+
+  };
+
+  const toggleAIBookings = async () => {
+
+    try {
+
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/settings/ai-bookings`,
+        {
+          method: "PATCH",
+          credentials: "include",
+        }
+      );
+
+      await fetchSettings();
+
+    } catch (err) {
+
+      console.error(err);
 
     }
 
@@ -861,6 +908,40 @@ export default function AdminPage() {
               }
             </h2>
           </div>
+        </div>
+        
+        {/* Admin Settings for AI Bookings Disable */}
+        <div className="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
+
+          <h2 className="text-2xl font-bold">
+            🤖 AI Concierge
+          </h2>
+
+          <span
+            className={`px-4 py-2 rounded-full text-sm font-semibold ${
+              settings?.aiBookingsEnabled
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+            }`}
+          >
+            {settings?.aiBookingsEnabled
+              ? "OPEN"
+              : "CLOSED"}
+          </span>
+
+          <button
+            onClick={toggleAIBookings}
+            className={`px-5 py-3 rounded-xl text-white font-semibold ${
+              settings?.aiBookingsEnabled
+                ? "bg-red-600 hover:bg-red-700"
+                : "bg-green-600 hover:bg-green-700"
+            }`}
+          >
+            {settings?.aiBookingsEnabled
+              ? "Close AI Concierge"
+              : "Open AI Concierge"}
+          </button>
+
         </div>
 
         {/* TOUR MANAGEMENT */}

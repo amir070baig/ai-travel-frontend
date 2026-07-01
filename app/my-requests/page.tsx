@@ -826,11 +826,39 @@ export default function MyRequestsPage() {
                           : b.status || "PENDING"
                       }
                     </span>
+
+                    {b.status === "REFUND_PENDING" &&
+                      b.cancelledByAdmin && (
+
+                        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm space-y-2">
+
+                          <p className="font-bold text-red-700">
+                            ❌ Booking Cancelled by TourGen
+                          </p>
+
+                          <p>
+                            <strong>Reason:</strong>{" "}
+                            {b.adminCancellationReason}
+                          </p>
+
+                          <p className="text-gray-600">
+                            We sincerely apologize for the inconvenience.
+                            Your full refund has been initiated and is being processed.
+                          </p>
+
+                        </div>
+
+                      )}
+
                     {b.status === "REFUND_PENDING" && (
                       <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm space-y-1">
 
                         <p className="font-semibold text-yellow-800">
-                          Refund Request Submitted
+
+                          {b.cancelledByAdmin
+                            ? "Full Refund Initiated"
+                            : "Refund Request Submitted"}
+
                         </p>
 
                         <p>
@@ -844,7 +872,11 @@ export default function MyRequestsPage() {
                         </p>
 
                         <p className="text-gray-600">
-                          Your request is currently under review by our team.
+
+                          {b.cancelledByAdmin
+                            ? "We cancelled this booking due to operational reasons. Your refund is being processed."
+                            : "Your cancellation request is currently under review by our team."}
+
                         </p>
 
                       </div>
@@ -936,8 +968,8 @@ export default function MyRequestsPage() {
                             [
                               "CONFIRMED",
                               "COMPLETED",
-                              "REFUND_PENDING",
-                              "REFUNDED",
+                              // "REFUND_PENDING",
+                              // "REFUNDED",
                             ].includes(b.status)
                               ? "text-green-600 font-medium"
                               : "text-gray-400"
@@ -951,6 +983,33 @@ export default function MyRequestsPage() {
                             : "⏳"}{" "}
                           Booking Confirmed
                         </div>
+
+                        {b.cancelledByAdmin && (
+
+                          <div className="text-red-600 font-medium">
+                            ❌ Booking Cancelled by TourGen
+                          </div>
+
+                        )}
+
+                        {b.cancelledByAdmin &&
+                        ["REFUND_PENDING", "REFUNDED"].includes(b.status) && (
+
+                          <div
+                            className={
+                              b.status === "REFUNDED"
+                                ? "text-green-600 font-medium"
+                                : "text-yellow-600 font-medium"
+                            }
+                          >
+
+                            {b.status === "REFUNDED"
+                              ? "✅ Full Refund Completed"
+                              : "💰 Full Refund In Progress"}
+
+                          </div>
+
+                        )}
 
                         <div
                           className={
