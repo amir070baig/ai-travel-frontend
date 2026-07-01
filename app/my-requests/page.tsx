@@ -768,6 +768,30 @@ export default function MyRequestsPage() {
                         </p>
 
                       </div>
+
+                      <div className="mt-5 rounded-2xl border border-blue-200 bg-blue-50 p-5">
+
+                        <h3 className="font-bold text-blue-900 mb-3">
+                          💳 Payment Schedule
+                        </h3>
+
+                        <ul className="space-y-2 text-sm text-blue-800">
+
+                          <li>
+                            ✅ Pay <strong>30% today</strong> to secure your booking.
+                          </li>
+
+                          <li>
+                            💰 The remaining <strong>70%</strong> can be paid when your trip begins or at any time during your tour.
+                          </li>
+
+                          <li>
+                            🤝 No full payment is required before your travel date.
+                          </li>
+
+                        </ul>
+
+                      </div>
                     </div>
                   </div>
                   
