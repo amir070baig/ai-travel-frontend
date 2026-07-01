@@ -1126,7 +1126,7 @@ export default function MyRequestsPage() {
 
                     {(
                       b.status === "PENDING_PAYMENT" ||
-                      b.status === "CONFIRMED" ||
+                      (b.status === "CONFIRMED" && !b.supplierBookingStarted) ||
                       b.status === "COMPLETED"
                     ) && (
                       <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-sm text-blue-800">
@@ -1141,7 +1141,7 @@ export default function MyRequestsPage() {
 
                       {b.status === "CONFIRMED" &&
                         b.supplierBookingStarted &&
-                        "Travel arrangements are currently being finalized."}
+                        "Travel arrangements have already started. Our operations team is currently coordinating your guide, transport and other travel services."}
 
                       {b.status === "COMPLETED" &&
                         "Your trip has been completed. Thank you for choosing TourGen."}
