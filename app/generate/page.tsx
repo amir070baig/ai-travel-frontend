@@ -279,6 +279,70 @@ export default function GeneratePage() {
 
   };
 
+
+  const handleRequestThisTour = async () => {
+
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    try {
+
+      // Save itinerary first
+      const savedItinerary = await saveItinerary();
+
+      if (!savedItinerary) {
+        return;
+      }
+
+      // Submit request
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/requests`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            itineraryId: savedItinerary.id,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+
+        alert(
+          data.message ||
+          "Failed to submit request."
+        );
+
+        return;
+
+      }
+
+      alert(
+        "Your itinerary has been submitted for expert review. ✅"
+      );
+
+      router.push("/my-requests");
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert("Something went wrong.");
+
+    } finally {
+
+      setIsSubmitting(false);
+
+    }
+
+  };
+
   const handlePayment = async () => {
     alert("Our team will contact you for payment via WhatsApp 📞");
   };
@@ -662,6 +726,17 @@ export default function GeneratePage() {
               >
                 Discuss on WhatsApp
               </a>
+
+              {/* Request itinerary */}
+              <button
+                onClick={handleRequestThisTour}
+                disabled={isSubmitting}
+                className="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 hover:opacity-90 text-white py-3 rounded-xl font-semibold shadow-lg disabled:opacity-50"
+              >
+                {isSubmitting
+                  ? "Submitting..."
+                  : "Request This Tour"}
+              </button>
 
               {/* SAVE */}
               <button
