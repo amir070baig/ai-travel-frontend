@@ -745,6 +745,12 @@ export default function MyRequestsPage() {
                             }
                           </p>
 
+                          <p className="mt-2 text-sm text-gray-600">
+
+                            💳 The remaining balance can be paid when your trip begins or anytime during your tour.
+
+                            </p>
+
                         </div>
                       )}
                       <div className="mt-4 bg-blue-50 rounded-2xl p-4">

@@ -669,6 +669,37 @@ export default function TourDetailsPage({
               </p>
             </div>
           )}
+
+          
+          {/* Payment Schedule */}
+
+          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 max-w-3xl mx-auto">
+
+            <h3 className="text-lg font-bold text-blue-900 mb-4">
+              💳 Payment Schedule
+            </h3>
+
+            <div className="space-y-3 text-sm text-blue-800">
+
+              <p>
+                ✅ Reserve this tour with a
+                <strong> 30% advance payment</strong>.
+              </p>
+
+              <p>
+                💰 The remaining
+                <strong> 70%</strong> can be paid
+                <strong> when your tour begins</strong>
+                or at any convenient time during your tour.
+              </p>
+
+              <p>
+                🤝 No full payment is required before your travel date.
+              </p>
+
+            </div>
+
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
             <div>

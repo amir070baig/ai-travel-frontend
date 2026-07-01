@@ -87,6 +87,18 @@ export default function HomePage() {
             ✨ AI Powered Travel Planning
           </div>
 
+          <div className="flex flex-wrap justify-center gap-3 mt-5">
+
+            <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
+              💳 Only 30% Advance Required
+            </span>
+
+            <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+              🤝 Pay the Rest During Your Tour
+            </span>
+
+          </div>
+
           <h1 className="max-w-4xl mx-auto text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-tight text-gray-900">
 
             Plan Luxury
@@ -187,6 +199,165 @@ export default function HomePage() {
 
       </div>
 
+      {/* Payment Banner */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-10">
+
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-8 text-white shadow-xl">
+
+          <div className="text-center">
+
+            <h2 className="text-2xl sm:text-3xl font-black">
+              💳 Book with Confidence
+            </h2>
+
+            <p className="mt-4 text-blue-100 text-lg leading-relaxed max-w-3xl mx-auto">
+              Reserve your tour today with only
+              <strong> 30% advance payment</strong>.
+              Pay the remaining
+              <strong> 70%</strong>
+              when your tour begins or anytime during your journey.
+            </p>
+
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+
+              <div className="bg-white/10 rounded-2xl p-5">
+
+                <div className="text-3xl mb-3">
+                  💳
+                </div>
+
+                <h3 className="font-bold">
+                  Only 30% Today
+                </h3>
+
+                <p className="text-sm text-blue-100 mt-2">
+                  Secure your booking with a small advance payment.
+                </p>
+
+              </div>
+
+              <div className="bg-white/10 rounded-2xl p-5">
+
+                <div className="text-3xl mb-3">
+                  🤝
+                </div>
+
+                <h3 className="font-bold">
+                  Pay Later
+                </h3>
+
+                <p className="text-sm text-blue-100 mt-2">
+                  Pay the remaining balance when your tour begins.
+                </p>
+
+              </div>
+
+              <div className="bg-white/10 rounded-2xl p-5">
+
+                <div className="text-3xl mb-3">
+                  🔒
+                </div>
+
+                <h3 className="font-bold">
+                  Secure Booking
+                </h3>
+
+                <p className="text-sm text-blue-100 mt-2">
+                  Transparent pricing with secure online payments.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* Why book with us */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+
+        <div className="text-center mb-14">
+
+          <p className="text-blue-600 font-semibold">
+            Why Travelers Choose TourGen
+          </p>
+
+          <h2 className="text-4xl font-black mt-3">
+            Book With Confidence
+          </h2>
+
+          <p className="text-gray-600 mt-4 max-w-3xl mx-auto">
+            We combine local expertise, flexible payments and personalized support
+            to make your Agra experience simple and stress-free.
+          </p>
+
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <div className="bg-white rounded-3xl border p-6 shadow-sm">
+
+            <div className="text-4xl mb-4">💳</div>
+
+            <h3 className="font-bold text-lg">
+              Only 30% to Reserve
+            </h3>
+
+            <p className="text-gray-600 mt-3 text-sm">
+              Secure your booking today and pay the remaining balance when your tour begins.
+            </p>
+
+          </div>
+
+          <div className="bg-white rounded-3xl border p-6 shadow-sm">
+
+            <div className="text-4xl mb-4">🤖</div>
+
+            <h3 className="font-bold text-lg">
+              AI + Local Experts
+            </h3>
+
+            <p className="text-gray-600 mt-3 text-sm">
+              AI creates your itinerary, then our local travel specialists personally review it.
+            </p>
+
+          </div>
+
+          <div className="bg-white rounded-3xl border p-6 shadow-sm">
+
+            <div className="text-4xl mb-4">⭐</div>
+
+            <h3 className="font-bold text-lg">
+              Private Experiences
+            </h3>
+
+            <p className="text-gray-600 mt-3 text-sm">
+              Carefully selected tours with experienced local guides and flexible scheduling.
+            </p>
+
+          </div>
+
+          <div className="bg-white rounded-3xl border p-6 shadow-sm">
+
+            <div className="text-4xl mb-4">📱</div>
+
+            <h3 className="font-bold text-lg">
+              Real Human Support
+            </h3>
+
+            <p className="text-gray-600 mt-3 text-sm">
+              Need help? Chat with us on WhatsApp before, during and after your trip.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
       {/* TOURS PREVIEW */}
       <div className="max-w-6xl mx-auto py-20 lg:py-24 px-4 sm:px-6">
         <h2 className="text-3xl md:text-4xl font-black mb-10 text-center text-gray-900">
@@ -214,7 +385,7 @@ export default function HomePage() {
                     </span>
 
                     <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-                      Instant Confirmation
+                      💳 Only 30% to Reserve
                     </span>
 
                   </div>
