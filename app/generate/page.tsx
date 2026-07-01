@@ -212,6 +212,73 @@ export default function GeneratePage() {
     }
   };
 
+  
+
+  const saveItinerary = async () => {
+
+    const authRes = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
+      {
+        credentials: "include",
+      }
+    );
+
+    if (!authRes.ok) {
+
+      sessionStorage.setItem(
+        "pendingItinerary",
+        JSON.stringify({
+          contentJson: itinerary.contentJson,
+          days: itinerary.days,
+          budget: itinerary.budget,
+          groupSize: itinerary.groupSize,
+          travelStyle: itinerary.travelStyle,
+          tripType: itinerary.tripType,
+          interests: itinerary.interests,
+        })
+      );
+
+      alert("Please login to continue.");
+
+      router.push("/login?redirect=/generate");
+
+      return null;
+    }
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/itineraries/save`,
+      {
+        credentials: "include",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: itinerary.contentJson,
+          days: Number(itinerary.days),
+          budget: itinerary.budget,
+          groupSize: Number(itinerary.groupSize),
+          travelStyle: itinerary.travelStyle,
+          tripType: itinerary.tripType,
+          interests: itinerary.interests,
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+
+      throw new Error(
+        data.message || "Save failed"
+      );
+
+    }
+
+    return data;
+
+  };
+
   const handlePayment = async () => {
     alert("Our team will contact you for payment via WhatsApp 📞");
   };
@@ -604,69 +671,29 @@ export default function GeneratePage() {
                   setIsSubmitting(true);
                   try {
                     // First check if user is logged in
-                    const authRes = await fetch(
-                      `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
-                      {
-                        credentials: "include",
+                    const savedItinerary = await saveItinerary();
+
+                      if (!savedItinerary) {
+                        return;
                       }
-                    );
 
-                    if (!authRes.ok) {
+                      setSaved(true);
 
-                      sessionStorage.setItem(
-                        "pendingItinerary",
-                        JSON.stringify({
-                          contentJson: itinerary.contentJson,
-                          days: itinerary.days,
-                          budget: itinerary.budget,
-                          groupSize: itinerary.groupSize,
-                          travelStyle: itinerary.travelStyle,
-                          tripType: itinerary.tripType,
-                          interests: itinerary.interests,
-                        })
-                      );
+                      setMessage("Itinerary saved successfully ✅");
 
-                      alert("Please login to save your itinerary.");
+                      window.location.href = "/my-requests";
 
-                      router.push("/login?redirect=/generate");
+                    // console.log("SAVE RESPONSE", data);
+                    // console.log("SAVE STATUS", res.status);
 
-                      return;
-                    }
+                    // if (!res.ok) {
+                    //   alert(data.message || "Save failed");
+                    //   return;
+                    // }
 
-                    // User is authenticated, now save
-                    const res = await fetch(
-                      `${process.env.NEXT_PUBLIC_API_URL}/itineraries/save`,
-                      {
-                        credentials: "include",
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                          content: itinerary.contentJson,
-                          days: Number(itinerary.days),
-                          budget: itinerary.budget,
-                          groupSize: Number(itinerary.groupSize),
-                          travelStyle: itinerary.travelStyle,
-                          tripType: itinerary.tripType,
-                          interests: itinerary.interests,
-                        }),
-                      }
-                    );
-
-                    const data = await res.json();
-
-                    console.log("SAVE RESPONSE", data);
-                    console.log("SAVE STATUS", res.status);
-
-                    if (!res.ok) {
-                      alert(data.message || "Save failed");
-                      return;
-                    }
-
-                    setSaved(true);
-                    setMessage("Itinerary saved successfully ✅");
-                    window.location.href = "/my-requests"; // Redirect to My Requests page
+                    // setSaved(true);
+                    // setMessage("Itinerary saved successfully ✅");
+                    // window.location.href = "/my-requests"; // Redirect to My Requests page
                     
 
                   } catch (err) {
