@@ -22,6 +22,7 @@ export default function GeneratePage() {
   const [interests, setInterests] = useState("");
   const itineraryRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [settings, setSettings] = useState<any>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const router = useRouter();
   const itineraryTitle = itinerary
@@ -29,11 +30,15 @@ export default function GeneratePage() {
   : "Agra Journey";
 
   useEffect(() => {
+
+    fetchSettings();
+
     const pending = sessionStorage.getItem("pendingItinerary");
 
     if (!pending) return;
 
     try {
+
       const restored = JSON.parse(pending);
 
       setItinerary(restored);
@@ -41,9 +46,13 @@ export default function GeneratePage() {
       setMessage("");
 
       sessionStorage.removeItem("pendingItinerary");
+
     } catch (err) {
+
       console.error(err);
+
     }
+
   }, []);
 
 
@@ -184,6 +193,25 @@ export default function GeneratePage() {
     }
   };
 
+  const fetchSettings = async () => {
+    try {
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/settings`,
+        {
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+
+      setSettings(data);
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handlePayment = async () => {
     alert("Our team will contact you for payment via WhatsApp 📞");
   };
@@ -234,6 +262,61 @@ export default function GeneratePage() {
 
     alert("Revision Accepted ✅");
   };
+
+  if (
+    settings &&
+    !settings.aiBookingsEnabled
+  ) {
+
+    return (
+
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center p-6">
+
+        <div className="max-w-xl bg-white rounded-3xl shadow-xl border p-10 text-center space-y-6">
+
+          <div className="text-6xl">
+            🤖
+          </div>
+
+          <h1 className="text-3xl font-bold text-gray-900">
+            AI Concierge Temporarily Unavailable
+          </h1>
+
+          <p className="text-gray-600 leading-relaxed">
+            Our AI Concierge is temporarily unavailable while we prepare existing travel plans.
+          </p>
+
+          <p className="text-gray-600 leading-relaxed">
+            You can still explore our curated Agra tours or contact us directly on WhatsApp.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+            <button
+              onClick={() => router.push("/tours")}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold"
+            >
+              Browse Tours
+            </button>
+
+            <a
+              href="https://wa.me/917599921173"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-gray-300 px-6 py-3 rounded-xl font-semibold text-center"
+            >
+              Contact on WhatsApp
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    );
+
+  } 
 
   return (
 

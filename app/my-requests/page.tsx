@@ -948,20 +948,7 @@ export default function MyRequestsPage() {
                           Advance Payment Received
                         </div>
 
-                        {!b.tourId && (
-                          <div
-                            className={
-                              b.supplierBookingStarted
-                                ? "text-green-600 font-medium"
-                                : "text-gray-400"
-                            }
-                          >
-                            {b.supplierBookingStarted
-                              ? "✅"
-                              : "⏳"}{" "}
-                            Travel Arrangements Started
-                          </div>
-                        )}
+                        
 
                         <div
                           className={
@@ -983,6 +970,21 @@ export default function MyRequestsPage() {
                             : "⏳"}{" "}
                           Booking Confirmed
                         </div>
+
+                        {!b.tourId && (
+                          <div
+                            className={
+                              b.supplierBookingStarted
+                                ? "text-green-600 font-medium"
+                                : "text-gray-400"
+                            }
+                          >
+                            {b.supplierBookingStarted
+                              ? "✅"
+                              : "⏳"}{" "}
+                            Travel Arrangements Started
+                          </div>
+                        )}
 
                         {b.cancelledByAdmin && (
 
@@ -1011,18 +1013,22 @@ export default function MyRequestsPage() {
 
                         )}
 
-                        <div
-                          className={
-                            b.status === "COMPLETED"
-                              ? "text-green-600 font-medium"
-                              : "text-gray-400"
-                          }
-                        >
-                          {b.status === "COMPLETED"
-                            ? "✅"
-                            : "⏳"}{" "}
-                          Trip Completed
-                        </div>
+                        {!b.cancelledByAdmin && (
+
+                          <div
+                            className={
+                              b.status === "COMPLETED"
+                                ? "text-green-600 font-medium"
+                                : "text-gray-400"
+                            }
+                          >
+                            {b.status === "COMPLETED"
+                              ? "✅"
+                              : "⏳"}{" "}
+                            Trip Completed
+                          </div>
+
+                          )}
 
                         {/* AI TOUR REVIEW */}
                         {!b.tourId &&
@@ -1162,7 +1168,7 @@ export default function MyRequestsPage() {
                       <div className="bg-gray-100 text-gray-700 p-3 rounded-xl text-sm">
                         {b.tourId
                           ? "Refund window has closed for this booking."
-                          : "Supplier bookings have already been initiated. Travel arrangements are currently being finalized and this booking is no longer eligible for cancellation or refund under our policy."}
+                          : "Travel arrangements have already started. Your guide, transport and other services are currently being arranged. This booking is no longer eligible for cancellation or refund under our policy."}
                       </div>
                     )}
                   </div>
