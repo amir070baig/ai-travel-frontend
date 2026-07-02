@@ -139,6 +139,12 @@ export default function TourDetailsPage({
             timeSlot,
             travelers,
             guideLanguage: language,
+            fullName,
+            email,
+            country,
+            whatsapp,
+            hotelPickup: hotelName,
+            specialRequests,
             advanceAmount:
               tour?.price
                 ? Math.floor(
