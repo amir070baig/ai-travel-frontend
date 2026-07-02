@@ -197,17 +197,19 @@ export default function GeneratePage() {
     try {
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/settings`,
-        {
-          credentials: "include",
-        }
-      );
+      `${process.env.NEXT_PUBLIC_API_URL}/settings`,
+      {
+        credentials: "include",
+      }
+    );
 
-      const data = await res.json();
-      console.log("SETTINGS API:", data);
+    if (!res.ok) {
+      throw new Error("Failed to load settings");
+    }
 
-      setSettings(data);
-      console.log("STATE BEFORE UPDATE:", settings);
+    const data = await res.json();
+
+    setSettings(data);
 
     } catch (err) {
       console.error(err);
