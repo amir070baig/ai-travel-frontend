@@ -528,7 +528,7 @@ export default function MyRequestsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 py-16 lg:py-20 px-4">
+    <div className="min-h-screen bg-linear-to-brm-slate-50 via-white to-blue-50 py-16 lg:py-20 px-4">
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center border-b border-gray-200 pb-8">
 
@@ -940,20 +940,20 @@ export default function MyRequestsPage() {
                         onClick={() => handlePayment(b.id)}
                         // Disables the button if this specific booking or any other payment is running
                         disabled={isPaying !== null}
-                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100"
+                        className="w-full bg-linear-to-rm-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100"
                       >
                         {isPaying === b.id ? "Processing..." : "Pay Now"}
                       </button>
                     )}
                     {b.status === "PENDING_PAYMENT" && (
-                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-3xl p-5 text-sm text-blue-900">
+                      <div className="bg-linear-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-3xl p-5 text-sm text-blue-900">
                         A small advance payment is required to reserve your personalized itinerary planning,
                         consultation, and travel coordination services.
                       </div>
                     )}
 
 
-                    <div className="bg-gradient-to-br from-gray-50 to-white border rounded-3xl p-5 space-y-4">
+                    <div className="bg-linear-to-br from-gray-50 to-white border rounded-3xl p-5 space-y-4">
 
                       <h4 className="text-lg font-bold text-gray-900">
                         📍 Booking Progress
@@ -1266,7 +1266,7 @@ export default function MyRequestsPage() {
 
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
 
-                    <h3 className="text-xl font-bold text-gray-900 break-words">
+                    <h3 className="text-xl font-bold text-gray-900 wrap-break-word">
                       {trip.title || trip.city}
                     </h3>
 
@@ -1292,7 +1292,7 @@ export default function MyRequestsPage() {
 
                         <div
                           key={i}
-                          className="bg-gradient-to-r from-gray-50 to-white border rounded-2xl p-4 overflow-hidden"
+                          className="bg-linear-to-r from-gray-50 to-white border rounded-2xl p-4 overflow-hidden"
                         >
 
                           <p
@@ -1364,7 +1364,7 @@ export default function MyRequestsPage() {
                           setSubmittingRequestId(null);
                         }
                       }}
-                      className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:scale-[1.02] transition-all text-white py-3 rounded-2xl font-semibold shadow-md disabled:bg-gray-400"
+                      className="flex-1 bg-linear-to-r from-green-600 to-emerald-600 hover:scale-[1.02] transition-all text-white py-3 rounded-2xl font-semibold shadow-md disabled:bg-gray-400"
                     >
                       {submittingRequestId === trip.id
                         ? "Submitting..."
@@ -1444,7 +1444,7 @@ export default function MyRequestsPage() {
                     </div>
 
                     {req.finalPrice && (
-                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-3xl p-5">
+                      <div className="bg-linear-to-r from-green-50 to-emerald-50 border border-green-200 rounded-3xl p-5">
 
                         <p className="font-semibold text-green-700">
                           Personalized Package Ready
@@ -1530,7 +1530,7 @@ export default function MyRequestsPage() {
                               return (
                                 <div
                                   key={msg.id}
-                                  className={`p-4 rounded-2xl text-sm break-words max-w-[85%] ${msg.senderType === "ADMIN" ? "bg-blue-100 mr-auto" : "bg-green-100 ml-auto"}`}
+                                  className={`p-4 rounded-2xl text-sm wrap-break-word max-w-[85%] ${msg.senderType === "ADMIN" ? "bg-blue-100 mr-auto" : "bg-green-100 ml-auto"}`}
                                 >
                                   <span className="font-semibold">
                                     {senderLabel}
@@ -1567,7 +1567,7 @@ export default function MyRequestsPage() {
                             onClick={() =>
                               handleSendMessage(req.id)
                             }
-                            className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold px-6 py-3 rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all disabled:bg-gray-400"
+                            className="w-full sm:w-auto bg-linear-to-r from-blue-600 to-indigo-600 text-white font-semibold px-6 py-3 rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all disabled:bg-gray-400"
                           >
                             {sendingMessageId === req.id
                               ? "Sending..."

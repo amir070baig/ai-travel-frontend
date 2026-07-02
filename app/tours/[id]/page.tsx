@@ -20,6 +20,12 @@ export default function TourDetailsPage({
   const [timeSlot, setTimeSlot] = useState("Sunrise");
   const [travelers, setTravelers] = useState(2);
   const [language, setLanguage] = useState("English");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [hotelName, setHotelName] = useState("");
+  const [specialRequests, setSpecialRequests] = useState("");
   const [bookingStatus, setBookingStatus] = useState("");
 
 
@@ -794,6 +800,106 @@ export default function TourDetailsPage({
                 <option value="Chinese">🇨🇳 Chinese</option>
               </select>
             </div>
+          </div>
+
+          <div className="max-w-3xl mx-auto bg-gray-50 border rounded-2xl p-6 mt-8">
+
+            <h3 className="text-xl font-bold mb-5">
+              Lead Traveler Information
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              <div>
+                <label className="block text-sm font-semibold mb-1">
+                  Full Name *
+                </label>
+
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="w-full border p-3 rounded-xl"
+                  placeholder="John Smith"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-1">
+                  Email Address *
+                </label>
+
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full border p-3 rounded-xl"
+                  placeholder="john@email.com"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-1">
+                  Country *
+                </label>
+
+                <input
+                  type="text"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  className="w-full border p-3 rounded-xl"
+                  placeholder="United Kingdom"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-1">
+                  WhatsApp Number (Optional)
+                </label>
+
+                <input
+                  type="text"
+                  value={whatsapp}
+                  onChange={(e) => setWhatsapp(e.target.value)}
+                  className="w-full border p-3 rounded-xl"
+                  placeholder="+44 7123456789"
+                />
+              </div>
+
+            </div>
+
+            <div className="mt-4">
+
+              <label className="block text-sm font-semibold mb-1">
+                Hotel / Pickup Location (Optional)
+              </label>
+
+              <input
+                type="text"
+                value={hotelName}
+                onChange={(e) => setHotelName(e.target.value)}
+                className="w-full border p-3 rounded-xl"
+                placeholder="Hotel name or pickup address"
+              />
+
+            </div>
+
+            <div className="mt-4">
+
+              <label className="block text-sm font-semibold mb-1">
+                Special Requests (Optional)
+              </label>
+
+              <textarea
+                value={specialRequests}
+                onChange={(e) => setSpecialRequests(e.target.value)}
+                className="w-full border p-3 rounded-xl"
+                rows={4}
+                placeholder="Dietary requirements, accessibility needs, child seat, etc."
+              />
+
+            </div>
+
           </div>
 
           <div className="flex flex-wrap justify-center gap-6 border-t border-gray-200 pt-6 mt-6 text-sm text-gray-600">
