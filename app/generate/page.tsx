@@ -204,8 +204,10 @@ export default function GeneratePage() {
       );
 
       const data = await res.json();
+      console.log("SETTINGS API:", data);
 
       setSettings(data);
+      console.log("STATE BEFORE UPDATE:", settings);
 
     } catch (err) {
       console.error(err);
@@ -394,14 +396,16 @@ export default function GeneratePage() {
     alert("Revision Accepted ✅");
   };
 
+  console.log("CURRENT SETTINGS:", settings);
+
   if (
     settings &&
-    !settings.aiConciergeEnabled
+    !settings.aiBookingsEnabled
   ) {
 
     return (
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center p-6">
 
         <div className="max-w-xl bg-white rounded-3xl shadow-xl border p-10 text-center space-y-6">
 
@@ -731,7 +735,7 @@ export default function GeneratePage() {
               <button
                 onClick={handleRequestThisTour}
                 disabled={isSubmitting}
-                className="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 hover:opacity-90 text-white py-3 rounded-xl font-semibold shadow-lg disabled:opacity-50"
+                className="flex-1 bg-linear-to-r from-emerald-600 to-green-600 hover:opacity-90 text-white py-3 rounded-xl font-semibold shadow-lg disabled:opacity-50"
               >
                 {isSubmitting
                   ? "Submitting..."
@@ -756,7 +760,7 @@ export default function GeneratePage() {
 
                       setMessage("Itinerary saved successfully ✅");
 
-                      window.location.href = "/my-requests";
+                      router.push("/my-requests");
 
                     // console.log("SAVE RESPONSE", data);
                     // console.log("SAVE STATUS", res.status);
