@@ -986,7 +986,7 @@ export default function HomePage() {
 
             <div>
 
-              <h3 className="text-2xl font-black text-gray-900">
+              <h3 className="text-3xl font-extrabold tracking-tight text-white">
                 TourGen
               </h3>
 
