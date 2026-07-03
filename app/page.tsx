@@ -150,7 +150,7 @@ export default function HomePage() {
 
           </div>
 
-          <div className="flex flex-col sm:flex-row w-full sm:w-auto justify-center gap-4 pt-4">
+          {/* <div className="flex flex-col sm:flex-row w-full sm:w-auto justify-center gap-4 pt-4">
 
             <a
               href="/generate"
@@ -166,7 +166,7 @@ export default function HomePage() {
               Explore Tours
             </a>
 
-          </div>
+          </div> */}
 
         </div>
 
@@ -179,42 +179,42 @@ export default function HomePage() {
           <div className="bg-white rounded-3xl border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
             <p className="text-5xl mb-5">🧠</p>
             <h3 className="font-bold text-lg text-gray-900">
-              <p className="text-gray-600 text-sm leading-relaxed mt-3">
-                🤖AI-Powered Itineraries
-                Personalized travel plans based on your interests, budget and travel style.
-              </p>
+              🤖 AI-Powered Itineraries
             </h3>
+            <p className="text-gray-600 text-sm leading-relaxed mt-3">
+                Personalized travel plans based on your interests, budget and travel style.
+            </p>
           </div>
 
           <div className="bg-white rounded-3xl border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
             <p className="text-5xl mb-5">🏨</p>
             <h3 className="font-bold text-lg text-gray-900">
-              <p className="text-gray-600 text-sm leading-relaxed mt-3">
-                👨‍💼Local Travel Experts
-                Every itinerary is reviewed by experienced Agra travel specialists.
-              </p>
+              🏨 Hotel Pickup & Drop
             </h3>
+            <p className="text-gray-600 text-sm leading-relaxed mt-3">
+                Every itinerary is reviewed by experienced Agra travel specialists.
+            </p>
           </div>
 
           <div className="bg-white rounded-3xl border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
             <p className="text-5xl mb-5">🧳</p>
             <h3 className="font-bold text-lg text-gray-900">
-              <p className="text-gray-600 text-sm leading-relaxed mt-3">
-                📞Expert Support
+              📞Expert Support
+            </h3>
+            <p className="text-gray-600 text-sm leading-relaxed mt-3">
                 💬WhatsApp Assistance
                 Need help? Chat with our team before, during and after your trip.
               </p>
-            </h3>
           </div>
 
           <div className="bg-white rounded-3xl border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
             <p className="text-5xl mb-5">📍</p>
             <h3 className="font-bold text-lg text-gray-900">
-              <p className="text-gray-600 text-sm leading-relaxed mt-3">
-                🕌Best-Selling Agra Tours
+              🕌Best-Selling Agra Tours
+            </h3>
+            <p className="text-gray-600 text-sm leading-relaxed mt-3">
                 Private tours designed for unforgettable Taj Mahal experiences.
               </p>
-            </h3>
           </div>
 
         </div>
@@ -285,7 +285,7 @@ export default function HomePage() {
 
           {/* AI Planner */}
 
-          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl text-white shadow-xl p-6 sm:p-8 hover:-translate-y-1 hover:shadow-2xl transition-all">
+          <div className="bg-linear-to-br from-blue-600 to-indigo-700 rounded-3xl text-white shadow-xl p-6 sm:p-8 hover:-translate-y-1 hover:shadow-2xl transition-all">
 
             <div className="text-5xl mb-6">
               🤖
@@ -500,7 +500,7 @@ export default function HomePage() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
 
-        <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl overflow-hidden">
+        <div className="bg-linear-to-r from-slate-900 to-slate-800 rounded-3xl overflow-hidden">
 
           <div className="grid lg:grid-cols-2 gap-10 items-center p-10 lg:p-16">
 
@@ -545,7 +545,7 @@ export default function HomePage() {
                 </div>
 
                 <h3 className="text-white font-bold mt-3">
-                  AI Planning
+                  AI + Human Planning
                 </h3>
 
               </div>
@@ -1010,21 +1010,21 @@ export default function HomePage() {
 
                 <a
                   href="/agra-tours"
-                  className="text-gray-600 hover:text-white transition"
+                  className="text-gray-400 hover:text-white transition"
                 >
                   Agra Tours
                 </a>
 
                 <a
                   href="/tours"
-                  className="text-gray-600 hover:text-white transition"
+                  className="text-gray-400 hover:text-white transition"
                 >
                   Taj Mahal Experiences
                 </a>
 
                 <a
                   href="/generate"
-                  className="text-gray-600 hover:text-blue-600"
+                  className="text-gray-400 hover:text-white transition"
                 >
                   Luxury Agra Trips
                 </a>
