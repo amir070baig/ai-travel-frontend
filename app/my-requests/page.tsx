@@ -173,6 +173,20 @@ export default function MyRequestsPage() {
     setIsPaying(bookingId);
 
     try {
+      if (!fullNames[bookingId]?.trim()) {
+        alert("Please enter the primary traveler's full name.");
+        return;
+      }
+
+      if (!emails[bookingId]?.trim()) {
+        alert("Please enter the primary traveler's email address.");
+        return;
+      }
+
+      if (!countries[bookingId]?.trim()) {
+        alert("Please enter the traveler's country.");
+        return;
+      }
       // Send the selected date to the backend so it gets saved!
       await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/bookings/${bookingId}/travel-date`,
@@ -184,6 +198,13 @@ export default function MyRequestsPage() {
           },
           body: JSON.stringify({
             travelDate: selectedDate,
+
+            fullName: fullNames[bookingId],
+            email: emails[bookingId],
+            country: countries[bookingId],
+            whatsapp: whatsapps[bookingId],
+            hotelPickup: hotelPickups[bookingId],
+            specialRequests: specialRequests[bookingId],
           }),
         }
       );
