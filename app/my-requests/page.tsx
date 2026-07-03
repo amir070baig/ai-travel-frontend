@@ -1087,7 +1087,7 @@ export default function MyRequestsPage() {
                         onClick={() => handlePayment(b.id)}
                         // Disables the button if this specific booking or any other payment is running
                         disabled={isPaying !== null}
-                        className="w-full bg-linear-to-rm-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100"
+                        className="w-full bg-linear-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100"
                       >
                         {isPaying === b.id ? "Processing..." : "Pay Now"}
                       </button>
