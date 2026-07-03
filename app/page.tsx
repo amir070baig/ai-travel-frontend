@@ -79,7 +79,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50">
 
       {/* HERO */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20 lg:py-24 sm:py-24">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20 lg:py-24">
 
         <div className="text-center space-y-6">
 
@@ -99,7 +99,7 @@ export default function HomePage() {
 
           </div>
 
-          <h1 className="max-w-5xl mx-auto text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-tight text-gray-900">
+          <h1 className="max-w-5xl mx-auto text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-tight text-white">
 
             Book the Best
             <span className="block text-blue-600">
@@ -150,7 +150,7 @@ export default function HomePage() {
 
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row w-full sm:w-auto justify-center gap-4 pt-4">
 
             <a
               href="/generate"
@@ -176,32 +176,45 @@ export default function HomePage() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-          <div className="bg-white rounded-2xl p-5 border shadow-sm text-center">
-            <p className="text-2xl mb-2">🧠</p>
-            <p className="font-semibold text-sm">
-              AI Trip Planning
-            </p>
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+            <p className="text-5xl mb-5">🧠</p>
+            <h3 className="font-bold text-lg text-gray-900">
+              <p className="text-gray-600 text-sm leading-relaxed mt-3">
+                🤖AI-Powered Itineraries
+                Personalized travel plans based on your interests, budget and travel style.
+              </p>
+            </h3>
           </div>
 
-          <div className="bg-white rounded-2xl p-5 border shadow-sm text-center">
-            <p className="text-2xl mb-2">🏨</p>
-            <p className="font-semibold text-sm">
-              Hotel Suggestions
-            </p>
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+            <p className="text-5xl mb-5">🏨</p>
+            <h3 className="font-bold text-lg text-gray-900">
+              <p className="text-gray-600 text-sm leading-relaxed mt-3">
+                👨‍💼Local Travel Experts
+                Every itinerary is reviewed by experienced Agra travel specialists.
+              </p>
+            </h3>
           </div>
 
-          <div className="bg-white rounded-2xl p-5 border shadow-sm text-center">
-            <p className="text-2xl mb-2">🧳</p>
-            <p className="font-semibold text-sm">
-              Expert Support
-            </p>
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+            <p className="text-5xl mb-5">🧳</p>
+            <h3 className="font-bold text-lg text-gray-900">
+              <p className="text-gray-600 text-sm leading-relaxed mt-3">
+                📞Expert Support
+                💬WhatsApp Assistance
+                Need help? Chat with our team before, during and after your trip.
+              </p>
+            </h3>
           </div>
 
-          <div className="bg-white rounded-2xl p-5 border shadow-sm text-center">
-            <p className="text-2xl mb-2">📍</p>
-            <p className="font-semibold text-sm">
-              Curated Tours
-            </p>
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+            <p className="text-5xl mb-5">📍</p>
+            <h3 className="font-bold text-lg text-gray-900">
+              <p className="text-gray-600 text-sm leading-relaxed mt-3">
+                🕌Best-Selling Agra Tours
+                Private tours designed for unforgettable Taj Mahal experiences.
+              </p>
+            </h3>
           </div>
 
         </div>
@@ -233,7 +246,7 @@ export default function HomePage() {
 
           {/* Ready Made Tours */}
 
-          <div className="bg-white rounded-3xl border shadow-lg p-8 hover:-translate-y-1 hover:shadow-2xl transition-all">
+          <div className="bg-white rounded-3xl border shadow-lg p-6 sm:p-8 hover:-translate-y-1 hover:shadow-2xl transition-all">
 
             <div className="text-5xl mb-6">
               🕌
@@ -272,7 +285,7 @@ export default function HomePage() {
 
           {/* AI Planner */}
 
-          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl text-white shadow-xl p-8 hover:-translate-y-1 hover:shadow-2xl transition-all">
+          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl text-white shadow-xl p-6 sm:p-8 hover:-translate-y-1 hover:shadow-2xl transition-all">
 
             <div className="text-5xl mb-6">
               🤖
@@ -313,8 +326,351 @@ export default function HomePage() {
 
       </div>
 
+      {/* HOW AI WORKS */}
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+
+        <div className="text-center mb-14">
+
+          <p className="text-blue-600 font-semibold">
+            AI Trip Planning Made Simple
+          </p>
+
+          <h2 className="text-4xl font-black mt-3">
+            How AI + Local Experts Plan Your Trip
+          </h2>
+
+          <p className="text-gray-600 mt-4 max-w-3xl mx-auto">
+            We combine artificial intelligence with local travel expertise to create
+            personalized journeys that match your budget and travel style.
+          </p>
+
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <div className="bg-white rounded-3xl border p-6 shadow-sm text-center">
+
+            <div className="text-5xl mb-5">
+              ✍️
+            </div>
+
+            <h3 className="text-xl font-bold text-gray-900">
+              Tell Us Your Plans
+            </h3>
+
+            <p className="text-gray-600 mt-4 leading-relaxed">
+              Share your destination, travel dates, budget and interests.
+            </p>
+
+          </div>
+
+          <div className="bg-white rounded-3xl border p-6 shadow-sm text-center">
+
+            <div className="text-5xl mb-5">
+              🤖
+            </div>
+
+            <h3 className="text-xl font-bold text-gray-900">
+              AI Creates Your Itinerary
+            </h3>
+
+            <p className="text-gray-600 mt-4 leading-relaxed">
+              Our AI generates a personalized itinerary tailored to your preferences.
+            </p>
+
+          </div>
+
+          <div className="bg-white rounded-3xl border p-6 shadow-sm text-center">
+
+            <div className="text-5xl mb-5">
+              👨‍💼
+            </div>
+
+            <h3 className="text-xl font-bold text-gray-900">
+              Local Experts Review It
+            </h3>
+
+            <p className="text-gray-600 mt-4 leading-relaxed">
+              Our travel specialists verify routes, pricing and local recommendations.
+            </p>
+
+          </div>
+
+          <div className="bg-white rounded-3xl border p-6 shadow-sm text-center">
+
+            <div className="text-5xl mb-5">
+              ✈️
+            </div>
+
+            <h3 className="text-xl font-bold text-gray-900">
+              Book & Travel
+            </h3>
+
+            <p className="text-gray-600 mt-4 leading-relaxed">
+              Approve your itinerary, pay the advance and enjoy your journey.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="border-t border-gray-200"></div>
+      </div>
+
+
+      {/* TOURS PREVIEW */}
+      <div className="max-w-6xl mx-auto py-20 lg:py-24 px-4 sm:px-6">
+        <h2 className="text-3xl md:text-4xl font-black mb-10 text-center text-gray-900">
+          Most Popular Taj Mahal & Agra Tours
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {tours.slice(0, 3).map((tour) => (
+            <a key={tour.id} href={`/tours/${tour.id}`}>
+              <div className="h-full flex flex-col bg-white/90 backdrop-blur border border-white/40 rounded-3xl overflow-hidden shadow-xl shadow-black/5 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
+                <div className="overflow-hidden">
+                  <img
+                    src={tour.imageUrl}
+                    alt={tour.title}
+                    className="w-full h-52 object-cover hover:scale-105 transition-all duration-500"
+                  />
+                </div>
+
+                <div className="p-6 space-y-3 flex flex-col flex-1">
+
+                  <div className="flex flex-wrap gap-2">
+
+                    <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+                      Bestseller
+                    </span>
+
+                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                      💳 Only 30% to Reserve
+                    </span>
+
+                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                      🚗 Hotel Pickup Included
+                    </span>
+
+                  </div>
+
+                  <h3 className="text-xl font-bold text-gray-900">
+                    {tour.title}
+                  </h3>
+
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {tour.description}
+                  </p>
+
+                  <div className="flex items-center justify-between pt-2">
+
+                    <div>
+                      <p className="text-xs text-gray-400">
+                        Starting From
+                      </p>
+
+                      <p className="text-2xl font-black text-gray-900">
+                        ₹{tour.price}
+                        <span className="text-sm font-medium text-gray-500">
+                          /person
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="bg-linear-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-2xl text-sm font-semibold">
+                      View Tour →
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+
+      {/* TRUST SECTION */}
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+
+        <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl overflow-hidden">
+
+          <div className="grid lg:grid-cols-2 gap-10 items-center p-10 lg:p-16">
+
+            <div>
+
+              <p className="text-blue-400 font-semibold">
+                Trusted Travel Planning
+              </p>
+
+              <h2 className="text-4xl font-black text-white mt-3">
+                Why Travelers Choose TourGen
+              </h2>
+
+              <p className="text-slate-300 mt-6 leading-relaxed text-lg">
+
+                We combine modern AI technology with experienced local travel experts
+                to deliver stress-free travel planning and unforgettable Agra
+                experiences.
+
+              </p>
+
+            </div>
+
+            <div className="grid grid-cols-2 gap-5">
+
+              <div className="bg-white/10 rounded-2xl p-6">
+
+                <div className="text-3xl">
+                  ⭐
+                </div>
+
+                <h3 className="text-white font-bold mt-3">
+                  Local Experts
+                </h3>
+
+              </div>
+
+              <div className="bg-white/10 rounded-2xl p-6">
+
+                <div className="text-3xl">
+                  🤖
+                </div>
+
+                <h3 className="text-white font-bold mt-3">
+                  AI Planning
+                </h3>
+
+              </div>
+
+              <div className="bg-white/10 rounded-2xl p-6">
+
+                <div className="text-3xl">
+                  💬
+                </div>
+
+                <h3 className="text-white font-bold mt-3">
+                  WhatsApp Support
+                </h3>
+
+              </div>
+
+              <div className="bg-white/10 rounded-2xl p-6">
+
+                <div className="text-3xl">
+                  🔒
+                </div>
+
+                <h3 className="text-white font-bold mt-3">
+                  Secure Booking
+                </h3>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      
+
+      {/* Why book with us */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+
+        <div className="text-center mb-14">
+
+          <p className="text-blue-600 font-semibold">
+            Why Travelers Choose TourGen
+          </p>
+
+          <h2 className="text-4xl font-black mt-3">
+            Book With Confidence
+          </h2>
+
+          <p className="text-gray-600 mt-4 max-w-3xl mx-auto">
+            We combine local expertise, flexible payments and personalized support
+            to make your Agra experience simple and stress-free.
+          </p>
+
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <div className="bg-white rounded-3xl border border-gray-200 p-7 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+
+            <div className="text-5xl mb-5">💳</div>
+
+            <h3 className="text-xl font-bold text-gray-900">
+              Only 30% to Reserve
+            </h3>
+
+            <p className="text-gray-600 mt-4 leading-relaxed">
+              Secure your booking today and pay the remaining balance when your tour begins.
+            </p>
+
+          </div>
+
+          <div className="bg-white rounded-3xl border border-gray-200 p-7 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+
+            <div className="text-5xl mb-5">🤖</div>
+
+            <h3 className="text-xl font-bold text-gray-900">
+              AI + Local Experts
+            </h3>
+
+            <p className="text-gray-600 mt-4 leading-relaxed">
+              AI creates your itinerary, then our local travel specialists personally review it.
+            </p>
+
+          </div>
+
+          <div className="bg-white rounded-3xl border border-gray-200 p-7 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+
+            <div className="text-5xl mb-5">⭐</div>
+
+            <h3 className="text-xl font-bold text-gray-900">
+              Private Experiences
+            </h3>
+
+            <p className="text-gray-600 mt-4 leading-relaxed">
+              Carefully selected tours with experienced local guides and flexible scheduling.
+            </p>
+
+          </div>
+
+          <div className="bg-white rounded-3xl border border-gray-200 p-7 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+
+            <div className="text-5xl mb-5">📱</div>
+
+            <h3 className="text-xl font-bold text-gray-900">
+              Real Human Support
+            </h3>
+
+            <p className="text-gray-600 mt-4 leading-relaxed">
+              Need help? Chat with us on WhatsApp before, during and after your trip.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      
+
+
       {/* Payment Banner */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-10">
+      {/* <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-10">
 
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-8 text-white shadow-xl">
 
@@ -388,171 +744,127 @@ export default function HomePage() {
 
         </div>
 
-      </div>
+      </div> */}
 
-      {/* Why book with us */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
 
-        <div className="text-center mb-14">
+      {/* AI SUCCESS STORIES */}
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20 lg:py-24">
+
+        <div className="text-center mb-12">
 
           <p className="text-blue-600 font-semibold">
-            Why Travelers Choose TourGen
+
+            Real Traveler Reviews
+
           </p>
 
           <h2 className="text-4xl font-black mt-3">
-            Book With Confidence
+
+            Travelers Love Their TourGen Experience
+
           </h2>
 
           <p className="text-gray-600 mt-4 max-w-3xl mx-auto">
-            We combine local expertise, flexible payments and personalized support
-            to make your Agra experience simple and stress-free.
+
+            Read genuine feedback from travelers who booked tours or created personalized itineraries with TourGen.
+
           </p>
 
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {reviews.length > 0 && (
 
-          <div className="bg-white rounded-3xl border p-6 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-            <div className="text-4xl mb-4">💳</div>
+              {reviews.map((review) => (
 
-            <h3 className="font-bold text-lg">
-              Only 30% to Reserve
-            </h3>
+                <div
+                  key={review.id}
+                  className="bg-white rounded-3xl border border-gray-200 p-7 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-full flex flex-col"
+                >
 
-            <p className="text-gray-600 mt-3 text-sm">
-              Secure your booking today and pay the remaining balance when your tour begins.
-            </p>
+                  <div className="text-5xl text-blue-100 leading-none mb-3">
+                    “
+                  </div>
 
-          </div>
+                  <div className="text-2xl tracking-wide">
 
-          <div className="bg-white rounded-3xl border p-6 shadow-sm">
-
-            <div className="text-4xl mb-4">🤖</div>
-
-            <h3 className="font-bold text-lg">
-              AI + Local Experts
-            </h3>
-
-            <p className="text-gray-600 mt-3 text-sm">
-              AI creates your itinerary, then our local travel specialists personally review it.
-            </p>
-
-          </div>
-
-          <div className="bg-white rounded-3xl border p-6 shadow-sm">
-
-            <div className="text-4xl mb-4">⭐</div>
-
-            <h3 className="font-bold text-lg">
-              Private Experiences
-            </h3>
-
-            <p className="text-gray-600 mt-3 text-sm">
-              Carefully selected tours with experienced local guides and flexible scheduling.
-            </p>
-
-          </div>
-
-          <div className="bg-white rounded-3xl border p-6 shadow-sm">
-
-            <div className="text-4xl mb-4">📱</div>
-
-            <h3 className="font-bold text-lg">
-              Real Human Support
-            </h3>
-
-            <p className="text-gray-600 mt-3 text-sm">
-              Need help? Chat with us on WhatsApp before, during and after your trip.
-            </p>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* TOURS PREVIEW */}
-      <div className="max-w-6xl mx-auto py-20 lg:py-24 px-4 sm:px-6">
-        <h2 className="text-3xl md:text-4xl font-black mb-10 text-center text-gray-900">
-          Popular Tours 🌍
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {tours.slice(0, 3).map((tour) => (
-            <a key={tour.id} href={`/tours/${tour.id}`}>
-              <div className="h-full flex flex-col bg-white/90 backdrop-blur border border-white/40 rounded-3xl overflow-hidden shadow-xl shadow-black/5 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
-                <div className="overflow-hidden">
-                  <img
-                    src={tour.imageUrl}
-                    alt={tour.title}
-                    className="w-full h-52 object-cover hover:scale-105 transition-all duration-500"
-                  />
-                </div>
-
-                <div className="p-5 space-y-3 flex flex-col flex-1">
-
-                  <div className="flex flex-wrap gap-2">
-
-                    <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
-                      Bestseller
-                    </span>
-
-                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-                      💳 Only 30% to Reserve
-                    </span>
+                    {"⭐".repeat(review.rating)}
 
                   </div>
 
-                  <h3 className="text-xl font-bold text-gray-900">
-                    {tour.title}
-                  </h3>
+                  <p className="mt-5 text-gray-700 leading-relaxed italic">
 
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {tour.description}
+                    "{review.comment}"
+
                   </p>
 
-                  <div className="flex items-center justify-between pt-2">
+                  <div className="border-t border-gray-100 my-6"></div>
 
-                    <div>
-                      <p className="text-xs text-gray-400">
-                        Starting From
-                      </p>
+                  <div className="mt-auto space-y-2 text-sm text-gray-600">
 
-                      <p className="text-2xl font-black text-gray-900">
-                        ₹{tour.price}
-                        <span className="text-sm font-medium text-gray-500">
-                          /person
-                        </span>
-                      </p>
-                    </div>
+                    <p>
 
-                    <div className="bg-linear-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-2xl text-sm font-semibold">
-                      Explore
-                    </div>
+                      ✔ Verified AI Traveler
+
+                    </p>
+
+                    <p>
+
+                      📍 {review.itinerary.city}
+
+                    </p>
+
+                    <p>
+
+                      🗓 {review.itinerary.days} Day Trip
+
+                    </p>
+
+                    <p>
+
+                      👥 {review.itinerary.groupSize} Travelers
+
+                    </p>
 
                   </div>
 
                 </div>
-              </div>
-            </a>
-          ))}
+
+              ))}
+
+            </div>
+          )
+        }
+
+        <div className="text-center mt-10">
+
+          <a
+            href="/ai-reviews"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-7 py-4 rounded-3xl font-semibold transition"
+          >
+
+            Read More Traveler Stories →
+
+          </a>
+
         </div>
+
       </div>
 
 
 
       <div className="max-w-4xl mx-auto px-4 py-14">
 
-        <div className="bg-white rounded-3xl border shadow-xl p-8">
+        <div className="bg-white rounded-3xl border border-gray-200 shadow-xl p-6 sm:p-8 ">
 
           <h2 className="text-4xl font-black text-center">
-            Plan Your Journey
+            Need Help Planning Your Trip?
           </h2>
 
           <p className="text-center text-gray-600 mt-4">
-            Speak with our travel experts and get
-            personalized recommendations.
+            Not sure which tour is right for you? Tell us about your travel plans and our Agra travel experts will recommend the perfect experience.
           </p>
 
           <div className="grid md:grid-cols-2 gap-4 mt-8">
@@ -568,7 +880,7 @@ export default function HomePage() {
                 )
               }
 
-              className="border p-4 rounded-2xl"
+              className="border border-gray-300 rounded-2xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition"
             />
 
             <input
@@ -582,7 +894,7 @@ export default function HomePage() {
                 )
               }
 
-              className="border p-4 rounded-2xl"
+              className="border border-gray-300 rounded-2xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition"
             />
 
             <input
@@ -651,7 +963,7 @@ export default function HomePage() {
             }}
             className="w-full bg-blue-600 text-white py-4 rounded-2xl font-semibold mt-8 hover:shadow-md hover:border-blue-300"
           >
-            Submit Inquiry
+            Get Free Travel Advice →
           </button>
 
         </div>
@@ -659,113 +971,12 @@ export default function HomePage() {
       </div>
 
 
-      {/* AI SUCCESS STORIES */}
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20 lg:py-24">
-
-        <div className="text-center mb-12">
-
-          <p className="text-blue-600 font-semibold">
-
-            ⭐ Trusted by AI Travelers
-
-          </p>
-
-          <h2 className="text-4xl font-black mt-3">
-
-            TourGen's AI concierge Success Stories
-
-          </h2>
-
-          <p className="text-gray-600 mt-4 max-w-3xl mx-auto">
-
-            Discover how TourGen's AI helped
-            travelers plan unforgettable journeys.
-
-          </p>
-
-        </div>
-
-        {reviews.length > 0 && (
-
-            <div className="grid md:grid-cols-3 gap-6">
-
-              {reviews.map((review) => (
-
-                <div
-                  key={review.id}
-                  className="bg-white rounded-3xl border shadow-sm p-6 hover:shadow-xl transition"
-                >
-
-                  <div className="text-xl">
-
-                    {"⭐".repeat(review.rating)}
-
-                  </div>
-
-                  <p className="mt-5 text-gray-700 leading-relaxed italic">
-
-                    "{review.comment}"
-
-                  </p>
-
-                  <div className="border-t my-6"></div>
-
-                  <div className="space-y-2 text-sm text-gray-600">
-
-                    <p>
-
-                      ✔ Verified AI Traveler
-
-                    </p>
-
-                    <p>
-
-                      📍 {review.itinerary.city}
-
-                    </p>
-
-                    <p>
-
-                      🗓 {review.itinerary.days} Day Trip
-
-                    </p>
-
-                    <p>
-
-                      👥 {review.itinerary.groupSize} Travelers
-
-                    </p>
-
-                  </div>
-
-                </div>
-
-              ))}
-
-            </div>
-          )
-        }
-
-        <div className="text-center mt-10">
-
-          <a
-            href="/ai-reviews"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-7 py-4 rounded-2xl font-semibold transition"
-          >
-
-            View All Success Stories →
-
-          </a>
-
-        </div>
-
-      </div>
+      
 
 
       {/* FOOTER */}
 
-      <div className="bg-white border-t mt-16">
+      <div className="bg-slate-950 text-white mt-20">
 
         <div className="max-w-6xl mx-auto px-6 py-10">
 
@@ -779,7 +990,7 @@ export default function HomePage() {
                 TourGen
               </h3>
 
-              <p className="text-gray-600 mt-4 leading-relaxed">
+              <p className="text-slate-400 mt-4 leading-relaxed">
                 Premium AI-powered travel planning,
                 curated Agra tours, and personalized
                 local experiences.
@@ -799,14 +1010,14 @@ export default function HomePage() {
 
                 <a
                   href="/agra-tours"
-                  className="text-gray-600 hover:text-blue-600"
+                  className="text-gray-600 hover:text-white transition"
                 >
                   Agra Tours
                 </a>
 
                 <a
                   href="/tours"
-                  className="text-gray-600 hover:text-blue-600"
+                  className="text-gray-600 hover:text-white transition"
                 >
                   Taj Mahal Experiences
                 </a>
@@ -892,7 +1103,7 @@ export default function HomePage() {
                 <a
                   href="https://wa.me/917599921173"
                   target="_blank"
-                  className="inline-block bg-green-500 text-white px-5 py-3 rounded-2xl mt-3"
+                  className="inline-block bg-green-600 hover:bg-green-700 transition text-white px-5 py-3 rounded-2xl mt-3"
                 >
                   Chat on WhatsApp
                 </a>
@@ -905,7 +1116,7 @@ export default function HomePage() {
 
           {/* BOTTOM */}
 
-          <div className="border-t mt-10 pt-6 text-center text-gray-500 text-sm">
+          <div className="border-t border-slate-800 mt-12 pt-6 text-center text-gray-500 text-sm">
 
             © 2026 TourGen.
             All rights reserved.
