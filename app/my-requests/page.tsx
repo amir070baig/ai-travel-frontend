@@ -953,6 +953,131 @@ export default function MyRequestsPage() {
                           <p className="text-sm text-gray-500 mt-1">
                             We'll use these details to confirm your booking and coordinate your trip.
                           </p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                            <div>
+                              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                Full Name *
+                              </label>
+
+                              <input
+                                type="text"
+                                value={fullNames[b.id] || ""}
+                                onChange={(e) =>
+                                  setFullNames({
+                                    ...fullNames,
+                                    [b.id]: e.target.value,
+                                  })
+                                }
+                                placeholder="John Smith"
+                                className="w-full rounded-2xl border border-gray-300 bg-white p-3 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                Email Address *
+                              </label>
+
+                              <input
+                                type="email"
+                                value={emails[b.id] || ""}
+                                onChange={(e) =>
+                                  setEmails({
+                                    ...emails,
+                                    [b.id]: e.target.value,
+                                  })
+                                }
+                                placeholder="john@example.com"
+                                className="w-full rounded-2xl border border-gray-300 bg-white p-3 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition"
+                              />
+                            </div>
+
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                            <div>
+                              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                Country *
+                              </label>
+
+                              <input
+                                type="text"
+                                value={countries[b.id] || ""}
+                                onChange={(e) =>
+                                  setCountries({
+                                    ...countries,
+                                    [b.id]: e.target.value,
+                                  })
+                                }
+                                placeholder="India"
+                                className="w-full rounded-2xl border border-gray-300 bg-white p-3 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                WhatsApp Number (Optional)
+                              </label>
+
+                              <input
+                                type="text"
+                                value={whatsapps[b.id] || ""}
+                                onChange={(e) =>
+                                  setWhatsapps({
+                                    ...whatsapps,
+                                    [b.id]: e.target.value,
+                                  })
+                                }
+                                placeholder="+91 9876543210"
+                                className="w-full rounded-2xl border border-gray-300 bg-white p-3 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition"
+                              />
+                            </div>
+
+                          </div>
+
+                          <div>
+
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                              Hotel / Pickup Location (Optional)
+                            </label>
+
+                            <input
+                              type="text"
+                              value={hotelPickups[b.id] || ""}
+                              onChange={(e) =>
+                                setHotelPickups({
+                                  ...hotelPickups,
+                                  [b.id]: e.target.value,
+                                })
+                              }
+                              placeholder="The Oberoi Amarvilas"
+                              className="w-full rounded-2xl border border-gray-300 bg-white p-3 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition"
+                            />
+
+                          </div>
+
+                          <div>
+
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                              Special Requests (Optional)
+                            </label>
+
+                            <textarea
+                              rows={3}
+                              value={specialRequests[b.id] || ""}
+                              onChange={(e) =>
+                                setSpecialRequests({
+                                  ...specialRequests,
+                                  [b.id]: e.target.value,
+                                })
+                              }
+                              placeholder="Vegetarian meals, wheelchair assistance, celebration, etc."
+                              className="w-full rounded-2xl border border-gray-300 bg-white p-3 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition resize-none"
+                            />
+
+                          </div>
                         </div>
 
                       </div>
