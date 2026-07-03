@@ -84,7 +84,7 @@ export default function HomePage() {
         <div className="text-center space-y-6">
 
           <div className="inline-flex items-center gap-2 bg-white border border-gray-200 shadow-sm px-4 py-2 rounded-full text-sm text-gray-600">
-            ✨ AI Powered Travel Planning
+            🕌 Agra Tours • 🤖 AI Trip Planner • ⭐ Local Experts
           </div>
 
           <div className="flex flex-wrap justify-center gap-3 mt-5">
@@ -99,20 +99,29 @@ export default function HomePage() {
 
           </div>
 
-          <h1 className="max-w-4xl mx-auto text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-tight text-gray-900">
+          <h1 className="max-w-5xl mx-auto text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-tight text-gray-900">
 
-            Plan Luxury
+            Book the Best
             <span className="block text-blue-600">
-              Agra Experiences
+              Taj Mahal & Agra Tours
+            </span>
+
+            <span className="block text-2xl sm:text-3xl lg:text-4xl text-gray-700 font-bold mt-6">
+              or Create Your Own AI Travel Itinerary
             </span>
 
           </h1>
 
-          <p className="text-gray-600 mt-4 leading-relaxed max-w-3xl mx-auto text-sm sm:text-base">
-            TourGen helps travelers discover
-            personalized AI itineraries,
-            curated Agra tours, and expert
-            travel planning assistance.
+          <p className="text-gray-600 leading-relaxed max-w-3xl mx-auto text-base sm:text-lg">
+
+            Choose from professionally curated
+            <strong> Taj Mahal and Agra tours</strong>,
+            or let our
+            <strong> AI travel planner</strong>
+            create a personalized itinerary that is
+            reviewed by our local travel experts before
+            you book.
+
           </p>
           
 
