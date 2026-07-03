@@ -6,20 +6,24 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://tourgen.in"),
 
   title: {
-    default: "TourGen | Agra Tours & AI Travel Planner",
+    default: "Agra Tours, Taj Mahal Tours & AI Travel Planner | TourGen",
     template: "%s | TourGen",
   },
 
   description:
-    "Book Agra tours, Taj Mahal tours, and AI-powered custom travel itineraries. TourGen combines expert local travel planning with AI to create unforgettable experiences.",
+  "Book private Taj Mahal tours, Agra sightseeing tours, Delhi to Agra day trips and AI-powered personalized travel itineraries. Trusted local experts, secure booking and flexible travel planning.",
 
   keywords: [
     "Agra Tours",
-    "Taj Mahal Tour",
-    "Delhi to Agra Tour",
+    "Taj Mahal Tours",
+    "Private Taj Mahal Tour",
+    "Delhi to Agra Day Tour",
+    "Agra Fort Tour",
+    "Fatehpur Sikri Tour",
     "Agra Sightseeing",
-    "Private Agra Tour",
     "Sunrise Taj Mahal Tour",
+    "Same Day Agra Tour",
+    "Private Tour Guide Agra",
     "AI Travel Planner",
     "Custom India Itinerary",
     "TourGen",
@@ -34,11 +38,21 @@ export const metadata: Metadata = {
   creator: "TourGen",
 
   publisher: "TourGen",
+  applicationName: "TourGen",
 
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
+
+  referrer: "origin-when-cross-origin",
 
   alternates: {
     canonical: "/",
@@ -56,7 +70,7 @@ export const metadata: Metadata = {
     title: "TourGen | Agra Tours & AI Travel Planner",
 
     description:
-      "Discover curated Agra tours, Taj Mahal experiences, and AI-powered personalized travel planning.",
+      "Book private Taj Mahal tours, Agra sightseeing experiences and AI-powered personalized itineraries with trusted local travel experts.",
 
     url: "https://tourgen.in",
 
@@ -82,7 +96,7 @@ export const metadata: Metadata = {
     title: "TourGen | Agra Tours & AI Travel Planner",
 
     description:
-      "Book Agra tours and generate AI-powered travel itineraries.",
+      "Book Taj Mahal tours, Agra day trips and personalized AI travel itineraries with TourGen.",
 
     images: ["/og-image.jpg"],
   },
