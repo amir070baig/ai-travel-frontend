@@ -1803,6 +1803,48 @@ export default function AdminPage() {
 
                     ₹{b.advanceAmount}
                   </p>
+
+                  <div className="mt-5 border rounded-2xl bg-gray-50 p-4 space-y-3">
+
+                    <h4 className="font-semibold text-gray-900">
+                      👤 Primary Traveler
+                    </h4>
+
+                    <div className="grid md:grid-cols-2 gap-3">
+
+                      <p>
+                        <strong>Name:</strong>{" "}
+                        {b.fullName || "-"}
+                      </p>
+
+                      <p>
+                        <strong>Email:</strong>{" "}
+                        {b.email || "-"}
+                      </p>
+
+                      <p>
+                        <strong>Country:</strong>{" "}
+                        {b.country || "-"}
+                      </p>
+
+                      <p>
+                        <strong>WhatsApp:</strong>{" "}
+                        {b.whatsapp || "-"}
+                      </p>
+
+                      <p className="md:col-span-2">
+                        <strong>Hotel / Pickup:</strong>{" "}
+                        {b.hotelPickup || "-"}
+                      </p>
+
+                      <p className="md:col-span-2">
+                        <strong>Special Requests:</strong>{" "}
+                        {b.specialRequests || "-"}
+                      </p>
+
+                    </div>
+
+                  </div>
                 </div>
 
                 <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
