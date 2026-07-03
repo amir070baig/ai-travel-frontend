@@ -12,6 +12,12 @@ export default function MyRequestsPage() {
   const [savedItineraries, setSavedItineraries] = useState<any[]>([]);
   const [expandedTrips, setExpandedTrips] = useState<string[]>([]);
   const [travelDates, setTravelDates] = useState<Record<string, string>>({});
+  const [fullNames, setFullNames] = useState<Record<string, string>>({});
+  const [emails, setEmails] = useState<Record<string, string>>({});
+  const [countries, setCountries] = useState<Record<string, string>>({});
+  const [whatsapps, setWhatsapps] = useState<Record<string, string>>({});
+  const [hotelPickups, setHotelPickups] = useState<Record<string, string>>({});
+  const [specialRequests, setSpecialRequests] = useState<Record<string, string>>({});
   const [messages, setMessages] = useState<Record<string, any[]>>({});
   const [messageInputs, setMessageInputs] = useState<Record<string, string>>({});
   const [isPaying, setIsPaying] = useState<string | null>(null);
@@ -803,6 +809,7 @@ export default function MyRequestsPage() {
                   
                   <div className="flex flex-col gap-4 pt-2 border-t">
                     {!b.travelDate && b.status === "PENDING_PAYMENT" && (
+                      
                       <div className="space-y-2">
 
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -932,6 +939,21 @@ export default function MyRequestsPage() {
                         <p className="text-gray-600">
                           Refund has been approved and processed.
                         </p>
+
+                      </div>
+                    )}
+                    {b.status === "PENDING_PAYMENT" && (
+                      <div className="bg-white border border-gray-200 rounded-2xl p-5 space-y-5">
+
+                        <div>
+                          <h3 className="text-lg font-bold text-gray-900">
+                            👤 Primary Traveler Details
+                          </h3>
+
+                          <p className="text-sm text-gray-500 mt-1">
+                            We'll use these details to confirm your booking and coordinate your trip.
+                          </p>
+                        </div>
 
                       </div>
                     )}
