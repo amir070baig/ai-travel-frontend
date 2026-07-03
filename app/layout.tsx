@@ -82,7 +82,7 @@ export const metadata: Metadata = {
 
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "TourGen - Agra Tours & AI Travel Planner",
@@ -98,7 +98,7 @@ export const metadata: Metadata = {
     description:
       "Book Taj Mahal tours, Agra day trips and personalized AI travel itineraries with TourGen.",
 
-    images: ["/og-image.jpg"],
+    images: ["/og-image.png"],
   },
 };
 
