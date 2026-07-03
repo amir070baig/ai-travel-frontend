@@ -208,6 +208,111 @@ export default function HomePage() {
 
       </div>
 
+      {/* CHOOSE YOUR EXPERIENCE */}
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+
+        <div className="text-center mb-14">
+
+          <p className="text-blue-600 font-semibold">
+            Two Ways to Experience Agra
+          </p>
+
+          <h2 className="text-4xl font-black mt-3">
+            Choose How You Want to Travel
+          </h2>
+
+          <p className="text-gray-600 mt-4 max-w-3xl mx-auto">
+            Whether you already know which tour you want or need help planning your
+            perfect journey, TourGen has you covered.
+          </p>
+
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-8">
+
+          {/* Ready Made Tours */}
+
+          <div className="bg-white rounded-3xl border shadow-lg p-8 hover:-translate-y-1 hover:shadow-2xl transition-all">
+
+            <div className="text-5xl mb-6">
+              🕌
+            </div>
+
+            <h3 className="text-2xl font-bold">
+              Book Ready-Made Tours
+            </h3>
+
+            <p className="text-gray-600 mt-4 leading-relaxed">
+              Choose from our professionally curated Taj Mahal,
+              Agra Fort, Fatehpur Sikri and Delhi to Agra tours.
+              Perfect if you want instant booking.
+            </p>
+
+            <ul className="mt-6 space-y-3 text-gray-700">
+
+              <li>✅ Instant booking</li>
+
+              <li>✅ Fixed itinerary</li>
+
+              <li>✅ Local guides</li>
+
+              <li>✅ Only 30% advance payment</li>
+
+            </ul>
+
+            <a
+              href="/tours"
+              className="inline-block mt-8 bg-blue-600 text-white px-6 py-3 rounded-2xl font-semibold hover:bg-blue-700 transition"
+            >
+              Explore Tours →
+            </a>
+
+          </div>
+
+          {/* AI Planner */}
+
+          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl text-white shadow-xl p-8 hover:-translate-y-1 hover:shadow-2xl transition-all">
+
+            <div className="text-5xl mb-6">
+              🤖
+            </div>
+
+            <h3 className="text-2xl font-bold">
+              Create a Custom AI Trip
+            </h3>
+
+            <p className="text-blue-100 mt-4 leading-relaxed">
+              Tell us your destination, budget and travel style.
+              Our AI creates a personalized itinerary that is
+              reviewed by our travel experts before booking.
+            </p>
+
+            <ul className="mt-6 space-y-3 text-blue-50">
+
+              <li>✅ Personalized itinerary</li>
+
+              <li>✅ AI + Human expert review</li>
+
+              <li>✅ Flexible travel planning</li>
+
+              <li>✅ Custom pricing</li>
+
+            </ul>
+
+            <a
+              href="/generate"
+              className="inline-block mt-8 bg-white text-blue-700 px-6 py-3 rounded-2xl font-semibold hover:bg-gray-100 transition"
+            >
+              Generate My Trip →
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
       {/* Payment Banner */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-10">
 
