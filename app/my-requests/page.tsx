@@ -714,12 +714,12 @@ export default function MyRequestsPage() {
 
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
 
-                      <h3 className="text-xl font-bold text-gray-900 leading-snug">
+                      <h3 className="text-2xl font-extrabold text-gray-900 leading-tight">
                         {b.tour?.title || b.itinerary?.title}
                       </h3>
 
                       <span
-                        className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap ${
+                        className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide whitespace-nowrap ${
                           ["CONFIRMED", "COMPLETED"].includes(b.status)
                             ? "bg-green-100 text-green-700"
                             : b.status === "REFUND_PENDING"
@@ -743,10 +743,10 @@ export default function MyRequestsPage() {
                         </p>
                       </div>
                     )} */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5 text-sm">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                       
                       {/* INJECTED TARGET DATA METADATA SNIPPET */}
-                      <div className="bg-gray-50 rounded-2xl p-3">
+                      <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4 transition-all hover:border-blue-200 hover:bg-blue-50">
                         <p className="text-xs text-gray-500">
                           📅 Travel Date
                         </p>
@@ -756,7 +756,7 @@ export default function MyRequestsPage() {
                             : "Select Below"}
                         </p>
                       </div>
-                      <div className="bg-gray-50 rounded-2xl p-3">
+                      <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4 transition-all hover:border-blue-200 hover:bg-blue-50">
                         <p className="text-xs text-gray-500">
                           🕒 Time
                         </p>
@@ -764,12 +764,22 @@ export default function MyRequestsPage() {
                           {b.timeSlot || "Flexible"}
                         </p>
                       </div>
-                      <div className="bg-gray-50 rounded-2xl p-3">
+                      <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4 transition-all hover:border-blue-200 hover:bg-blue-50">
                         <p className="text-xs text-gray-500">
                           👥 Travelers
                         </p>
                         <p className="font-semibold text-gray-900 mt-1">
                           {b.travelers}
+                        </p>
+                      </div>
+                      
+                      <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4 transition-all hover:border-blue-200 hover:bg-blue-50">
+                        <p className="text-xs text-gray-500">
+                          💳 Payment
+                        </p>
+
+                        <p className="mt-1 font-semibold text-gray-900">
+                          {b.paymentStatus === "PAID" ? "Paid" : "Pending"}
                         </p>
                       </div>
 
@@ -805,49 +815,109 @@ export default function MyRequestsPage() {
 
                         </div>
                       )}
-                      <div className="mt-4 bg-blue-50 rounded-2xl p-4">
+                      <div className="mt-5 rounded-3xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-6">
 
-                        <p className="text-sm text-gray-600">
-                          {
-                            b.paymentStatus === "PAID"
-                              ? "Advance Paid"
-                              : "Advance Due"
-                          }
-                        </p>
+                        <div className="flex items-center justify-between">
 
-                        <p
-                          className={`text-3xl font-black mt-1 ${
-                            b.paymentStatus === "PAID"
-                              ? "text-green-600"
-                              : "text-blue-600"
-                          }`}
-                        >
-                          ₹{b.advanceAmount}
-                        </p>
+                          <div>
+
+                            <p className="text-sm font-medium text-gray-600">
+                              {b.paymentStatus === "PAID" ? "Advance Paid" : "Advance Due"}
+                            </p>
+
+                            <p
+                              className={`mt-2 text-4xl font-black ${
+                                b.paymentStatus === "PAID"
+                                  ? "text-green-600"
+                                  : "text-blue-600"
+                              }`}
+                            >
+                              ₹{b.advanceAmount}
+                            </p>
+
+                          </div>
+
+                          <div
+                            className={`rounded-full px-4 py-2 text-sm font-bold ${
+                              b.paymentStatus === "PAID"
+                                ? "bg-green-100 text-green-700"
+                                : "bg-yellow-100 text-yellow-700"
+                            }`}
+                          >
+                            {b.paymentStatus}
+                          </div>
+
+                        </div>
 
                       </div>
 
                       
 
-                        <h3 className="font-bold text-blue-900 mb-3">
-                          💳 Payment Schedule
-                        </h3>
+                        <div className="border-t border-blue-200 pt-5">
 
-                        <ul className="space-y-2 text-sm text-blue-800">
+                          <h3 className="mb-4 text-lg font-bold text-gray-900">
+                            Payment Schedule
+                          </h3>
 
-                          <li>
-                            ✅ Pay <strong>30% today</strong> to secure your booking.
-                          </li>
+                          <div className="space-y-3">
 
-                          <li>
-                            💰 The remaining <strong>70%</strong> can be paid when your trip begins or at any time during your tour.
-                          </li>
+                            <div className="flex items-start gap-3 rounded-2xl bg-white p-4">
 
-                          <li>
-                            🤝 No full payment is required before your travel date.
-                          </li>
+                              <div className="text-green-600 text-xl">
+                                ✓
+                              </div>
 
-                        </ul>
+                              <div>
+                                <p className="font-semibold text-gray-900">
+                                  Pay 30% Today
+                                </p>
+
+                                <p className="text-sm text-gray-500">
+                                  Secure your booking instantly.
+                                </p>
+                              </div>
+
+                            </div>
+
+                            <div className="flex items-start gap-3 rounded-2xl bg-white p-4">
+
+                              <div className="text-blue-600 text-xl">
+                                ₹
+                              </div>
+
+                              <div>
+                                <p className="font-semibold text-gray-900">
+                                  Remaining 70%
+                                </p>
+
+                                <p className="text-sm text-gray-500">
+                                  Pay when your tour begins or anytime during your trip.
+                                </p>
+                              </div>
+
+                            </div>
+
+                            <div className="flex items-start gap-3 rounded-2xl bg-white p-4">
+
+                              <div className="text-orange-500 text-xl">
+                                🛡️
+                              </div>
+
+                              <div>
+                                <p className="font-semibold text-gray-900">
+                                  Flexible Payment
+                                </p>
+
+                                <p className="text-sm text-gray-500">
+                                  No full payment is required before your travel date.
+                                </p>
+                              </div>
+
+                            </div>
+
+                          </div>
+
+                        </div>
 
                       
                     </div>
@@ -989,17 +1059,19 @@ export default function MyRequestsPage() {
                       </div>
                     )}
                     {b.status === "PENDING_PAYMENT" && (
-                      <div className="bg-white border border-gray-200 rounded-2xl p-5 space-y-5">
+                      <details className="rounded-2xl border border-gray-200 bg-white">
 
                         <div>
-                          <h3 className="text-lg font-bold text-gray-900">
+                          <summary className="cursor-pointer list-none px-5 py-4 text-lg font-bold text-gray-900 hover:bg-gray-50 rounded-2xl">
                             👤 Primary Traveler Details
-                          </h3>
+                          </summary>
+
+                          <div className="border-t border-gray-100 p-5">
 
                           <p className="text-sm text-gray-500 mt-1">
                             We'll use these details to confirm your booking and coordinate your trip.
                           </p>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
                             <div>
                               <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -1127,6 +1199,8 @@ export default function MyRequestsPage() {
                         </div>
 
                       </div>
+
+                      </details>
                     )}
                     {b.status === "PENDING_PAYMENT" && (
                       <button
@@ -1146,29 +1220,46 @@ export default function MyRequestsPage() {
                     )}
 
 
-                    <div className="bg-linear-to-br from-gray-50 to-white border rounded-3xl p-5 space-y-6">
+                    <details className="rounded-3xl border border-gray-200 bg-white">
 
-                      <h4 className="text-lg font-bold text-gray-900">
+                      <summary className="cursor-pointer list-none rounded-3xl px-5 py-4 text-lg font-bold text-gray-900 hover:bg-gray-50">
                         📍 Booking Progress
-                      </h4>
+                      </summary>
 
-                      <div className="space-y-2 text-sm">
+                      <div className="border-t border-gray-100 p-5">
 
-                        <div className="text-green-600 font-medium">
-                          ✅ Booking Created
+                      <div className="space-y-3">
+
+                        <div className="flex items-center justify-between rounded-xl bg-green-50 px-4 py-3">
+                          <span className="font-medium text-gray-900">
+                            Booking Created
+                          </span>
+
+                          <span className="text-green-600 font-bold">
+                            ✓
+                          </span>
                         </div>
 
                         <div
-                          className={
+                          className={`flex items-center justify-between rounded-xl px-4 py-3 ${
                             b.paymentStatus === "PAID"
-                              ? "text-green-600 font-medium"
-                              : "text-gray-400"
-                          }
+                              ? "bg-green-50"
+                              : "bg-gray-50"
+                          }`}
                         >
-                          {b.paymentStatus === "PAID"
-                            ? "✅"
-                            : "⏳"}{" "}
-                          Advance Payment Received
+                          <span className="font-medium text-gray-900">
+                            Advance Payment
+                          </span>
+
+                          <span
+                            className={
+                              b.paymentStatus === "PAID"
+                                ? "text-green-600 font-bold"
+                                : "text-gray-400 font-bold"
+                            }
+                          >
+                            {b.paymentStatus === "PAID" ? "✓" : "○"}
+                          </span>
                         </div>
 
                         
@@ -1346,6 +1437,8 @@ export default function MyRequestsPage() {
                       </div>
 
                     </div>
+
+                    </details>
 
                     {(
                       b.status === "PENDING_PAYMENT" ||
