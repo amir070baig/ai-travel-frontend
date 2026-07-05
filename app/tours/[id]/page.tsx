@@ -278,7 +278,7 @@ export default function TourDetailsPage({
 
           <div>
             <p className="text-sm text-gray-500">
-              Starting from
+              Price Summary
             </p>
 
             <p className="text-2xl font-black text-emerald-600">
@@ -388,7 +388,7 @@ export default function TourDetailsPage({
               
               <div className="max-w-3xl mx-auto rounded-2xl border bg-gray-50 p-6 mt-8">
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Travel Date</label>
                     <input
@@ -480,27 +480,7 @@ export default function TourDetailsPage({
                 </div>
               </div>
 
-              <div className="my-8 rounded-3xl border border-emerald-200 bg-emerald-50 p-6 text-center">
-                <p className="text-sm text-gray-600">
-                  Reserve your tour today with only
-                </p>
-                <p className="mt-2 text-4xl font-black text-emerald-600">
-                  ₹{Math.floor(tour.price * travelers * 0.3).toLocaleString()}
-                </p>
-                <p className="mt-2 text-sm text-gray-600">
-                  30% advance • Remaining balance during your tour
-                </p>
-                <button
-                  onClick={() =>
-                    document
-                      .getElementById("traveler-info")
-                      ?.scrollIntoView({ behavior: "smooth" })
-                  }
-                  className="mt-5 rounded-2xl bg-emerald-600 px-8 py-4 font-bold text-white transition hover:bg-emerald-700"
-                >
-                  Continue Booking
-                </button>
-              </div>
+              
 
               <div
                 id="traveler-info"
@@ -640,6 +620,20 @@ export default function TourDetailsPage({
 
                   </div>
 
+                  <button
+                    onClick={handleBooking}
+                    disabled={isLateBooking}
+                    className={`mt-6 w-full py-5 text-lg font-bold rounded-2xl shadow-xl transition ${
+                      isLateBooking
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-emerald-600 hover:bg-emerald-700"
+                    }`}
+                  >
+                    {isLateBooking
+                      ? "Advance Notice Required"
+                      : "Reserve Your Tour"}
+                  </button>
+
                 </div>
 
               </div>
@@ -676,19 +670,7 @@ export default function TourDetailsPage({
                 </div>
               )}
 
-              <button
-                onClick={handleBooking}
-                disabled={isLateBooking}
-                className={`mt-4 w-full sm:w-auto text-white font-bold px-10 py-4 rounded-2xl shadow-lg transition ${
-                  isLateBooking
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-emerald-600 hover:bg-emerald-700"
-                }`}
-              >
-                {isLateBooking
-                  ? "Advance Notice Required"
-                  : "Reserve Your Tour"}
-              </button>
+              
 
               <div className="text-center mb-4">
                 <Link
