@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
+import {Plane, Heart, MessageCircle, Trophy,} from "lucide-react";
 
 export default function MyRequestsPage() {
   const { loading } = useAuth();
@@ -557,15 +558,25 @@ export default function MyRequestsPage() {
   return (
     <div className="min-h-screen bg-linear-to-brm-slate-50 via-white to-blue-50 py-16 lg:py-20 px-4">
       <div className="max-w-7xl mx-auto space-y-12">
-        <div className="text-center border-b border-gray-200 pb-8">
+        <div className="relative overflow-hidden rounded-3xl border border-blue-100 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-600 p-8 text-white shadow-xl">
 
-          <h1 className="text-4xl sm:text-5xl font-black text-gray-900">
-            Travel Dashboard
-          </h1>
+          <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
 
-          <p className="mt-3 text-lg text-gray-600 max-w-2xl mx-auto">
-            Manage your bookings, saved itineraries and conversations with our travel experts—all in one place.
-          </p>
+          <div className="relative">
+
+            <p className="text-sm uppercase tracking-widest text-blue-100 font-semibold">
+              Welcome Back 👋
+            </p>
+
+            <h1 className="mt-2 text-4xl sm:text-5xl font-black">
+              Travel Dashboard
+            </h1>
+
+            <p className="mt-4 max-w-2xl text-blue-100 text-lg">
+              Manage your bookings, payments, saved itineraries and conversations with our travel experts from one place.
+            </p>
+
+          </div>
 
         </div>
 
@@ -578,11 +589,17 @@ export default function MyRequestsPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
 
           <div className="bg-white rounded-3xl border shadow-sm p-6 text-center">
-            <p className="text-3xl font-black text-blue-600">
+            <div className="flex justify-center mb-4">
+              <div className="rounded-2xl bg-blue-100 p-3">
+                <Plane className="h-7 w-7 text-blue-600" />
+              </div>
+            </div>
+
+            <p className="text-4xl font-black text-gray-900">
               {bookings.length}
             </p>
 
-            <p className="text-gray-600 mt-2">
+            <p className="mt-2 text-sm font-medium text-gray-500 uppercase tracking-wide">
               Bookings
             </p>
           </div>
@@ -625,17 +642,25 @@ export default function MyRequestsPage() {
 
         {/* BOOKINGS SECTION */}
         <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 space-y-6">
-          <div>
+          <div className="flex items-center justify-between border-b border-gray-200 pb-5">
 
-            <h2 className="text-3xl font-black text-gray-900">
-              📅 My Bookings
-            </h2>
+            <div>
 
-            <p className="text-gray-500 mt-2">
-              Track payments, booking status and travel progress.
-            </p>
+              <h2 className="text-3xl font-black text-gray-900">
+                My Bookings
+              </h2>
 
-          </div> 
+              <p className="mt-2 text-gray-500">
+                Track payments, booking status and travel progress.
+              </p>
+
+            </div>
+
+            <div className="hidden md:flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100">
+              <Plane className="h-6 w-6 text-blue-600" />
+            </div>
+
+          </div>
           {bookings.length === 0 ? (
             <div className="bg-white border rounded-3xl p-10 text-center shadow-sm">
 
@@ -749,7 +774,7 @@ export default function MyRequestsPage() {
                       </div>
 
                     </div>
-                    <div>
+                    <div className="mt-5 rounded-3xl border border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 space-y-5">
                       {!b.tour && b.request?.finalPrice && (
                         <div className="mt-2 space-y-1 text-sm">
 
@@ -802,7 +827,7 @@ export default function MyRequestsPage() {
 
                       </div>
 
-                      <div className="mt-5 rounded-2xl border border-blue-200 bg-blue-50 p-5">
+                      
 
                         <h3 className="font-bold text-blue-900 mb-3">
                           💳 Payment Schedule
@@ -824,7 +849,7 @@ export default function MyRequestsPage() {
 
                         </ul>
 
-                      </div>
+                      
                     </div>
                   </div>
                   
@@ -1121,7 +1146,7 @@ export default function MyRequestsPage() {
                     )}
 
 
-                    <div className="bg-linear-to-br from-gray-50 to-white border rounded-3xl p-5 space-y-4">
+                    <div className="bg-linear-to-br from-gray-50 to-white border rounded-3xl p-5 space-y-6">
 
                       <h4 className="text-lg font-bold text-gray-900">
                         📍 Booking Progress
