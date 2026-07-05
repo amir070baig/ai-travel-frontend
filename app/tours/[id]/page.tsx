@@ -386,94 +386,97 @@ export default function TourDetailsPage({
                 </div>
               </div>
               
-              <div className="max-w-3xl mx-auto bg-gray-50 border rounded-2xl p-6 mt-8">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Travel Date</label>
-                  <input
-                    type="date"
-                    min={new Date().toISOString().split("T")[0]}
-                    value={travelDate}
-                    onChange={(e) => setTravelDate(e.target.value)}
-                    className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  />
-                  {hoursUntilTour === null ? (
-                    <p className="text-sm text-gray-500 mt-2">
-                      📅 Select your preferred travel date.
-                    </p>
-                  ) : hoursUntilTour >= 24 ? (
-                    <p className="text-sm text-green-700 mt-2">
-                      ⏰ Tour starts in{" "}
-                      <span className="font-semibold">
-                        {daysUntilTour} {daysUntilTour === 1 ? "day" : "days"}
-                      </span>
-                    </p>
-                  ) : (
-                    <p className="text-sm text-amber-700 mt-2">
-                      ⏰ Tour starts in{" "}
-                      <span className="font-semibold">
-                        {Math.floor(hoursUntilTour)} hours
-                      </span>
-                    </p>
-                  )}
-                  {hoursUntilTour !== null && hoursUntilTour < 12 && (
-                    <p className="mt-2 text-sm text-red-600 font-medium">
-                      ⚠ Fixed tours require at least 12 hours advance notice.
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Time Slot</label>
-                  <select
-                    value={timeSlot}
-                    onChange={(e) => setTimeSlot(e.target.value)}
-                    className="w-full border p-3 rounded-xl"
-                  >
-                    <option value="Sunrise">
-                      Sunrise (6:00 AM)
-                    </option>
-                    <option value="Morning">
-                      Morning (9:00 AM)
-                    </option>
-                    <option value="Afternoon">
-                      Afternoon (2:00 PM)
-                    </option>
-                    <option value="Sunset">
-                      Sunset (5:00 PM)
-                    </option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Number of Travelers</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="20"
-                    value={travelers}
-                    onChange={(e) => setTravelers(Number(e.target.value))}
-                    className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  />
-                </div>
+              <div className="max-w-3xl mx-auto rounded-2xl border bg-gray-50 p-6 mt-8">
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
-                    Preferred Guide Language
-                  </label>
-                  <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
-                    className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  >
-                    <option value="English">🇬🇧 English</option>
-                    <option value="Hindi">🇮🇳 Hindi</option>
-                    <option value="French">🇫🇷 French</option>
-                    <option value="Spanish">🇪🇸 Spanish</option>
-                    <option value="German">🇩🇪 German</option>
-                    <option value="Italian">🇮🇹 Italian</option>
-                    <option value="Japanese">🇯🇵 Japanese</option>
-                    <option value="Russian">🇷🇺 Russian</option>
-                    <option value="Chinese">🇨🇳 Chinese</option>
-                  </select>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Travel Date</label>
+                    <input
+                      type="date"
+                      min={new Date().toISOString().split("T")[0]}
+                      value={travelDate}
+                      onChange={(e) => setTravelDate(e.target.value)}
+                      className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    />
+                    {hoursUntilTour === null ? (
+                      <p className="text-sm text-gray-500 mt-2">
+                        📅 Select your preferred travel date.
+                      </p>
+                    ) : hoursUntilTour >= 24 ? (
+                      <p className="text-sm text-green-700 mt-2">
+                        ⏰ Tour starts in{" "}
+                        <span className="font-semibold">
+                          {daysUntilTour} {daysUntilTour === 1 ? "day" : "days"}
+                        </span>
+                      </p>
+                    ) : (
+                      <p className="text-sm text-amber-700 mt-2">
+                        ⏰ Tour starts in{" "}
+                        <span className="font-semibold">
+                          {Math.floor(hoursUntilTour)} hours
+                        </span>
+                      </p>
+                    )}
+                    {hoursUntilTour !== null && hoursUntilTour < 12 && (
+                      <p className="mt-2 text-sm text-red-600 font-medium">
+                        ⚠ Fixed tours require at least 12 hours advance notice.
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Time Slot</label>
+                    <select
+                      value={timeSlot}
+                      onChange={(e) => setTimeSlot(e.target.value)}
+                      className="w-full border p-3 rounded-xl"
+                    >
+                      <option value="Sunrise">
+                        Sunrise (6:00 AM)
+                      </option>
+                      <option value="Morning">
+                        Morning (9:00 AM)
+                      </option>
+                      <option value="Afternoon">
+                        Afternoon (2:00 PM)
+                      </option>
+                      <option value="Sunset">
+                        Sunset (5:00 PM)
+                      </option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Number of Travelers</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="20"
+                      value={travelers}
+                      onChange={(e) => setTravelers(Number(e.target.value))}
+                      className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">
+                      Preferred Guide Language
+                    </label>
+                    <select
+                      value={language}
+                      onChange={(e) => setLanguage(e.target.value)}
+                      className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    >
+                      <option value="English">🇬🇧 English</option>
+                      <option value="Hindi">🇮🇳 Hindi</option>
+                      <option value="French">🇫🇷 French</option>
+                      <option value="Spanish">🇪🇸 Spanish</option>
+                      <option value="German">🇩🇪 German</option>
+                      <option value="Italian">🇮🇹 Italian</option>
+                      <option value="Japanese">🇯🇵 Japanese</option>
+                      <option value="Russian">🇷🇺 Russian</option>
+                      <option value="Chinese">🇨🇳 Chinese</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
@@ -584,6 +587,62 @@ export default function TourDetailsPage({
             </div>
 
             <div className="lg:col-span-1">
+              <div className="space-y-5">
+
+                <div className="sticky top-28 rounded-3xl border border-emerald-200 bg-emerald-50 p-6">
+
+                  <p className="text-sm text-gray-500">
+                    Starting From
+                  </p>
+
+                  <p className="mt-2 text-4xl font-black text-emerald-600">
+                    ₹{tour.price.toLocaleString()}
+                  </p>
+
+                  <p className="text-gray-500">
+                    per traveler
+                  </p>
+
+                  <hr className="my-5" />
+
+                  <div className="space-y-3 text-sm">
+
+                    <div className="flex justify-between">
+                      <span>Travelers</span>
+                      <strong>{travelers}</strong>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <span>Pay Today</span>
+                      <strong>
+                        ₹{Math.floor(tour.price * travelers * 0.3).toLocaleString()}
+                      </strong>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <span>Remaining Later</span>
+                      <strong>
+                        ₹{Math.floor(tour.price * travelers * 0.7).toLocaleString()}
+                      </strong>
+                    </div>
+
+                  </div>
+
+                  <div className="mt-6 space-y-2 text-sm text-gray-600">
+
+                    <p>✓ Instant confirmation</p>
+
+                    <p>✓ Secure payment</p>
+
+                    <p>✓ Local support</p>
+
+                    <p>✓ Flexible payment</p>
+
+                  </div>
+
+                </div>
+
+              </div>
               <div className="flex flex-wrap justify-center gap-6 border-t border-gray-200 pt-6 mt-6 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
                   🔒 <span>Secure Payment</span>
