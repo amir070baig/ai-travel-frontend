@@ -170,24 +170,40 @@ export default function MyRequestsPage() {
       return;
     }
 
-    // 3. Set the current booking ID to true/active right after validation passes
+    // Helper function to automatically expand form and focus the empty input field
+    const focusMissingField = (fieldId: string) => {
+      const detailsElement = document.getElementById(`details-${bookingId}`) as HTMLDetailsElement | null;
+      if (detailsElement) {
+        detailsElement.open = true; // Programmatically force accordion open
+      }
+      setTimeout(() => {
+        document.getElementById(fieldId)?.focus();
+      }, 100); // Small timeout allows accordion transition to complete gracefully
+    };
+
+    // Validate traveler inputs BEFORE setting "setIsPaying"
+    if (!fullNames[bookingId]?.trim()) {
+      alert("Please enter the primary traveler's full name.");
+      focusMissingField(`name-${bookingId}`);
+      return;
+    }
+
+    if (!emails[bookingId]?.trim()) {
+      alert("Please enter the primary traveler's email address.");
+      focusMissingField(`email-${bookingId}`);
+      return;
+    }
+
+    if (!countries[bookingId]?.trim()) {
+      alert("Please enter the traveler's country.");
+      focusMissingField(`country-${bookingId}`);
+      return;
+    }
+
+    // 3. Set the current booking ID to true/active ONLY after all validations pass
     setIsPaying(bookingId);
 
     try {
-      if (!fullNames[bookingId]?.trim()) {
-        alert("Please enter the primary traveler's full name.");
-        return;
-      }
-
-      if (!emails[bookingId]?.trim()) {
-        alert("Please enter the primary traveler's email address.");
-        return;
-      }
-
-      if (!countries[bookingId]?.trim()) {
-        alert("Please enter the traveler's country.");
-        return;
-      }
       // Send the selected date to the backend so it gets saved!
       await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/bookings/${bookingId}/travel-date`,
@@ -199,7 +215,6 @@ export default function MyRequestsPage() {
           },
           body: JSON.stringify({
             travelDate: selectedDate,
-
             fullName: fullNames[bookingId],
             email: emails[bookingId],
             country: countries[bookingId],
@@ -218,7 +233,7 @@ export default function MyRequestsPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ 
             bookingId,
-            travelDate: selectedDate || currentBooking?.travelDate // Passes the date if selected
+            travelDate: selectedDate || currentBooking?.travelDate
           }),
         }
       );
@@ -256,11 +271,9 @@ export default function MyRequestsPage() {
           } catch (verifyErr) {
             console.error("Verification error:", verifyErr);
           } finally {
-            // Reset the payment state after validation/verification sequence finishes
             setIsPaying(null);
           }
         },
-        // If user closes Razorpay modal without paying, clear state
         modal: {
           ondismiss: function () {
             setIsPaying(null);
@@ -274,7 +287,6 @@ export default function MyRequestsPage() {
     } catch (err) {
       console.error(err);
       alert("Payment failed");
-      // Clear state if the initial order creation API fails
       setIsPaying(null);
     }
   };
@@ -992,7 +1004,10 @@ export default function MyRequestsPage() {
                       </div>
                     )}
                     {b.status === "PENDING_PAYMENT" && (
-                      <details className="rounded-2xl border border-gray-200 bg-white overflow-hidden group">
+                      <details 
+                        id={`details-${b.id}`} 
+                        className="rounded-2xl border border-gray-200 bg-white overflow-hidden group"
+                      >
                         <summary className="cursor-pointer list-none px-4 py-3.5 text-sm sm:text-base font-bold text-gray-900 bg-gray-50 hover:bg-gray-100 flex justify-between items-center transition-all select-none">
                           <span>👤 Primary Traveler Details</span>
                           <span className="text-xs text-gray-400 group-open:rotate-180 transition-transform">▼</span>
@@ -1009,6 +1024,7 @@ export default function MyRequestsPage() {
                                 Full Name *
                               </label>
                               <input
+                                id={`name-${b.id}`}
                                 type="text"
                                 value={fullNames[b.id] || ""}
                                 onChange={(e) =>
@@ -1027,6 +1043,7 @@ export default function MyRequestsPage() {
                                 Email Address *
                               </label>
                               <input
+                                id={`email-${b.id}`}
                                 type="email"
                                 value={emails[b.id] || ""}
                                 onChange={(e) =>
@@ -1047,6 +1064,7 @@ export default function MyRequestsPage() {
                                 Country *
                               </label>
                               <input
+                                id={`country-${b.id}`}
                                 type="text"
                                 value={countries[b.id] || ""}
                                 onChange={(e) =>
