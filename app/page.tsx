@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function HomePage() {
   const [tours, setTours] = useState<any[]>([]);
@@ -12,6 +11,13 @@ export default function HomePage() {
   const [leadMessage, setLeadMessage] = useState("");
   const [reviews, setReviews] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Reference for smooth scrolling to the Experience Section
+  const experienceSectionRef = useRef<HTMLDivElement>(null);
+
+  const scrollToExperience = () => {
+    experienceSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -90,8 +96,14 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50/70 text-slate-800 antialiased selection:bg-blue-500 selection:text-white">
 
-      {/* HERO SECTION */}
-      <section className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 lg:py-28 overflow-hidden">
+      {/* NEW: LIVE AVAILABILITY SCARCITY BANNER */}
+      <div className="bg-slate-900 text-white text-center py-2 px-4 text-xs font-semibold tracking-wide flex items-center justify-center gap-2 shadow-inner">
+        <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>High demand for sunrise slots. Secure your approved local guide entry today.</span>
+      </div>
+
+      {/* 1. HERO SECTION */}
+      <section className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-12 lg:pt-24 overflow-hidden">
         <div className="text-center space-y-6 relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md border border-slate-200/60 shadow-xs px-4 py-2 rounded-full text-xs sm:text-sm text-slate-600 font-medium">
             🕌 Agra Tours • 🤖 AI Trip Planner • ⭐ Local Experts
@@ -122,23 +134,17 @@ export default function HomePage() {
             perfectly cross-checked by our seasoned guides before you pay.
           </p>
 
-          {/* Primary Call to Actions */}
-          <div className="flex flex-col sm:flex-row w-full sm:w-auto justify-center items-center gap-4 pt-6 max-w-md mx-auto">
-            <Link
-              href="/generate"
-              className="w-full sm:w-auto bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-blue-500/20 text-center transform active:scale-98"
+          {/* REFINED CONVERSION CTA: Directs immediately down to the action section */}
+          <div className="pt-4">
+            <button
+              onClick={scrollToExperience}
+              className="group bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all text-white px-10 py-4 rounded-2xl font-bold shadow-xl shadow-blue-500/20 text-center transform active:scale-98 flex items-center gap-2 mx-auto cursor-pointer"
             >
-              🤖 Generate AI Trip
-            </Link>
-            <Link
-              href="/tours"
-              className="w-full sm:w-auto bg-white border border-slate-200 hover:bg-slate-50 transition-all text-slate-900 px-8 py-4 rounded-2xl font-bold text-center shadow-xs active:scale-98"
-            >
-              Explore Fixed Tours
-            </Link>
+              Plan Your Experience 
+              <span className="transform group-hover:translate-y-1 transition-transform duration-200">↓</span>
+            </button>
           </div>
 
-          {/* Contextual Context Navigation */}
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-8 text-xs font-bold text-slate-400 uppercase tracking-wider">
             <Link href="/agra-tours" className="hover:text-blue-600 transition">Best Agra Tours</Link>
             <span className="hidden sm:inline text-slate-300">•</span>
@@ -149,27 +155,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* QUICK VALUE PROPS */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 mb-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {[
-            { icon: "🧠", title: "AI-Powered Itineraries", desc: "Personalized travel plans built completely around your pace, budget, and styles." },
-            { icon: "🏨", title: "Hotel Pickup & Drop", desc: "Doorstep logic. Every configuration is vetted by native Agra travel logistics agents." },
-            { icon: "🧳", title: "Expert Local Support", desc: "Instant human safety nets. Direct 24/7 WhatsApp assistance from start to finish." },
-            { icon: "📍", title: "Best-Selling Routes", desc: "Private access designed for completely seamless and crowds-avoided Taj Mahal entry." }
-          ].map((item, idx) => (
-            <div key={idx} className="bg-white rounded-3xl border border-slate-200/70 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
-              <span className="text-4xl block mb-4" role="img" aria-label="feature icon">{item.icon}</span>
-              <h3 className="font-extrabold text-base text-slate-900">{item.title}</h3>
-              <p className="text-slate-500 text-xs leading-relaxed mt-2">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CHOOSE YOUR EXPERIENCE INTERACTION CHANNELS */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <div className="text-center mb-14">
+      {/* 2. CHOOSE YOUR EXPERIENCE */}
+      <section ref={experienceSectionRef} className="max-w-6xl mx-auto px-4 sm:px-6 py-12 border-b border-slate-100 scroll-mt-6">
+        <div className="text-center mb-10">
           <p className="text-blue-600 font-bold uppercase tracking-wider text-xs">Two Ways to Experience Agra</p>
           <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-2">Choose How You Want to Travel</h2>
           <p className="text-slate-500 mt-3 max-w-2xl mx-auto text-sm sm:text-base">
@@ -179,7 +167,7 @@ export default function HomePage() {
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Package Side */}
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-md p-6 sm:p-8 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 flex flex-col justify-between">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 sm:p-8 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
             <div>
               <div className="text-4xl mb-5" role="img" aria-label="monument">🕌</div>
               <h3 className="text-2xl font-extrabold text-slate-900">Book Ready-Made Tours</h3>
@@ -202,7 +190,7 @@ export default function HomePage() {
           </div>
 
           {/* AI Custom Planner Side */}
-          <div className="bg-linear-to-br from-blue-600 to-indigo-700 rounded-3xl text-white shadow-md p-6 sm:p-8 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 flex flex-col justify-between">
+          <div className="bg-linear-to-br from-blue-600 to-indigo-700 rounded-3xl text-white shadow-xs p-6 sm:p-8 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
             <div>
               <div className="text-4xl mb-5" role="img" aria-label="robot">🤖</div>
               <h3 className="text-2xl font-extrabold">Create a Custom AI Trip</h3>
@@ -226,8 +214,26 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* HOW IT WORKS MAP */}
+      {/* 3. QUICK VALUE PROPS */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {[
+            { icon: "🧠", title: "AI-Powered Itineraries", desc: "Personalized travel plans built completely around your pace, budget, and styles." },
+            { icon: "🏨", title: "Hotel Pickup & Drop", desc: "Doorstep logic. Every configuration is vetted by native Agra travel logistics agents." },
+            { icon: "🧳", title: "Expert Local Support", desc: "Instant human safety nets. Direct 24/7 WhatsApp assistance from start to finish." },
+            { icon: "📍", title: "Best-Selling Routes", desc: "Private access designed for completely seamless and crowds-avoided Taj Mahal entry." }
+          ].map((item, idx) => (
+            <div key={idx} className="bg-white rounded-3xl border border-slate-200/70 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+              <span className="text-4xl block mb-4" role="img" aria-label="feature icon">{item.icon}</span>
+              <h3 className="font-extrabold text-base text-slate-900">{item.title}</h3>
+              <p className="text-slate-500 text-xs leading-relaxed mt-2">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 4. HOW IT WORKS MAP */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="text-center mb-14">
           <p className="text-blue-600 font-bold uppercase tracking-wider text-xs">AI Trip Planning Made Simple</p>
           <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-2">How AI + Local Experts Plan Your Trip</h2>
@@ -249,7 +255,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* TOURS PREVIEW CARD GRID */}
+      {/* 5. TOURS PREVIEW CARD GRID */}
       <section className="max-w-6xl mx-auto py-16 px-4 sm:px-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
           <div>
@@ -263,11 +269,9 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {tours.slice(0, 3).map((tour) => (
-            <Link key={tour.id} href={`/tours/${tour.id}`} className="group block">
+            <div key={tour.id} className="group block">
               <div className="h-full flex flex-col bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                
-                {/* Image Wrapper Component */}
-                <div className="overflow-hidden h-52 relative bg-slate-100">
+                <Link href={`/tours/${tour.id}`} className="overflow-hidden h-52 relative bg-slate-100 block">
                   {tour.imageUrl ? (
                     <img
                       src={tour.imageUrl}
@@ -280,7 +284,7 @@ export default function HomePage() {
                       No Image Preview Available
                     </div>
                   )}
-                </div>
+                </Link>
 
                 <div className="p-6 space-y-4 flex flex-col flex-1 justify-between">
                   <div className="space-y-3">
@@ -293,35 +297,49 @@ export default function HomePage() {
                       </span>
                     </div>
 
-                    <h3 className="text-xl font-extrabold text-slate-900 group-hover:text-blue-600 transition">
-                      {tour.title}
-                    </h3>
+                    <Link href={`/tours/${tour.id}`}>
+                      <h3 className="text-xl font-extrabold text-slate-900 group-hover:text-blue-600 transition">
+                        {tour.title}
+                      </h3>
+                    </Link>
 
                     <p className="text-slate-500 text-sm line-clamp-3 leading-relaxed">
                       {tour.description}
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                    <div>
-                      <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Starting From</p>
-                      <p className="text-2xl font-black text-slate-900">
-                        ₹{Number(tour.price).toLocaleString("en-IN")}
-                        <span className="text-xs font-medium text-slate-500 ml-0.5">/person</span>
-                      </p>
+                  <div className="pt-4 border-t border-slate-100 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Starting From</p>
+                        <p className="text-2xl font-black text-slate-900">
+                          ₹{Number(tour.price).toLocaleString("en-IN")}
+                          <span className="text-xs font-medium text-slate-500 ml-0.5">/person</span>
+                        </p>
+                      </div>
+                      <Link href={`/tours/${tour.id}`} className="bg-blue-600 group-hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-xs">
+                        View Details
+                      </Link>
                     </div>
-                    <div className="bg-blue-600 group-hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-xs">
-                      View Details
-                    </div>
+
+                    {/* NEW: FAST-TRACK LOW FRICTION WHATSAPP ACTION */}
+                    <a
+                      href={`https://wa.me/917599921173?text=Hi!%20I'm%20interested%20in%20booking%20the%20${encodeURIComponent(tour.title)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full text-center bg-emerald-50 text-emerald-700 border border-emerald-200/60 py-2 rounded-xl text-xs font-bold transition hover:bg-emerald-100/70 flex items-center justify-center gap-1.5"
+                    >
+                      💬 Instant Booking via WhatsApp
+                    </a>
                   </div>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* CORE BRAND VALUE TRUST WRAPPER */}
+      {/* 6. CORE BRAND VALUE TRUST WRAPPER */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="bg-slate-900 rounded-3xl overflow-hidden shadow-xl relative">
           <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px] opacity-10"></div>
@@ -330,7 +348,7 @@ export default function HomePage() {
               <p className="text-blue-400 font-bold uppercase tracking-wider text-xs">Trusted Travel Framework</p>
               <h2 className="text-3xl sm:text-4xl font-black text-white mt-2">Why Travelers Choose TourGen</h2>
               <p className="text-slate-300 mt-4 leading-relaxed text-base">
-                We bridge high precision algorithmic itinerary building with boots-on-the-ground validation. No synthetic routes, no logistical hallucination.
+                We bridge high precision algorithmic travel engines matched with verified local guide execution inside Agra, India.
               </p>
             </div>
 
@@ -354,7 +372,7 @@ export default function HomePage() {
       {/* REVIEWS SHOWCASE SECTION */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
         <div className="text-center mb-12">
-          <p className="text-blue-600 font-bold uppercase tracking-wider text-xs">Real Traveler Reviews</p>
+          <p className="text-blue-600 font-bold uppercase tracking-wide text-sm">Real Traveler Reviews</p>
           <h2 className="text-3xl font-black text-slate-900 mt-2">Travelers Love Their TourGen Experience</h2>
         </div>
 
@@ -403,7 +421,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* REFINED LEAD INTAKE CONSULTATION FORM */}
+      {/* 7. REFINED LEAD INTAKE CONSULTATION FORM */}
       <section className="max-w-3xl mx-auto px-4 py-12">
         <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-10 relative">
           <h2 className="text-2xl sm:text-3xl font-black text-center text-slate-900">Need Help Planning Your Trip?</h2>
@@ -412,29 +430,25 @@ export default function HomePage() {
           </p>
 
           <form onSubmit={handleLeadSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-            <div className="flex flex-col">
-              <input
-                placeholder="Your Name *"
-                type="text"
-                required
-                value={leadName}
-                onChange={(e) => setLeadName(e.target.value)}
-                className="border border-slate-200 bg-slate-50 rounded-xl p-3.5 text-sm font-medium focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition outline-hidden text-slate-900"
-                aria-label="Your Name"
-              />
-            </div>
+            <input
+              placeholder="Your Name *"
+              type="text"
+              required
+              value={leadName}
+              onChange={(e) => setLeadName(e.target.value)}
+              className="border border-slate-200 bg-slate-50 rounded-xl p-3.5 text-sm font-medium focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition outline-hidden text-slate-900"
+              aria-label="Your Name"
+            />
 
-            <div className="flex flex-col">
-              <input
-                placeholder="Your Email Address *"
-                type="email"
-                required
-                value={leadEmail}
-                onChange={(e) => setLeadEmail(e.target.value)}
-                className="border border-slate-200 bg-slate-50 rounded-xl p-3.5 text-sm font-medium focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition outline-hidden text-slate-900"
-                aria-label="Your Email Address"
-              />
-            </div>
+            <input
+              placeholder="Your Email Address *"
+              type="email"
+              required
+              value={leadEmail}
+              onChange={(e) => setLeadEmail(e.target.value)}
+              className="border border-slate-200 bg-slate-50 rounded-xl p-3.5 text-sm font-medium focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition outline-hidden text-slate-900"
+              aria-label="Your Email Address"
+            />
 
             <div className="flex flex-col md:col-span-2">
               <input
@@ -473,15 +487,13 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-6 py-16">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
             
-            {/* BRAND SUMMARY */}
-            <div className="space-y-4">
+            <div>
               <h3 className="text-2xl font-black tracking-tight text-white">TourGen</h3>
               <p className="text-slate-400 leading-relaxed text-xs sm:text-sm">
                 Premium algorithmic travel engines matched with verified local guide execution inside Agra, India.
               </p>
             </div>
 
-            {/* EXP INDEX */}
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-slate-200 mb-4">Explore</h4>
               <div className="flex flex-col gap-2.5 text-sm">
@@ -491,7 +503,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* SYSTEM LEGAL PILLS */}
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-slate-200 mb-4">Legal</h4>
               <div className="flex flex-col gap-2.5 text-sm">
@@ -502,7 +513,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* DIRECT COMMS CONTACT HANDLES */}
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-slate-200 mb-4">Contact</h4>
               <div className="space-y-2 text-sm text-slate-300">
@@ -525,7 +535,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* ATTRIBUTION BOTTOM */}
           <div className="border-t border-slate-900 mt-12 pt-6 text-center text-slate-600 text-xs font-medium">
             © 2026 TourGen. All rights reserved.
           </div>
