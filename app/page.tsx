@@ -69,7 +69,8 @@ export default function HomePage() {
 
     setIsSubmitting(true);
     try {
-      await fetch("/leads", {
+      // FIXED: Changed "/leads" to use your absolute API URL
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leads`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
