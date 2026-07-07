@@ -144,14 +144,6 @@ export default function HomePage() {
               <span className="transform group-hover:translate-y-1 transition-transform duration-200">↓</span>
             </button>
           </div>
-
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-8 text-xs font-bold text-slate-400 uppercase tracking-wider">
-            <Link href="/agra-tours" className="hover:text-blue-600 transition">Best Agra Tours</Link>
-            <span className="hidden sm:inline text-slate-300">•</span>
-            <Link href="/tours" className="hover:text-blue-600 transition">Taj Mahal Sunrise Tours</Link>
-            <span className="hidden sm:inline text-slate-300">•</span>
-            <Link href="/generate" className="hover:text-blue-600 transition">Generate AI Itinerary</Link>
-          </div>
         </div>
       </section>
 
@@ -271,7 +263,7 @@ export default function HomePage() {
           {tours.slice(0, 3).map((tour) => (
             <div key={tour.id} className="group block">
               <div className="h-full flex flex-col bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                <Link href={`/tours/${tour.id}`} className="overflow-hidden h-52 relative bg-slate-100 block">
+                <Link href={`/tours/${tour.id}`} className="overflow-hidden h-48 sm:h-56 lg:h-52 relative bg-slate-100 block">
                   {tour.imageUrl ? (
                     <img
                       src={tour.imageUrl}
@@ -342,7 +334,7 @@ export default function HomePage() {
       {/* 6. CORE BRAND VALUE TRUST WRAPPER */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="bg-slate-900 rounded-3xl overflow-hidden shadow-xl relative">
-          <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px] opacity-10"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] bg-size-[16px_16px] opacity-10"></div>
           <div className="grid lg:grid-cols-2 gap-10 items-center p-8 sm:p-12 lg:p-16 relative z-10">
             <div>
               <p className="text-blue-400 font-bold uppercase tracking-wider text-xs">Trusted Travel Framework</p>
@@ -359,7 +351,7 @@ export default function HomePage() {
                 { label: "WhatsApp Support", icon: "💬" },
                 { label: "Secure Booking", icon: "🔒" }
               ].map((pill, idx) => (
-                <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-xs">
+                <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl p-3 sm:p-5 backdrop-blur-xs">
                   <div className="text-2xl" role="img" aria-label="trust metric icon">{pill.icon}</div>
                   <h3 className="text-white font-bold text-sm mt-2">{pill.label}</h3>
                 </div>
@@ -481,6 +473,16 @@ export default function HomePage() {
           </form>
         </div>
       </section>
+
+      {/* QUICK LINKS SECTION RIGHT BEFORE FOOTER */}
+        <section className="bg-slate-100 border-t border-b border-slate-200/60 py-6 text-center">
+          <div className="max-w-6xl mx-auto px-4 flex flex-wrap justify-center gap-x-8 gap-y-3 text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider">
+            <span className="text-slate-400 normal-case font-medium">Looking for something specific?</span>
+            <Link href="/agra-tours" className="text-slate-700 hover:text-blue-600 transition">Best Agra Tours</Link>
+            <Link href="/tours" className="text-slate-700 hover:text-blue-600 transition">Taj Mahal Sunrise Tours</Link>
+            <Link href="/generate" className="text-blue-600 hover:text-blue-700 transition">Generate AI Itinerary →</Link>
+          </div>
+        </section>
 
       {/* FOOTER SECTION */}
       <footer className="bg-slate-950 text-white mt-16 border-t border-slate-900">
