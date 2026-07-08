@@ -17,7 +17,8 @@ export default function TourDetailsPage({
   const [rating, setRating] = useState(5);  
   const [comment, setComment] = useState("");
   const [travelDate, setTravelDate] = useState("");
-  const [timeSlot, setTimeSlot] = useState("Sunrise");
+  // const [timeSlot, setTimeSlot] = useState("Sunrise");
+  const [timeSlot, setTimeSlot] = useState("");
   const [travelers, setTravelers] = useState(2);
   const [language, setLanguage] = useState("English");
   const [fullName, setFullName] = useState("");
@@ -39,6 +40,12 @@ export default function TourDetailsPage({
         );
         const data = await res.json();
         setTour(data);
+
+        if (data.timeSlots && data.timeSlots.length > 0) {
+          setTimeSlot(data.timeSlots[0]);
+        } else {
+          setTimeSlot("Standard Time"); // Fallback for old/legacy tours
+        }
 
         const reviewRes = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/reviews/${params.id}`,
@@ -278,7 +285,7 @@ export default function TourDetailsPage({
                       <p className="mt-2 text-sm text-red-600 font-medium">⚠ Fixed tours require at least 12 hours advance notice.</p>
                     )}
                   </div>
-                  <div>
+                  {/* <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Time Slot</label>
                     <select
                       value={timeSlot}
@@ -290,6 +297,29 @@ export default function TourDetailsPage({
                       <option value="Afternoon">Afternoon (2:00 PM)</option>
                       <option value="Sunset">Sunset (5:00 PM)</option>
                     </select>
+                  </div> */}
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Time Slot</label>
+                    {tour.timeSlots && tour.timeSlots.length > 1 ? (
+                      // If the tour has multiple slots options, render a selection drop down
+                      <select
+                        value={timeSlot}
+                        onChange={(e) => setTimeSlot(e.target.value)}
+                        className="w-full border p-3 rounded-xl bg-white focus:ring-2 focus:ring-blue-500"
+                      >
+                        {tour.timeSlots.map((slot: string) => (
+                          <option key={slot} value={slot}>
+                            {slot}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      // If only one specific slot is allowed, display it as an unchangeable info badge
+                      <div className="w-full border border-emerald-200 bg-emerald-50/50 p-3 rounded-xl font-medium text-emerald-800 flex items-center gap-2">
+                        ⏰ Scheduled for: {timeSlot || tour.timeSlots?.[0] || "Standard Time"}
+                      </div>
+                    )}
                   </div>
                   
                   <div>

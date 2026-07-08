@@ -34,6 +34,7 @@ export default function AdminPage() {
     faq:"",
     inclusions: "",
     exclusions: "",
+    timeSlots: "",
   });
   const [editingTourId, setEditingTourId] = useState("");
   const [expandedApproved, setExpandedApproved] = useState<string[]>([]);
@@ -470,6 +471,8 @@ export default function AdminPage() {
 
         price: Number(tourForm.price),
 
+        timeSlots: tourForm.timeSlots ? tourForm.timeSlots.split(",").map(s => s.trim()).filter(Boolean) : [],
+
         highlights: tourForm.highlights
           .split(",")
           .map((s) => s.trim()),
@@ -545,6 +548,7 @@ export default function AdminPage() {
         faq:"",
         inclusions: "",
         exclusions: "",
+        timeSlots: "",
       });
 
       await fetchTours();
@@ -572,6 +576,7 @@ export default function AdminPage() {
       pickupPoint: tour.pickupPoint ?? "",
       pickupTime: tour.pickupTime ?? "",
       availabilityNote: tour.availabilityNote ?? "",
+      timeSlots: Array.isArray(tour.timeSlots) ? tour.timeSlots.join(", ") : "",
       itinerary: Array.isArray(tour.itinerary)
         ? tour.itinerary.join("\n")
         : "",
@@ -1001,6 +1006,13 @@ export default function AdminPage() {
                 imageUrl: e.target.value,
               })
             }
+            className="border p-3 rounded-2xl w-full"
+          />
+
+          <input
+            placeholder="Available Slots (e.g. Sunrise, Morning, Afternoon)"
+            value={tourForm.timeSlots}
+            onChange={(e) => setTourForm({ ...tourForm, timeSlots: e.target.value })}
             className="border p-3 rounded-2xl w-full"
           />
 
