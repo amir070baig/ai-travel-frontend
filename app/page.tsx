@@ -42,16 +42,7 @@ export default function HomePage() {
           `${process.env.NEXT_PUBLIC_API_URL}/reviews/ai`
         );
         const data = await res.json();
-        setReviews(
-          Array.isArray(data)
-            ? data
-                .sort((a, b) => {
-                  if (b.rating !== a.rating) return b.rating - a.rating;
-                  return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-                })
-                .slice(0, 3)
-            : []
-        );
+        setTours(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Error fetching reviews:", err);
       }
@@ -69,7 +60,6 @@ export default function HomePage() {
 
     setIsSubmitting(true);
     try {
-      // FIXED: Changed "/leads" to use your absolute API URL
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leads`, {
         method: "POST",
         credentials: "include",
@@ -100,39 +90,37 @@ export default function HomePage() {
       {/* NEW: LIVE AVAILABILITY SCARCITY BANNER */}
       <div className="bg-slate-900 text-white text-center py-2 px-4 text-xs font-semibold tracking-wide flex items-center justify-center gap-2 shadow-inner">
         <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span>High demand for sunrise slots. Secure your approved local guide entry today.</span>
+        <span>High demand for sunrise slots. Secure your approved elite local guide and private transport today.</span>
       </div>
 
       {/* 1. HERO SECTION */}
       <section className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-12 lg:pt-24 overflow-hidden">
         <div className="text-center space-y-6 relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md border border-slate-200/60 shadow-xs px-4 py-2 rounded-full text-xs sm:text-sm text-slate-600 font-medium">
-            🕌 Agra Tours • 🤖 AI Trip Planner • ⭐ Local Experts
+            💎 Elite Boutique Experiences • 📸 Built-in Vacation Photography • 🚫 100% Zero Shopping Traps
           </div>
 
           <div className="flex flex-wrap justify-center gap-3 mt-4">
             <span className="bg-emerald-50/90 border border-emerald-200 text-emerald-800 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold shadow-xs">
-              💳 Only 30% Advance Required
+              👑 Directly Managed by Local Experts
             </span>
             <span className="bg-blue-50/90 border border-blue-200 text-blue-800 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold shadow-xs">
-              🤝 Pay the Rest During Your Tour
+              🤝 Only 30% Deposit Required
             </span>
           </div>
 
           <h1 className="max-w-5xl mx-auto text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-[1.1] text-slate-900">
-            Book the Best{" "}
+            Don't Just Visit the Taj Mahal.{" "}
             <span className="block text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-indigo-600 mt-2">
-              Taj Mahal & Agra Tours
+              Capture It Perfectly.
             </span>
             <span className="block text-xl sm:text-2xl lg:text-3xl text-slate-500 font-bold mt-6 tracking-wide uppercase">
-              Or Customize with AI Itinerary Planning
+              The Anti-Tour Factory Experience for Premium Travelers
             </span>
           </h1>
 
           <p className="text-slate-600 leading-relaxed max-w-3xl mx-auto text-base sm:text-lg pt-2">
-            Choose from professionally curated <strong>Taj Mahal and Agra tours</strong>, 
-            or let our smart <strong>AI travel engine</strong> map a personalized timeline, 
-            perfectly cross-checked by our seasoned guides before you pay.
+            Skip the crowded mass-tourism buses and aggressive souvenir commission traps. TourGen designs flawless, flexible private journeys across Agra and Delhi led by professional storytelling guides who know how to frame out crowds for perfect vacation photos.
           </p>
 
           {/* REFINED CONVERSION CTA: Directs immediately down to the action section */}
@@ -141,7 +129,7 @@ export default function HomePage() {
               onClick={scrollToExperience}
               className="group bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all text-white px-10 py-4 rounded-2xl font-bold shadow-xl shadow-blue-500/20 text-center transform active:scale-98 flex items-center gap-2 mx-auto cursor-pointer"
             >
-              Plan Your Experience 
+              Curate Your Experience 
               <span className="transform group-hover:translate-y-1 transition-transform duration-200">↓</span>
             </button>
           </div>
@@ -151,10 +139,10 @@ export default function HomePage() {
       {/* 2. CHOOSE YOUR EXPERIENCE */}
       <section ref={experienceSectionRef} className="max-w-6xl mx-auto px-4 sm:px-6 py-12 border-b border-slate-100 scroll-mt-6">
         <div className="text-center mb-10">
-          <p className="text-blue-600 font-bold uppercase tracking-wider text-xs">Two Ways to Experience Agra</p>
-          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-2">Choose How You Want to Travel</h2>
+          <p className="text-blue-600 font-bold uppercase tracking-wider text-xs">A Different Class of Local Hosting</p>
+          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-2">How Do You Want to Explore?</h2>
           <p className="text-slate-500 mt-3 max-w-2xl mx-auto text-sm sm:text-base">
-            Whether you favor an instant pre-vetted package or want to co-create a tailored journey alongside an AI, we map out everything.
+            Whether you want an instantly locked all-inclusive itinerary or prefer to co-create custom luxury paths using our AI Engine, we guarantee elite, uncompromised execution.
           </p>
         </div>
 
@@ -163,14 +151,14 @@ export default function HomePage() {
           <div className="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 sm:p-8 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
             <div>
               <div className="text-4xl mb-5" role="img" aria-label="monument">🕌</div>
-              <h3 className="text-2xl font-extrabold text-slate-900">Book Ready-Made Tours</h3>
+              <h3 className="text-2xl font-extrabold text-slate-900">All-Inclusive Luxury Tours</h3>
               <p className="text-slate-500 mt-3 leading-relaxed text-sm">
-                Lock down flawless itineraries targeting the Taj Mahal, Agra Fort, Fatehpur Sikri, or same-day excursions starting from Delhi. Perfect for lightning fast checkout.
+                Lock down highly refined, direct private excursions covering the Taj Mahal, Agra Fort, or same-day journeys starting straight from Delhi. Fully inclusive of executive transport and skip-the-line monument entries.
               </p>
               <ul className="mt-6 space-y-3 text-slate-700 text-sm font-medium">
-                <li className="flex items-center gap-2.5"><span className="text-blue-500">✓</span> Instant Booking Confirmation</li>
-                <li className="flex items-center gap-2.5"><span className="text-blue-500">✓</span> Fixed Pricing & Clear Routing</li>
-                <li className="flex items-center gap-2.5"><span className="text-blue-500">✓</span> Licensed Photogenic Tour Guides</li>
+                <li className="flex items-center gap-2.5"><span className="text-blue-500">✓</span> Skip-The-Line VIP Express Entry</li>
+                <li className="flex items-center gap-2.5"><span className="text-blue-500">✓</span> 100% Pure Sightseeing (No Forced Shopping)</li>
+                <li className="flex items-center gap-2.5"><span className="text-blue-500">✓</span> Photography-Trained Professional Guides</li>
                 <li className="flex items-center gap-2.5"><span className="text-blue-500">✓</span> Secure Spot with Only 30% Deposit</li>
               </ul>
             </div>
@@ -178,7 +166,7 @@ export default function HomePage() {
               href="/tours"
               className="inline-block mt-8 bg-slate-900 hover:bg-slate-800 text-white text-center px-6 py-4 rounded-2xl font-bold transition shadow-xs"
             >
-              Explore Fixed Tours →
+              View Direct Premium Tours →
             </Link>
           </div>
 
@@ -186,15 +174,15 @@ export default function HomePage() {
           <div className="bg-linear-to-br from-blue-600 to-indigo-700 rounded-3xl text-white shadow-xs p-6 sm:p-8 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
             <div>
               <div className="text-4xl mb-5" role="img" aria-label="robot">🤖</div>
-              <h3 className="text-2xl font-extrabold">Create a Custom AI Trip</h3>
+              <h3 className="text-2xl font-extrabold">Co-Design a Custom AI Journey</h3>
               <p className="text-blue-100 mt-3 leading-relaxed text-sm">
-                Drop your targets, timeline constraints, group dynamic and budget constraints. Our deep travel layer builds a completely custom blueprint in seconds.
+                Drop your timelines, personal interests, pacing styles, and fine-dining requests. Our custom travel matrix computes a seamless, highly optimized private concierge schedule in seconds.
               </p>
               <ul className="mt-6 space-y-3 text-blue-50 text-sm font-medium">
-                <li className="flex items-center gap-2.5"><span className="text-white">✓</span> Tailored Exclusively for You</li>
-                <li className="flex items-center gap-2.5"><span className="text-white">✓</span> Dual Core: AI Generation + Local Human Review</li>
-                <li className="flex items-center gap-2.5"><span className="text-white">✓</span> Dynamically Adjusted Logistics</li>
-                <li className="flex items-center gap-2.5"><span className="text-white">✓</span> Custom Optimized Multi-day Quote</li>
+                <li className="flex items-center gap-2.5"><span className="text-white">✓</span> Tailored Exclusively Around Your Pacing</li>
+                <li className="flex items-center gap-2.5"><span className="text-white">✓</span> AI Algorithmic Generation + Local Founder Verification</li>
+                <li className="flex items-center gap-2.5"><span className="text-white">✓</span> Dynamic Private Vehicle Routing & Custom Stop Logic</li>
+                <li className="flex items-center gap-2.5"><span className="text-white">✓</span> Transparent Luxury Multi-day Quotes</li>
               </ul>
             </div>
             <Link
@@ -207,19 +195,25 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. QUICK VALUE PROPS */}
+      {/* 3. THE TOURGEN EXCLUSIVE GUARANTEES (REPLACED GENERIC VALUE PROPS) */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+        <div className="text-center mb-10">
+          <p className="text-blue-600 font-bold uppercase tracking-wider text-xs">The Boutique Difference</p>
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">Why Discerning Travelers Bypass Corporate Travel Factories</h2>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { icon: "🧠", title: "AI-Powered Itineraries", desc: "Personalized travel plans built completely around your pace, budget, and styles." },
-            { icon: "🏨", title: "Hotel Pickup & Drop", desc: "Doorstep logic. Every configuration is vetted by native Agra travel logistics agents." },
-            { icon: "🧳", title: "Expert Local Support", desc: "Instant human safety nets. Direct 24/7 WhatsApp assistance from start to finish." },
-            { icon: "📍", title: "Best-Selling Routes", desc: "Private access designed for completely seamless and crowds-avoided Taj Mahal entry." }
+            { icon: "🚫", title: "Zero Shop Commissions", desc: "Cheap portal operators lower prices to trap you inside high-pressure souvenir factories. TourGen takes €0 from shops. Your vacation time is entirely yours." },
+            { icon: "📸", title: "Built-In Photo Portfolio", desc: "No blurry phone selfies. Our guides are trained specialists in composition, lighting, and angling to capture a clean, crowd-free memory collection." },
+            { icon: "🥂", title: "Fluid Concierge Pacing", desc: "Large corporations use rigid, automated shifts. As a boutique operator, your private itinerary adapts instantly on the fly to match your mood and energy." },
+            { icon: "🕵️‍♂️", title: "Direct Founder Trust", desc: "You are never a random booking number. Our founder manages or reviews your timeline logs directly to ensure absolute, elite execution." }
           ].map((item, idx) => (
-            <div key={idx} className="bg-white rounded-3xl border border-slate-200/70 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
-              <span className="text-4xl block mb-4" role="img" aria-label="feature icon">{item.icon}</span>
-              <h3 className="font-extrabold text-base text-slate-900">{item.title}</h3>
-              <p className="text-slate-500 text-xs leading-relaxed mt-2">{item.desc}</p>
+            <div key={idx} className="bg-white rounded-3xl border border-slate-200/70 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center flex flex-col justify-between">
+              <div>
+                <span className="text-4xl block mb-4" role="img" aria-label="feature icon">{item.icon}</span>
+                <h3 className="font-extrabold text-base text-slate-900">{item.title}</h3>
+                <p className="text-slate-500 text-xs leading-relaxed mt-2">{item.desc}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -228,16 +222,16 @@ export default function HomePage() {
       {/* 4. HOW IT WORKS MAP */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="text-center mb-14">
-          <p className="text-blue-600 font-bold uppercase tracking-wider text-xs">AI Trip Planning Made Simple</p>
-          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-2">How AI + Local Experts Plan Your Trip</h2>
+          <p className="text-blue-600 font-bold uppercase tracking-wider text-xs">Seamless Planning Logistics</p>
+          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-2">Elite Travel Orchestration Made Simple</h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
           {[
-            { num: "✍️", title: "Tell Us Your Plans", desc: "Input your dates, group count, interests, and style options safely." },
-            { num: "🤖", title: "AI Syncs Itinerary", desc: "The engine maps dynamic routes, travel paths, and timeline allocations instantly." },
-            { num: "👨‍💼", title: "Expert Verification", desc: "A seasoned human specialist refines local times, traffic flows, and hidden slots." },
-            { num: "✈️", title: "Book & Go", desc: "Pay the 30% secure booking link, meet your vehicle tracking crew, and enjoy Agra." }
+            { num: "✍️", title: "Share Your Ambitions", desc: "Input your preferred dates, party count, transport desires, and pacing targets securely." },
+            { num: "🤖", title: "AI Compiles Blueprint", desc: "The engine maps dynamic travel channels, traffic offsets, and time-saving intervals instantly." },
+            { num: "👨‍💼", title: "Founder Human Review", desc: "An expert local coordinator custom-verifies entry slots, optimal routes, and local nuances." },
+            { num: "✈️", title: "Execute Peacefully", desc: "Pay a secure 30% deposit link, receive your tracking crew codes, and experience India beautifully." }
           ].map((step, idx) => (
             <div key={idx} className="bg-white rounded-3xl border border-slate-100 p-6 shadow-xs text-center relative">
               <div className="text-4xl mb-4">{step.num}</div>
@@ -252,8 +246,8 @@ export default function HomePage() {
       <section className="max-w-6xl mx-auto py-16 px-4 sm:px-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
           <div>
-            <p className="text-blue-600 font-bold uppercase tracking-wider text-xs">Handcrafted Direct Packages</p>
-            <h2 className="text-3xl font-black text-slate-900 mt-1">Most Popular Taj Mahal & Agra Tours</h2>
+            <p className="text-blue-600 font-bold uppercase tracking-wider text-xs">Curated Masterpiece Experiences</p>
+            <h2 className="text-3xl font-black text-slate-900 mt-1">Featured Private Luxury Tours</h2>
           </div>
           <Link href="/tours" className="text-blue-600 font-bold text-sm hover:underline shrink-0 flex items-center gap-1">
             See All Packages <span>→</span>
@@ -283,10 +277,10 @@ export default function HomePage() {
                   <div className="space-y-3">
                     <div className="flex flex-wrap gap-1.5">
                       <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider">
-                        Bestseller
+                        100% Private Luxury
                       </span>
                       <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider">
-                        💳 30% Deposit
+                        🚫 Zero Shopping Stops
                       </span>
                     </div>
 
@@ -304,7 +298,7 @@ export default function HomePage() {
                   <div className="pt-4 border-t border-slate-100 space-y-3">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Starting From</p>
+                        <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">All-Inclusive Starting From</p>
                         <p className="text-2xl font-black text-slate-900">
                           ₹{Number(tour.price).toLocaleString("en-IN")}
                           <span className="text-xs font-medium text-slate-500 ml-0.5">/person</span>
@@ -317,12 +311,12 @@ export default function HomePage() {
 
                     {/* NEW: FAST-TRACK LOW FRICTION WHATSAPP ACTION */}
                     <a
-                      href={`https://wa.me/917599921173?text=Hi!%20I'm%20interested%20in%20booking%20the%20${encodeURIComponent(tour.title)}`}
+                      href={`https://wa.me/917599921173?text=Hi!%20I'm%20interested%20in%20arranging%20the%20premium%20${encodeURIComponent(tour.title)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full text-center bg-emerald-50 text-emerald-700 border border-emerald-200/60 py-2 rounded-xl text-xs font-bold transition hover:bg-emerald-100/70 flex items-center justify-center gap-1.5"
                     >
-                      💬 Instant Booking via WhatsApp
+                      💬 Connect Directly with the Founder via WhatsApp
                     </a>
                   </div>
                 </div>
@@ -338,19 +332,19 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] bg-size-[16px_16px] opacity-10"></div>
           <div className="grid lg:grid-cols-2 gap-10 items-center p-8 sm:p-12 lg:p-16 relative z-10">
             <div>
-              <p className="text-blue-400 font-bold uppercase tracking-wider text-xs">Trusted Travel Framework</p>
-              <h2 className="text-3xl sm:text-4xl font-black text-white mt-2">Why Travelers Choose TourGen</h2>
+              <p className="text-blue-400 font-bold uppercase tracking-wider text-xs">Uncompromised Travel Architecture</p>
+              <h2 className="text-3xl sm:text-4xl font-black text-white mt-2">Why Selective Travelers Trust TourGen</h2>
               <p className="text-slate-300 mt-4 leading-relaxed text-base">
-                We bridge high precision algorithmic travel engines matched with verified local guide execution inside Agra, India.
+                We combine the operational precision of an advanced algorithmic itinerary network with the high-touch hospitality of certified local fixers, ensuring your time in Agra is flawless.
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               {[
-                { label: "Local Experts", icon: "⭐" },
-                { label: "AI + Human Mix", icon: "🤖" },
-                { label: "WhatsApp Support", icon: "💬" },
-                { label: "Secure Booking", icon: "🔒" }
+                { label: "Boutique Pacing", icon: "💎" },
+                { label: "Elite Guided Execution", icon: "⭐" },
+                { label: "Direct Concierge WhatsApp", icon: "💬" },
+                { label: "Secure Escrow Booking", icon: "🔒" }
               ].map((pill, idx) => (
                 <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl p-3 sm:p-5 backdrop-blur-xs">
                   <div className="text-2xl" role="img" aria-label="trust metric icon">{pill.icon}</div>
@@ -365,8 +359,8 @@ export default function HomePage() {
       {/* REVIEWS SHOWCASE SECTION */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
         <div className="text-center mb-12">
-          <p className="text-blue-600 font-bold uppercase tracking-wide text-sm">Real Traveler Reviews</p>
-          <h2 className="text-3xl font-black text-slate-900 mt-2">Travelers Love Their TourGen Experience</h2>
+          <p className="text-blue-600 font-bold uppercase tracking-wide text-sm">Verified Traveler Journals</p>
+          <h2 className="text-3xl font-black text-slate-900 mt-2">Stories From Travelers Who Chose Exclusivity</h2>
         </div>
 
         {reviews.length > 0 ? (
@@ -388,7 +382,7 @@ export default function HomePage() {
 
                 <div className="border-t border-slate-100 mt-6 pt-4 space-y-1 text-xs text-slate-400 font-medium">
                   <p className="text-emerald-600 font-bold flex items-center gap-1">
-                    <span className="text-xs">✔</span> Verified AI Traveler
+                    <span className="text-xs">✔</span> Verified TourGen Traveler
                   </p>
                   <p className="font-semibold text-slate-700">📍 {review.itinerary?.city || "Agra"}</p>
                   <p className="text-[11px]">
@@ -400,7 +394,7 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="text-center text-sm text-slate-400 py-4 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-            Fetching traveler feedback logs...
+            Loading traveler verification journals...
           </div>
         )}
 
@@ -417,9 +411,9 @@ export default function HomePage() {
       {/* 7. REFINED LEAD INTAKE CONSULTATION FORM */}
       <section className="max-w-3xl mx-auto px-4 py-12">
         <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-10 relative">
-          <h2 className="text-2xl sm:text-3xl font-black text-center text-slate-900">Need Help Planning Your Trip?</h2>
+          <h2 className="text-2xl sm:text-3xl font-black text-center text-slate-900">Request Custom Curated Flight Path Assistance</h2>
           <p className="text-center text-slate-500 mt-2 max-w-xl mx-auto text-xs sm:text-sm">
-            Not sure which package rules are ideal or how the custom variables operate? Leave your info and our travel coordinators will lay out free path designs.
+            Not sure which pacing variable matches your timeline logistics? Leave your message below. Our local planning desk will lay out complete custom map routes for you free of charge.
           </p>
 
           <form onSubmit={handleLeadSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
@@ -445,7 +439,7 @@ export default function HomePage() {
 
             <div className="flex flex-col md:col-span-2">
               <input
-                placeholder="Phone / WhatsApp Number (Optional)"
+                placeholder="Phone / WhatsApp Number (Optional for Direct Concierge Connection)"
                 type="tel"
                 value={leadPhone}
                 onChange={(e) => setLeadPhone(e.target.value)}
@@ -456,7 +450,7 @@ export default function HomePage() {
 
             <div className="flex flex-col md:col-span-2">
               <textarea
-                placeholder="Tell us about your trip specs, dream dates or specific requests..."
+                placeholder="Tell us about your trip specs, dream dates, or specific vehicle preferences..."
                 value={leadMessage}
                 onChange={(e) => setLeadMessage(e.target.value)}
                 className="border border-slate-200 bg-slate-50 p-3.5 text-sm font-medium rounded-xl h-36 resize-none focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition outline-hidden text-slate-900"
@@ -469,7 +463,7 @@ export default function HomePage() {
               disabled={isSubmitting}
               className="w-full md:col-span-2 bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold mt-4 transition shadow-md shadow-blue-500/10 disabled:opacity-50 disabled:cursor-not-allowed text-center"
             >
-              {isSubmitting ? "Submitting Request Data..." : "Get Free Travel Advice →"}
+              {isSubmitting ? "Orchestrating Request Records..." : "Connect with a Local Coordinator →"}
             </button>
           </form>
         </div>
@@ -493,7 +487,7 @@ export default function HomePage() {
             <div>
               <h3 className="text-2xl font-black tracking-tight text-white">TourGen</h3>
               <p className="text-slate-400 leading-relaxed text-xs sm:text-sm">
-                Premium algorithmic travel engines matched with verified local guide execution inside Agra, India.
+                Boutique private travel experiences and algorithmic itinerary generation managed directly by verified local experts inside Agra, India.
               </p>
             </div>
 
@@ -519,7 +513,7 @@ export default function HomePage() {
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-slate-200 mb-4">Contact</h4>
               <div className="space-y-2 text-sm text-slate-300">
-                <p className="text-slate-400 text-xs">WhatsApp Support:</p>
+                <p className="text-slate-400 text-xs">Direct Founder WhatsApp Support:</p>
                 <p className="font-semibold text-white">+91 75999 21173</p>
                 <p className="text-slate-400 text-xs pt-1">Email Node:</p>
                 <p className="font-semibold text-white text-xs break-all">tourgenteam@gmail.com</p>
